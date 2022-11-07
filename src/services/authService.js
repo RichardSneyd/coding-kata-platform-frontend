@@ -1,4 +1,3 @@
-import { getSuggestedQuery } from '@testing-library/react';
 import axios from 'axios';
 
 const PORT = 8080;
