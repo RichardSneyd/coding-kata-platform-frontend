@@ -1,12 +1,11 @@
 import axios from 'axios';
-
-const BASE = "compile/";
+import GlobalConfig from '../config/GlobalConfig';
 
 const CompileService = {
     
     compile: (lang = "javascript", code = "console.log('hello world')") => {
         return axios.post(
-            BASE, {lang, code}
+            GlobalConfig.getApiOrigin + '/compile', {lang, code}
         );
     }
 }

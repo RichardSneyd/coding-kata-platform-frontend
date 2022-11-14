@@ -2,6 +2,22 @@
 
 A React front-end for the BNTA coding LMS.
 
+# Use authService.parseJwt to get User Info
+
+If you provide a valid Jwt token, it should return a JSON object in this format. `sub` means *subject*, and is the *username* of the User in the db. The `userId` prop can be used with subsequent API calls for the user:
+
+```json
+{
+  "sub": "fakestudent",
+  "roles": [
+    "USER"
+  ],
+  "iss": "http://localhost:8080/login",
+  "exp": 1667581703,
+  "userId": 2
+}
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
