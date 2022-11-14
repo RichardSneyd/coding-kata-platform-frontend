@@ -6,13 +6,17 @@ const AuthenticationService = {
     signin: async ({ username, password }) => {
         const userParams = this.toUrlEncoded({ username, password });
         //   const response = await fetch(window.location.protocol + "/" + window.location.hostname + ":" + PORT + '/login', {
-        const response = await fetch(GlobalConfig.getFrontendOrigin + '/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: userParams
+        const response = await axios.post(GlobalConfig.getFrontendOrigin + '/login', userParams, {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         });
+        
+        // const response = await fetch(GlobalConfig.getFrontendOrigin + '/login', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        //     },
+        //     body: userParams
+        // });
         const json = await response.json();
         this.storeAccessToken(json.access_token);
         this.storeUser(this.parseJwt(json.accessToken));
