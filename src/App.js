@@ -1,21 +1,22 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
-import TopBar from './components/TopBar';
-import PlaygroundContainer from './containers/PlaygroundContainer';
+import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "@mui/material/styles";
+
+// import TopBar from "./components/TopBar";
+// import PlaygroundContainer from "./containers/PlaygroundContainer";
+import theme from "./theme";
+import MainRouter from "./routing/MainRouter";
 
 const App = () => {
   return (
-    <BrowserRouter>
-    <div>
-      <TopBar />
-      <Routes>
-        <Route path="/playground" component={PlaygroundContainer} />
-      </Routes>
-      <PlaygroundContainer />
-    </div>
-
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <MainRouter />
+        </ThemeProvider>
+        {/* <PlaygroundContainer /> */}
+      </BrowserRouter>
+    </>
   );
-}
+};
 
 export default App;
