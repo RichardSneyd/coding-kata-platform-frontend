@@ -1,9 +1,9 @@
 import axios from "axios";
-const BASE = "eval/";
+import GlobalConfig from "../config/GlobalConfig";
 
 const EvalService = {
     evaluate: (userId, problemId, code, lang) => {
-        return axios.post(BASE, {userId, problemId, code, lang})
+        return axios.post(GlobalConfig.getApiOrigin + '/eval', {userId, problemId, code, lang})
     }
 }
 

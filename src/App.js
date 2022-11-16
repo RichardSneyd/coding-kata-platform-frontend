@@ -5,8 +5,15 @@ import { ThemeProvider } from "@mui/material/styles";
 // import PlaygroundContainer from "./containers/PlaygroundContainer";
 import theme from "./theme";
 import MainRouter from "./routing/MainRouter";
+import { useEffect } from "react";
+
+import AuthenticationService from "./services/authService";
 
 const App = () => {
+  useEffect(() => {
+    AuthenticationService.signin("richard", "fakepassword");
+  }, []);
+
   return (
     <>
       <BrowserRouter>

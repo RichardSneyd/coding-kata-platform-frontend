@@ -1,10 +1,9 @@
 import axios from 'axios';
-
-const BASE = 'problems/';
+import GlobalConfig from '../config/GlobalConfig';
 
 const ProblemService = {
     getAll: ()=> {
-        return axios.get(BASE);
+        return axios.get(GlobalConfig.getApiOrigin + '/problems');
     }
 }
 

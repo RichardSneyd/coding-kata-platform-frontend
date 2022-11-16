@@ -9,7 +9,7 @@ const CodeEditorContainer = (onSubmit, submitButtonTitle)=> {
     const [editorValues, setEditorValues] = useState({
         java: "public class Main {\n//write your solution here\n\n}",
         javascript: "// write your solution here",
-        python: "# write your solution here "
+        python: "# write your solution here"
     });
 
     const changeLang = (evt)=>{
