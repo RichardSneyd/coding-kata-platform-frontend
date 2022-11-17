@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import React, { Suspense } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import EmptyState from "../components/EmptyState";
+import Loading from "../components/global/Loading";
 import Home from "../pages/Home";
 import routes from "./routes";
 
@@ -20,7 +21,7 @@ const MainRouter = () => {
       {/* <Header isAuthed={isAuthed} setIsAuthed={setIsAuthed} history={history} /> */}
       <Grid container style={{ marginTop: "20px", marginBottom: "20px" }}>
         <Grid item xs={11}>
-          <Suspense fallback={<p>Loading</p>}>
+          <Suspense fallback={<Loading />}>
             <Routes>
               <Route path="/" element={<Home />} />
 

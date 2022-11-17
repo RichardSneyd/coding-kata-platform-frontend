@@ -7,7 +7,7 @@ import theme from "./theme";
 import MainRouter from "./routing/MainRouter";
 import { useEffect } from "react";
 
-import AuthenticationService from "./services/authService";
+// import AuthenticationService from "./services/authService";
 
 /**
  * Entry point for the application
@@ -15,9 +15,9 @@ import AuthenticationService from "./services/authService";
  * @returns {React.FC}
  */
 const App = () => {
-  useEffect(() => {
-    AuthenticationService.signin("richard", "fakepassword");
-  }, []);
+  // useEffect(() => {
+  //   authService.signin("richard", "fakepassword");
+  // }, []);
 
   return (
     <>

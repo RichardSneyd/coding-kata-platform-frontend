@@ -1,4 +1,6 @@
 import React from "react";
+import Signup from "../pages/auth/Signup";
+import Dashboard from "../pages/Dashboard";
 import Login from "./../pages/auth/Login";
 
 /**
@@ -20,6 +22,19 @@ const routes: IRouteType[] = [
     link: "/login",
     Component: Login,
     authed: false,
+  },
+  {
+    name: "Signup",
+    link: "/signup",
+    Component: Signup,
+    authed: false,
+  },
+
+  {
+    name: "Dashboard",
+    link: "/dashboard",
+    Component: Dashboard,
+    authed: true,
   },
 
   // /**
