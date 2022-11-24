@@ -1,81 +1,92 @@
-//@ts-nocheck
 // had to convert this from an object with functions in it because typescript didn't like it
-import axios from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import GlobalConfig from "../config/GlobalConfig";
+import { ISignin, IJWTUser, IResponse } from "../interfaces/network";
 
-// converts standard json object to x-www-form-urlencoded format required by Spring Security
-export const toUrlEncoded = (details) => {
-  var formBody = [];
-  for (var property in details) {
-    var encodedKey = encodeURIComponent(property);
-    var encodedValue = encodeURIComponent(details[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
-  }
-  formBody = formBody.join("&");
-  return formBody;
-};
-
-export const signin = async (username: string, password: string) => {
-  const userParams = toUrlEncoded({ username, password });
-  //   const response = await fetch(window.location.protocol + "/" + window.location.hostname + ":" + PORT + '/login', {
-  const response = await axios.post(
-    GlobalConfig.server_url + "/login",
-    userParams,
-    {
-      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+const authService = {
+  // converts standard json object to x-www-form-urlencoded format required by Spring Security
+  toUrlEncoded(details: any) {
+    var formBody = [];
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
     }
-  );
 
-  // const response = await fetch(GlobalConfig.getFrontendOrigin + '/login', {
-  //     method: 'POST',
-  //     headers: {
-  //         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-  //     }
-  //     body: userParams
-  // });
-  const json = await response.json();
-  this.storeAccessToken(json.access_token);
-  this.storeUser(this.parseJwt(json.accessToken));
-  return response;
+    return formBody.join("&");
+  },
+
+  async signin(username: string, password: string): Promise<ISignin> {
+    const userParams = this.toUrlEncoded({ username, password });
+
+    try {
+      const response = await axios.post<AxiosRequestConfig, IResponse>(
+        GlobalConfig.server_url + "/login",
+        userParams,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+          },
+        }
+      );
+
+      if (response?.data?.access_token) {
+        const user = this.parseJwt(response.data.access_token);
+
+        this.storeAccessToken(response.data.access_token);
+        this.storeUser(user);
+        return user;
+      }
+      throw AxiosError;
+    } catch (err) {
+      // If we get an axios error, we can assume the server down
+      if (axios.isAxiosError(err)) {
+        return { message: "Server error, please try again later" };
+      }
+      // If not, assuming it's incorrect credientials
+      return { message: "Incorrect username or password" };
+    }
+  },
+
+  logout() {
+    window.sessionStorage.setItem("access_token", "");
+    window.sessionStorage.setItem("user", "");
+  },
+
+  storeAccessToken(accessToken: string) {
+    window.sessionStorage.setItem("access_token", accessToken);
+  },
+
+  getAccessToken(): string | null {
+    return window.sessionStorage.getItem("access_token");
+  },
+
+  storeUser(user: IJWTUser) {
+    window.sessionStorage.setItem("user", JSON.stringify(user));
+  },
+
+  getUser(): IJWTUser | undefined {
+    const user = window.sessionStorage.getItem("user");
+    console.log(user);
+    if (user) return JSON.parse(user);
+    return undefined;
+  },
+
+  parseJwt(token: string): IJWTUser {
+    var base64Url = token.split(".")[1];
+    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    var jsonPayload = decodeURIComponent(
+      window
+        .atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload);
+  },
 };
 
-export const logout = () => {
-  localStorage.setItem("access_token", "");
-  localStorage.setItem("user", "");
-};
-
-export const register = () => {};
-
-export const storeAccessToken = (accessToken) => {
-  localStorage.set("access_token", accessToken);
-};
-
-export const getAccessToken = () => {
-  localStorage.getItem("access_token");
-};
-
-export const storeUser = (user) => {
-  localStorage.setItem("user", JSON.stringify(user));
-};
-
-export const getUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
-};
-
-export const parseJwt = (token) => {
-  var base64Url = token.split(".")[1];
-  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  var jsonPayload = decodeURIComponent(
-    window
-      .atob(base64)
-      .split("")
-      .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join("")
-  );
-
-  return JSON.parse(jsonPayload);
-};
-
-// export default AuthenticationService;
+export default authService;

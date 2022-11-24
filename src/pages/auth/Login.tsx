@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -9,9 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 import { Check } from "@mui/icons-material";
-import { signin } from "../../services/authService";
 
-// import AuthenticationService from "../../services/authService";
+import authService from "../../services/authService";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -22,6 +21,8 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleValidation = () => {
     let passed = true;
@@ -44,15 +45,19 @@ const Login = () => {
       setError("");
       setLoading(true);
       try {
-        const response = await signin(username, password);
-        console.log("response!", response);
+        const response = await authService.signin(username, password);
+        console.log("result in slogin", response);
+
+        if (response?.userId) {
+          navigate("/profile");
+          return;
+        }
+        setError(response.message ? response.message : "Server Error");
+        setLoading(false);
       } catch (err: any) {
-        console.log("error!", err);
-        setError(err.response.data.message);
+        setError(err.message ? err.message : "ssssServer Error");
         setLoading(false);
       }
-
-      // network stuff
     }
   };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import Signup from "../pages/auth/Signup";
 import Dashboard from "../pages/Dashboard";
+import Profile from "../pages/Profile";
 import Login from "./../pages/auth/Login";
 
 /**
@@ -34,6 +35,12 @@ const routes: IRouteType[] = [
     name: "Dashboard",
     link: "/dashboard",
     Component: Dashboard,
+    authed: true,
+  },
+  {
+    name: "Profile",
+    link: "/profile",
+    Component: Profile,
     authed: true,
   },
 

@@ -1,9 +1,10 @@
-import { Grid } from "@mui/material";
-import React, { Suspense } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Button, Grid } from "@mui/material";
+import React, { Suspense, useEffect } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import EmptyState from "../components/EmptyState";
 import Loading from "../components/global/Loading";
 import Home from "../pages/Home";
+import authService from "../services/authService";
 import routes from "./routes";
 
 /**
@@ -13,11 +14,43 @@ import routes from "./routes";
  */
 const MainRouter = () => {
   const [isAuthed, setIsAuthed] = React.useState(false);
-  //   const jwt = auth.isAuthenticated();
-  //   setAuth(jwt ? true : false);
+  const [role, setRole] = React.useState("");
+
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Runs when route updates
+  useEffect(() => {
+    // check if the user is authenticated
+
+    /**
+     * trying to use access token instead of user in session storage
+     * so it's more secure, not implemented yet
+     */
+    // const token = authService.getAccessToken();
+    // const user = authService.parseJwt(token ? token : null);
+
+    const user = authService.getUser();
+
+    if (user && user?.roles) {
+      console.log(user);
+      setIsAuthed(() => new Date(user.exp as number) < new Date());
+      setRole(user.roles[0]);
+    }
+  }, [location]);
+
+  const logout = () => {
+    authService.logout();
+    setIsAuthed(false);
+    setRole("");
+    navigate("/");
+  };
+
   return (
     <React.Fragment>
+      <p>Authed: {isAuthed ? "true" : "false"}</p>
+      <p>Role: {role}</p>
+      {isAuthed && <Button onClick={logout}>Logout</Button>}
       {/* <Header isAuthed={isAuthed} setIsAuthed={setIsAuthed} history={history} /> */}
       <Grid container style={{ marginTop: "20px", marginBottom: "20px" }}>
         <Grid item xs={11}>
@@ -30,6 +63,7 @@ const MainRouter = () => {
                   return (
                     <Route
                       key={`${i}-${link}`}
+                      path={link}
                       element={
                         <EmptyState
                           message="You need to be logged in to view this page"
