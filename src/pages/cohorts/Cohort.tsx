@@ -1,6 +1,7 @@
-import { Typography } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import EmptyState from "../../components/EmptyState";
 import Loading from "../../components/global/Loading";
 import { ICohort } from "../../interfaces/cohort";
@@ -44,6 +45,15 @@ const Cohort = () => {
   if (error || !cohort) return <EmptyState message={error} />;
   return (
     <>
+      <Button
+        color="info"
+        component={Link}
+        to="/cohorts"
+        // onClick={() => navigate("/cohorts")}
+        startIcon={<ArrowBack />}
+      >
+        Back
+      </Button>
       <Typography variant="h1">{cohort.name}</Typography>
       <Typography variant="caption">{cohort.startDate}</Typography>
 

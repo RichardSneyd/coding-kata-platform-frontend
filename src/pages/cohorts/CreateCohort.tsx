@@ -1,4 +1,4 @@
-import { Check } from "@mui/icons-material";
+import { ArrowBack, Check } from "@mui/icons-material";
 import {
   TextField,
   Typography,
@@ -122,12 +122,7 @@ const CreateCohort = () => {
           </Card>
         </Grid>
         <Grid item md={6}>
-          {/* <Card>
-            <CardHeader title="Add a member" />
-            <StyledCardContent> */}
           <CreateMember members={members} setMembers={setMembers} />
-          {/* </StyledCardContent> */}
-          {/* </Card> */}
         </Grid>
         <Grid item md={12}>
           <Members members={members} displayScore={false} />
@@ -138,6 +133,15 @@ const CreateCohort = () => {
             {error}
           </Typography>
           <br />
+        </Grid>
+        <Grid item md={12}>
+          <Button
+            color="info"
+            onClick={() => navigate("/cohorts")}
+            startIcon={<ArrowBack />}
+          >
+            Back
+          </Button>
           <Button
             color="secondary"
             variant="contained"
@@ -149,7 +153,6 @@ const CreateCohort = () => {
           </Button>
         </Grid>
       </Grid>
-      {/* </Box> */}
     </>
   );
 };
