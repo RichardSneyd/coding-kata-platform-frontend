@@ -76,7 +76,11 @@ const MainRouter = () => {
         setRole={setRole}
         setIsAuthed={setIsAuthed}
       />
-      <Grid container style={{ marginTop: "20px", marginBottom: "20px" }}>
+      <Grid
+        container
+        style={{ marginTop: "20px", marginBottom: "20px" }}
+        justifyContent="space-evenly"
+      >
         <Grid item xs={11}>
           <Suspense fallback={<Loading />}>
             <Routes>

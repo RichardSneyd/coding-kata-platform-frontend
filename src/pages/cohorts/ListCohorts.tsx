@@ -1,5 +1,15 @@
+import {
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import EmptyState from "../../components/EmptyState";
 import Loading from "../../components/global/Loading";
 import { ICohort } from "../../interfaces/cohort";
@@ -21,6 +31,10 @@ const ListCohorts = () => {
   const [cohorts, setCohorts] = useState<ICohort[]>([]);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
+
+  const tableFields = ["ID", "Name", "Start Date", "# Members"];
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = authService.getAccessToken();
@@ -51,18 +65,34 @@ const ListCohorts = () => {
   if (error) return <EmptyState message={error} />;
   return (
     <>
-      <h2>Cohorts</h2>
-      <Link to="/cohorts/new">Create</Link>
-      {cohorts.map((cohort) => {
-        return (
-          <div key={cohort.name}>
-            <Link to={`/cohorts/${cohort.id}`}>
-              {cohort.name} - {cohort.members.length} members
-            </Link>
-            <br />
-          </div>
-        );
-      })}
+      <Typography variant="h1">Cohorts</Typography>
+
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              {tableFields.map((cell, index) => (
+                <TableCell key={`${index}-${cell}`}>{cell}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {cohorts.map((row) => (
+              <TableRow
+                key={`${row.id}-${row.name}`}
+                hover
+                onClick={() => navigate(`/cohorts/${row.id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <TableCell>{row.id}</TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.startDate}</TableCell>
+                <TableCell>{row.members.length}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 };

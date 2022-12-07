@@ -66,8 +66,8 @@ const CreateMember = ({ members, setMembers }: ICreateMemberProps) => {
 
   return (
     <div>
-      <h2>Members</h2>
-      <Box component="form">
+      <h2>New Member</h2>
+      <Box>
         <TextField
           name="username"
           label="Username"
@@ -108,7 +108,7 @@ const CreateMember = ({ members, setMembers }: ICreateMemberProps) => {
           disabled={loading}
           endIcon={loading ? <CircularProgress size={18} /> : <Check />}
         >
-          Create
+          Add
         </Button>
       </Box>
     </div>

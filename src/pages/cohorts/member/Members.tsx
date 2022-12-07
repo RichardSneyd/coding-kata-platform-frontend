@@ -10,8 +10,8 @@ interface IMemberProps {
 const Members = ({ members, setMembers }: IMemberProps) => {
   return (
     <div>
-      <h2>Members</h2>
       <CreateMember members={members} setMembers={setMembers} />
+      <h2>Members</h2>
       {members.map((member) => {
         return (
           <div key={member.username}>
