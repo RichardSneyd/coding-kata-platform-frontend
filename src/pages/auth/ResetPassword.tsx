@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Button,
@@ -22,30 +22,50 @@ const StyledCardContent = styled(CardContent)`
   flex-direction: column;
 `;
 
-const Login = () => {
-  const [username, setUsername] = useState("");
+const ResetPassword = () => {
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+  const { id } = useParams();
+  const token = window.location.search.split("token=")[1];
 
   const handleValidation = () => {
     let passed = true;
 
-    if (username.length < 3) {
-      setUsernameError("Username must be at least 3 characters");
+    if (password !== confirmPassword) {
+      setPasswordError("Passwords do not match");
+      setConfirmPasswordError("Passwords do not match");
       passed = false;
-    } else setUsernameError("");
+    } else {
+      setPasswordError("");
+      setConfirmPasswordError("");
+    }
+
+    if (password === "") {
+      setPasswordError("Password cannot be blank");
+      passed = false;
+    } else setPasswordError("");
 
     if (password.length < 6) {
       setPasswordError("Password must be at least 6 characters");
       passed = false;
     } else setPasswordError("");
+
+    if (confirmPassword === "") {
+      setConfirmPasswordError("Confirm Password cannot be blank");
+      passed = false;
+    } else setConfirmPasswordError("");
+    if (confirmPassword.length < 6) {
+      setConfirmPasswordError("Confirm Password must be at least 6 characters");
+      passed = false;
+    } else setConfirmPasswordError("");
 
     return passed;
   };
@@ -54,15 +74,23 @@ const Login = () => {
     if (handleValidation()) {
       setError("");
       setLoading(true);
+      const body = {
+        secret: token,
+        userId: id,
+        newPassword: password,
+      };
       try {
-        const response = await authService.signin(username, password);
+        const response = await authService.resetPassword(body);
 
-        if (response?.userId) {
-          navigate("/profile");
-          return;
-        }
-        setError(response.message ? response.message : "Server Error");
-        setLoading(false);
+        console.log("response!", response);
+        // BUG FOUND in backend needs to be fixed
+        // return
+        // if (response?.userId) {
+        //   navigate("/profile");
+        //   return;
+        // }
+        // setError(response.message ? response.message : "Server Error");
+        // setLoading(false);
       } catch (err: any) {
         setError(err.message ? err.message : "Server Error");
         setLoading(false);
@@ -72,21 +100,9 @@ const Login = () => {
 
   return (
     <>
-      <Card>
-        <CardHeader title="Sign in" />
+      <Card component="form">
+        <CardHeader title="Reset Password" />
         <StyledCardContent>
-          <TextField
-            variant="standard"
-            name="username"
-            label="Username"
-            autoFocus={true}
-            margin="normal"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && submit()}
-            error={usernameError !== ""}
-            helperText={usernameError}
-          />
           <br />
           <TextField
             variant="standard"
@@ -102,13 +118,25 @@ const Login = () => {
           />
 
           <br />
+          <TextField
+            variant="standard"
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            margin="normal"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && submit()}
+            error={confirmPasswordError !== ""}
+            helperText={confirmPasswordError}
+          />
 
           <Typography variant="caption" color="error">
             {error}
           </Typography>
 
           <Typography variant="caption">
-            Don't have an account? <Link to={"/signup"}>Sign up</Link>
+            Already know your password? <Link to={"/login"}>Login</Link>
           </Typography>
         </StyledCardContent>
         <CardActions>
@@ -119,7 +147,7 @@ const Login = () => {
             disabled={loading}
             endIcon={loading ? <CircularProgress size={18} /> : <Check />}
           >
-            Login
+            ResetPassword
           </Button>
         </CardActions>
       </Card>
@@ -127,4 +155,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;

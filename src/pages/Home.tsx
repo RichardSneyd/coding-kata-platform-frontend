@@ -1,12 +1,15 @@
+import { Grid, Paper, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import Login from "./auth/Login";
 
 const Home = () => {
   return (
     <>
-      <p>Home</p>
-      <Link to="/login">Login</Link>
-      <br />
-      <Link to="/adognewogawnigiewoan">404 page</Link>
+      <Grid container component="main">
+        <Grid item xs={12} sm={8} md={6} margin="auto">
+          <Login />
+        </Grid>
+      </Grid>
     </>
   );
 };

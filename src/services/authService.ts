@@ -48,6 +48,23 @@ const authService = {
     }
   },
 
+  async resetPassword(body: {
+    secret: string;
+    userId: string | undefined;
+    newPassword: string;
+  }) {
+    const res = await axios.post(
+      GlobalConfig.server_url + "/user/users/password/reset",
+      body
+      // {
+      //   headers: {
+      //     Authorization: "Bearer " + token,
+      //   },
+      // }
+    );
+    return res.data;
+  },
+
   logout() {
     window.sessionStorage.setItem("access_token", "");
     window.sessionStorage.setItem("user", "");

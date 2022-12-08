@@ -1,4 +1,5 @@
 import React from "react";
+import ResetPassword from "../pages/auth/ResetPassword";
 import Signup from "../pages/auth/Signup";
 import Cohort from "../pages/cohorts/Cohort";
 import CreateCohort from "../pages/cohorts/CreateCohort";
@@ -43,6 +44,12 @@ const routes: IRouteType[] = [
     authed: UserRoles.UNAUTHED,
     showInMenuFor: UserRoles.UNAUTHED,
   },
+  {
+    name: "Reset Password",
+    link: "/reset-password/:id",
+    Component: ResetPassword,
+    authed: UserRoles.UNAUTHED,
+  },
 
   /**
    * General
@@ -59,7 +66,6 @@ const routes: IRouteType[] = [
     link: "/profile",
     Component: Profile,
     authed: UserRoles.USER,
-    showInMenuFor: UserRoles.USER,
   },
   /**
    * User

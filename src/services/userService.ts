@@ -2,8 +2,21 @@ import axios from "axios";
 import GlobalConfig from "../config/GlobalConfig";
 
 const UserService = {
-  getAll: () => {
-    return axios.get(GlobalConfig.getApiOrigin + "/admin/users");
+  getAll: async (token: string) => {
+    const res = await axios.get(GlobalConfig.server_url + "/admin/users/", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
+  },
+  getById: async (token: string, id: string) => {
+    const res = await axios.get(`${GlobalConfig.server_url}/user/users/${id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
   },
 };
 
