@@ -1,3 +1,4 @@
+import { Edit } from "@mui/icons-material";
 import {
   Typography,
   TableContainer,
@@ -13,9 +14,14 @@ import { IUser } from "../../../interfaces/user";
 interface IMemberProps {
   members: IUser[];
   displayScore: boolean;
+  setMemberEditIndex?: (index: number) => void;
 }
 
-const Members = ({ members, displayScore }: IMemberProps) => {
+const Members = ({
+  members,
+  displayScore,
+  setMemberEditIndex,
+}: IMemberProps) => {
   const tableFields = ["ID", "Name", "Email", "Start Date"];
   if (displayScore) tableFields.push("Score");
   // const navigate = useNavigate();
@@ -39,7 +45,7 @@ const Members = ({ members, displayScore }: IMemberProps) => {
                 <TableCell>No members added yet</TableCell>
               </TableRow>
             ) : (
-              members.map((row) => (
+              members.map((row, index) => (
                 <TableRow
                   key={`${row.id}-${row.username}`}
                   // hover
@@ -51,6 +57,11 @@ const Members = ({ members, displayScore }: IMemberProps) => {
                   <TableCell>{row.email}</TableCell>
                   <TableCell>{row.joinDate}</TableCell>
                   {displayScore && <TableCell>{row.score}</TableCell>}
+                  {setMemberEditIndex && (
+                    <TableCell onClick={() => setMemberEditIndex(index)}>
+                      <Edit />
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             )}

@@ -12,14 +12,14 @@ import {
 import { useEffect, useState } from "react";
 import EmptyState from "../components/EmptyState";
 import Loading from "../components/global/Loading";
-import { IJWTUser } from "../interfaces/network";
 import { IUser } from "../interfaces/user";
 import authService from "../services/authService";
 import UserService from "../services/userService";
 
+import { Class, LockClock, Mail, SportsEsports } from "@mui/icons-material";
+
 import relativeTime from "dayjs/plugin/relativeTime";
 import dayjs from "dayjs";
-import { Class, LockClock, Mail, SportsEsports } from "@mui/icons-material";
 dayjs.extend(relativeTime);
 
 const Profile = () => {

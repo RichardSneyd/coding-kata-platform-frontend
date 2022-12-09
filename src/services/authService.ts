@@ -38,11 +38,12 @@ const authService = {
         return user;
       }
       throw AxiosError;
-    } catch (err) {
+    } catch (err: any) {
       // If we get an axios error, we can assume the server down
-      if (axios.isAxiosError(err)) {
+      if (err?.code === "ERR_NETWORK") {
         return { message: "Server error, please try again later" };
       }
+
       // If not, assuming it's incorrect credientials
       return { message: "Incorrect username or password" };
     }

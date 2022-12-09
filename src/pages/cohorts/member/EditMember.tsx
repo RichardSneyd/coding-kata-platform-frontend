@@ -21,9 +21,10 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { Check } from "@mui/icons-material";
 import styled from "@emotion/styled";
 
-interface ICreateMemberProps {
+interface IEditMemberProps {
+  memberIndex: number;
   members: IUser[];
-  setMembers: (member: IUser[]) => void;
+  editMember: (member: IUser) => void;
   startDate: Dayjs | null;
 }
 
@@ -32,16 +33,19 @@ const StyledCardContent = styled(CardContent)`
   flex-direction: column;
 `;
 
-const CreateMember = ({
+const EditMember = ({
+  memberIndex,
   members,
-  setMembers,
+  editMember,
   startDate,
-}: ICreateMemberProps) => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+}: IEditMemberProps) => {
+  const [username, setUsername] = useState(members[memberIndex].username);
+  const [email, setEmail] = useState(members[memberIndex].email);
 
   const [customJoinDate, setCustomJoinDate] = useState(true);
-  const [joinDate, setStartDate] = useState<Dayjs | null>(dayjs());
+  const [joinDate, setStartDate] = useState<Dayjs | null>(
+    dayjs(members[memberIndex].joinDate)
+  );
 
   const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -82,17 +86,15 @@ const CreateMember = ({
           : dayjs(joinDate).format("YYYY-MM-DD"),
         roles: ["USER"],
       };
-      setMembers([...members, newMember]);
-      setUsername("");
-      setEmail("");
-      setStartDate(dayjs());
+
+      editMember(newMember);
       setLoading(false);
     }
   };
 
   return (
     <Card>
-      <CardHeader title="Add a member" />
+      <CardHeader title="Edit a member" />
       <StyledCardContent>
         <TextField
           variant="standard"
@@ -157,4 +159,4 @@ const CreateMember = ({
     </Card>
   );
 };
-export default CreateMember;
+export default EditMember;

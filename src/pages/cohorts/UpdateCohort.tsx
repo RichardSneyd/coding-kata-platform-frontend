@@ -24,19 +24,17 @@ import { ICohort } from "../../interfaces/cohort";
 import { IUser } from "../../interfaces/user";
 import CreateMember from "./member/CreateMember";
 import styled from "@emotion/styled";
-import EditMember from "./member/EditMember";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
   flex-direction: column;
 `;
 
-const CreateCohort = () => {
+const UpdateCohort = () => {
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
 
   const [members, setMembers] = useState<IUser[]>([]);
-  const [memberEditIndex, setMemberEditIndex] = useState(-1);
 
   const [nameError, setNameError] = useState("");
 
@@ -88,18 +86,6 @@ const CreateCohort = () => {
     }
   };
 
-  const updateEditedMember = (newMember: IUser) => {
-    setMembers(
-      members.map((member, index) => {
-        if (index === memberEditIndex) {
-          return { ...member, newMember };
-        }
-        return member;
-      })
-    );
-    setMemberEditIndex(-1);
-  };
-
   return (
     <>
       <Typography variant="h1">Create a Cohort</Typography>
@@ -136,27 +122,10 @@ const CreateCohort = () => {
           </Card>
         </Grid>
         <Grid item md={6}>
-          {memberEditIndex === -1 ? (
-            <CreateMember
-              members={members}
-              setMembers={setMembers}
-              startDate={startDate}
-            />
-          ) : (
-            <EditMember
-              members={members}
-              memberIndex={memberEditIndex}
-              editMember={updateEditedMember}
-              startDate={startDate}
-            />
-          )}
+          {/* <CreateMember members={members} setMembers={setMembers} /> */}
         </Grid>
         <Grid item md={12}>
-          <Members
-            members={members}
-            displayScore={false}
-            setMemberEditIndex={setMemberEditIndex}
-          />
+          <Members members={members} displayScore={false} />
         </Grid>
 
         <Grid item md={12}>
@@ -188,4 +157,4 @@ const CreateCohort = () => {
   );
 };
 
-export default CreateCohort;
+export default UpdateCohort;

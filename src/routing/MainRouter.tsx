@@ -78,6 +78,7 @@ const MainRouter = () => {
       />
       <Grid
         container
+        component="main"
         style={{ marginTop: "20px", marginBottom: "20px" }}
         justifyContent="space-evenly"
       >
