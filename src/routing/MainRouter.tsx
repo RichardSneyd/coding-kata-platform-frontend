@@ -1,9 +1,9 @@
 import { Grid } from "@mui/material";
 import React, { Suspense, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import EmptyState from "../components/EmptyState";
+import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
-import Header from "../components/Header";
+import Header from "../components/global/Header";
 import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import authService from "../services/authService";

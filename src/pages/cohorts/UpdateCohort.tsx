@@ -19,13 +19,13 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
-import Members from "./member/Members";
+import Members from "../../components/cohort/member/Members";
 import { ICohort } from "../../interfaces/cohort";
 import { IUser } from "../../interfaces/user";
-import CreateMember from "./member/CreateSingleMember";
+import CreateMember from "../../components/cohort/member/CreateSingleMember";
 import styled from "@emotion/styled";
 
-import UpdateMember from "./member/UpdateMember";
+import UpdateMember from "../../components/cohort/member/UpdateMember";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;

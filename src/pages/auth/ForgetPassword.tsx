@@ -15,7 +15,7 @@ import styled from "@emotion/styled";
 
 import authService from "../../services/authService";
 import { Link } from "react-router-dom";
-import EmptyState from "../../components/EmptyState";
+import EmptyState from "../../components/global/EmptyState";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;

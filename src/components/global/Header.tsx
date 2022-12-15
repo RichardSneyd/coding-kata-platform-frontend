@@ -1,4 +1,4 @@
-import { Home, AccountCircle } from "@mui/icons-material";
+import { AccountCircle } from "@mui/icons-material";
 import {
   AppBar,
   Toolbar,
@@ -13,8 +13,8 @@ import { Box } from "@mui/system";
 import React from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-import routes, { UserRoles } from "../routing/routes";
-import authService from "../services/authService";
+import routes, { UserRoles } from "../../routing/routes";
+import authService from "../../services/authService";
 
 /**
  * Component Types
@@ -71,9 +71,16 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
     <React.Fragment>
       <AppBar position="sticky">
         <Toolbar style={{ justifyContent: "space-between" }}>
-          <IconButton aria-label="Home" component={Link} to="/">
-            <Home />
-          </IconButton>
+          <Link to="/">
+            <Box
+              component="img"
+              sx={{
+                height: 40,
+              }}
+              alt="BNTA Logo"
+              src="/img/bnta-logo.png"
+            />
+          </Link>
 
           <Box sx={{ display: { sm: "block" } }}>
             {routes

@@ -2,6 +2,7 @@ import {
   Button,
   CardActions,
   CardContent,
+  CardHeader,
   CircularProgress,
   TextField,
 } from "@mui/material";
@@ -71,16 +72,15 @@ const CreateBulkMember = ({
 
   return (
     <>
+      <CardHeader subheader="Add in an email on each line or you can paste directly from Google sheets (without seperators or commas). A username will be automatically generated for each email." />
       <StyledCardContent>
         <TextField
-          id="outlined-multiline-flexible"
-          label="Multiline"
+          label="Add or paste multiple emails"
           variant="standard"
           autoFocus={true}
-          minRows={11}
+          rows={8}
           multiline
-          placeholder="Paste in emails directly from excel / Google sheets here (without seperators or commas)"
-          maxRows={11}
+          placeholder="john@email.com&#10;andrew@gmail.com&#10;dwight@dundermifflin.com"
           value={values}
           onChange={(e) => setValues(e.target.value)}
         />

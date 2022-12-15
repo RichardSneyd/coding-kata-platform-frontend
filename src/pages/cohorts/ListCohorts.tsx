@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import EmptyState from "../../components/EmptyState";
+import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
 import { ICohort } from "../../interfaces/cohort";
 import authService from "../../services/authService";

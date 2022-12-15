@@ -1,15 +1,15 @@
-import { Add, ArrowBack, Delete, Edit } from "@mui/icons-material";
+import { ArrowBack, Edit } from "@mui/icons-material";
 import { Button, Fab, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import EmptyState from "../../components/EmptyState";
+import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
 import { ICohort } from "../../interfaces/cohort";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
-import Members from "./member/Members";
+import Members from "../../components/cohort/member/Members";
 import styled from "@emotion/styled";
-import DeleteCohort from "./DeleteCohort";
+import DeleteCohort from "../../components/cohort/DeleteCohort";
 
 /**
  * Injected styles

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
-import EmptyState from "../components/EmptyState";
+import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
 import { IUser } from "../interfaces/user";
 import authService from "../services/authService";
@@ -52,7 +52,7 @@ const Profile = () => {
   }, []);
 
   if (loading) return <Loading />;
-  if (error || !user) return <EmptyState message={error} />;
+  if (error !== "" || !user) return <EmptyState message={error} />;
   return (
     <>
       <Typography variant="h1">Profile</Typography>
