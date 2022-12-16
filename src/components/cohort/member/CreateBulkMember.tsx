@@ -6,12 +6,13 @@ import {
   CircularProgress,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { IUser } from "../../../interfaces/user";
 import { useSnackbar } from "notistack";
 import { ICreateBulkMember } from "./CreateMemberWrapper";
 import styled from "@emotion/styled";
 import { Check } from "@mui/icons-material";
+import { AppContext, IAppContext } from "../../../context/AppContext";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -23,10 +24,25 @@ const CreateBulkMember = ({
   setMembers,
   startDate,
 }: ICreateBulkMember) => {
+  const { members: existingGlobalMembers } = useContext(
+    AppContext
+  ) as IAppContext;
+
   const [values, setValues] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const checkIfValueIsUnique = (name: string, value: string) => {
+    const existingMemberIndex = members.findIndex(
+      (member) => member[name] === value
+    );
+    const existingGlobalMembersIndex = existingGlobalMembers.findIndex(
+      (member) => member[name] === value
+    );
+
+    return existingMemberIndex === -1 && existingGlobalMembersIndex === -1;
+  };
 
   const submit = () => {
     if (values === "") {
@@ -45,20 +61,30 @@ const CreateBulkMember = ({
           variant: "error",
         });
       }
-      const existingMemberIndex = members.findIndex(
-        (member) => member.email === email
-      );
+      // const existingMemberIndex = members.findIndex(
+      //   (member) => member.email === email
+      // );
+      // const existingGlobalMembersIndex = existingGlobalMembers.findIndex(
+      //   (member) => member.email === email
+      // );
+      const isGloballyUnique = checkIfValueIsUnique("email", email);
       const newMemberIndex = newMembers.findIndex(
         (member) => member.email === email
       );
-      if (existingMemberIndex !== -1 || newMemberIndex !== -1) {
+      if (!isGloballyUnique || newMemberIndex !== -1) {
         enqueueSnackbar(`Member with ${email} already exists`, {
           variant: "error",
         });
         return;
       }
+      //@TODO FIX THIS!!
+      let username = email.split("@")[0];
+      // const isUnique = isGloballyUnique('username', username);
+      if (!checkIfValueIsUnique("username", username)) {
+        username = username + Math.floor(1000 + Math.random() * 9000);
+      }
       const newMember = {
-        username: email.split("@")[0],
+        username,
         email: email,
         joinDate: startDate?.format("YYYY-MM-DD"),
       };

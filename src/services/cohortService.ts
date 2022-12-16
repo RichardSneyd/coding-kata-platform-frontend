@@ -34,13 +34,17 @@ const cohortServices = {
         }
       );
       if (response?.data.id) {
-        return { id: response?.data.id, message: "Cohort created" };
+        return response.data;
+        // return { id: response?.data.id, message: "Cohort created" };
       }
       throw AxiosError;
     } catch (err: any) {
       // If we get an axios error, we can assume the server down
       if (err?.code === "ERR_NETWORK") {
         throw new Error("Server error, please try again later");
+      }
+      if (typeof err.response.data === "string") {
+        throw new Error(err.response.data);
       }
       throw new Error("Could not create Cohort");
     }
@@ -57,13 +61,16 @@ const cohortServices = {
         }
       );
       if (response.status === 200) {
-        return { message: "Cohort updated" };
+        return response.data;
       }
       throw AxiosError;
     } catch (err: any) {
       // If we get an axios error, we can assume the server down
       if (err?.code === "ERR_NETWORK") {
         throw new Error("Server error, please try again later");
+      }
+      if (typeof err.response.data === "string") {
+        throw new Error(err.response.data);
       }
       throw new Error("Could not update Cohort");
     }

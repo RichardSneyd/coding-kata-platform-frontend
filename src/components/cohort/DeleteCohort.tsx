@@ -9,18 +9,21 @@ import {
   DialogTitle,
   Fab,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+import { AppContext, IAppContext } from "../../context/AppContext";
 
 interface IDeleteCohortProps {
   id: number;
 }
 
 const DeleteCohort = ({ id }: IDeleteCohortProps) => {
+  const { cohorts, setNewCohorts } = useContext(AppContext) as IAppContext;
+
   const [open, setOpen] = useState(false);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,6 +39,7 @@ const DeleteCohort = ({ id }: IDeleteCohortProps) => {
         cohortServices
           .delete(token, id.toString())
           .then((result) => {
+            setNewCohorts(cohorts.filter((cohort) => cohort.id !== id));
             enqueueSnackbar(`Cohort deleted`, {
               variant: "success",
             });

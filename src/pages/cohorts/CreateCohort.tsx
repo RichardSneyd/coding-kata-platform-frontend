@@ -15,7 +15,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
@@ -26,6 +26,7 @@ import styled from "@emotion/styled";
 import EditMember from "../../components/cohort/member/UpdateMember";
 import CreateMemberWrapper from "../../components/cohort/member/CreateMemberWrapper";
 import { useSnackbar } from "notistack";
+import { AppContext, IAppContext } from "../../context/AppContext";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -33,6 +34,8 @@ const StyledCardContent = styled(CardContent)`
 `;
 
 const CreateCohort = () => {
+  const { cohorts, setNewCohorts } = useContext(AppContext) as IAppContext;
+
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
 
@@ -42,10 +45,6 @@ const CreateCohort = () => {
   const [nameError, setNameError] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  // const { cohorts } = useAppContext();
-  // console.log("here yeah!!", cohorts);
 
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -55,6 +54,11 @@ const CreateCohort = () => {
 
     if (name === "") {
       setNameError("Name cannot be blank");
+      passed = false;
+    } else setNameError("");
+
+    if (cohorts.findIndex((cohort) => cohort.name === name) !== -1) {
+      setNameError(`A cohort with the name ${name} already exists`);
       passed = false;
     } else setNameError("");
 
@@ -71,7 +75,6 @@ const CreateCohort = () => {
           startDate: dayjs(startDate).format("YYYY-MM-DD"),
           members,
         };
-        setError("");
         setLoading(true);
         try {
           const response = await cohortServices.create(token, body);
@@ -79,14 +82,21 @@ const CreateCohort = () => {
           enqueueSnackbar(`Cohort created`, {
             variant: "success",
           });
+
+          setNewCohorts([...cohorts, response as ICohort]);
           navigate(`/cohorts/${response?.id}`);
         } catch (err: any) {
-          setError(err.message ? err.message : "Server Error");
+          enqueueSnackbar(err.message, {
+            variant: "error",
+          });
+
           setLoading(false);
         }
       }
     } else {
-      setError("Authentication error, please log in again");
+      enqueueSnackbar("Authentication error, please log in again", {
+        variant: "error",
+      });
       setLoading(false);
     }
   };
@@ -121,7 +131,7 @@ const CreateCohort = () => {
       </Button>
       <Typography variant="h1">Create a Cohort</Typography>
       <Grid container spacing={5}>
-        <Grid item md={6}>
+        <Grid item sm={12} md={6}>
           <Card>
             <CardHeader title="Cohort details" />
             <StyledCardContent>
@@ -152,7 +162,7 @@ const CreateCohort = () => {
             </StyledCardContent>
           </Card>
         </Grid>
-        <Grid item md={6}>
+        <Grid item sm={12} md={6}>
           {memberEditIndex === -1 ? (
             <CreateMemberWrapper
               members={members}
@@ -179,12 +189,6 @@ const CreateCohort = () => {
           />
         </Grid>
 
-        <Grid item md={12}>
-          <Typography variant="caption" color="error">
-            {error}
-          </Typography>
-          <br />
-        </Grid>
         <Grid item md={12}>
           <Button
             color="primary"

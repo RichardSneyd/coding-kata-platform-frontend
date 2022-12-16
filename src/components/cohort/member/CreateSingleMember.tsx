@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -18,6 +18,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { Check } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { ICreateBulkMember } from "./CreateMemberWrapper";
+import { AppContext, IAppContext } from "../../../context/AppContext";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -29,6 +30,8 @@ const CreateSingleMember = ({
   setMembers,
   startDate,
 }: ICreateBulkMember) => {
+  const { members: existingMembers } = useContext(AppContext) as IAppContext;
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
@@ -63,7 +66,11 @@ const CreateSingleMember = ({
       return member.username === username || member.email === email;
     });
 
-    if (memberIndex !== -1) {
+    const existingMemberIndex = existingMembers.findIndex((member) => {
+      return member.username === username || member.email === email;
+    });
+
+    if (memberIndex !== -1 || existingMemberIndex !== -1) {
       setError("Member username and email must be unique");
       passed = false;
     } else setError("");

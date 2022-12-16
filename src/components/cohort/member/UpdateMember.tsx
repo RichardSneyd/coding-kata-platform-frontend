@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import { IUser } from "../../../interfaces/user";
 
@@ -21,6 +21,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { Check, Close } from "@mui/icons-material";
 import styled from "@emotion/styled";
+import { AppContext, IAppContext } from "../../../context/AppContext";
 
 interface IUpdateMemberProps {
   memberIndex: number;
@@ -42,6 +43,8 @@ const UpdateMember = ({
   editMember,
   setMemberEditIndex,
 }: IUpdateMemberProps) => {
+  const { members: existingMembers } = useContext(AppContext) as IAppContext;
+
   const [username, setUsername] = useState(members[memberIndex].username);
   const [email, setEmail] = useState(members[memberIndex].email);
 
@@ -81,7 +84,11 @@ const UpdateMember = ({
       );
     });
 
-    if (editedMemberIndex !== -1) {
+    const existingMemberIndex = existingMembers.findIndex((member) => {
+      return member.username === username || member.email === email;
+    });
+
+    if (editedMemberIndex !== -1 || existingMemberIndex !== -1) {
       setError("Member username and email must be unique");
       passed = false;
     } else setError("");

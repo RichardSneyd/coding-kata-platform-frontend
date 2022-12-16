@@ -15,7 +15,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
@@ -27,6 +27,7 @@ import styled from "@emotion/styled";
 
 import UpdateMember from "../../components/cohort/member/UpdateMember";
 import { useSnackbar } from "notistack";
+import { AppContext, IAppContext } from "../../context/AppContext";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -34,6 +35,8 @@ const StyledCardContent = styled(CardContent)`
 `;
 
 const UpdateCohort = () => {
+  const { cohorts, updateCohort } = useContext(AppContext) as IAppContext;
+
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
 
@@ -42,7 +45,7 @@ const UpdateCohort = () => {
 
   const [nameError, setNameError] = useState("");
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -50,38 +53,31 @@ const UpdateCohort = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const token = authService.getAccessToken();
-
-    if (token) {
-      if (id) {
-        setError("");
-        setLoading(true);
-        cohortServices
-          .getById(token, id)
-          .then((result) => {
-            setName(result.name);
-            setStartDate(dayjs(result.startDate));
-            setMembers(result.members);
-
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.log("Error getting cohorts", err);
-            setError("Error fetching data");
-            setLoading(false);
-          });
-      }
+    const cohort = cohorts.find(
+      (cohort) => cohort.id === parseInt(id as string)
+    );
+    if (cohort) {
+      setName(cohort.name);
+      setStartDate(dayjs(cohort.startDate));
+      setMembers(cohort.members);
     } else {
-      setError("Authentication error, please log in again");
-      setLoading(false);
+      setError("Could not find cohort");
     }
-  }, [id]);
+  }, [cohorts, id]);
 
   const handleValidation = () => {
     let passed = true;
 
     if (name === "") {
       setNameError("Name cannot be blank");
+      passed = false;
+    } else setNameError("");
+
+    const cohortIndex = cohorts.findIndex((cohort) => {
+      return cohort.name === name && cohort.id !== parseInt(id as string);
+    });
+    if (cohortIndex !== -1) {
+      setNameError(`A cohort with the name ${name} already exists`);
       passed = false;
     } else setNameError("");
 
@@ -104,6 +100,7 @@ const UpdateCohort = () => {
         try {
           await cohortServices.update(token, body);
 
+          updateCohort(body);
           enqueueSnackbar(`Cohort updated`, {
             variant: "success",
           });

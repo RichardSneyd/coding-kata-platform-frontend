@@ -1,6 +1,6 @@
 import { ArrowBack, Edit } from "@mui/icons-material";
 import { Button, Fab, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
@@ -11,6 +11,7 @@ import Members from "../../components/cohort/member/Members";
 import styled from "@emotion/styled";
 import DeleteCohort from "../../components/cohort/DeleteCohort";
 import dayjs from "dayjs";
+import { AppContext, IAppContext } from "../../context/AppContext";
 
 /**
  * Injected styles
@@ -28,38 +29,24 @@ const TitleActionWrapper = styled("div")`
 `;
 
 const Cohort = () => {
+  const { cohorts } = useContext(AppContext) as IAppContext;
+
   const [cohort, setCohort] = useState<ICohort>();
   const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
 
   const { id } = useParams();
 
   useEffect(() => {
-    const token = authService.getAccessToken();
-
-    if (token) {
-      if (!cohort && id) {
-        setError("");
-        setLoading(true);
-        cohortServices
-          .getById(token, id)
-          .then((result) => {
-            setCohort(result);
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.log("Error getting cohorts", err);
-            setError("Error fetching data");
-            setLoading(false);
-          });
-      }
+    const cohort = cohorts.find(
+      (cohort) => cohort.id === parseInt(id as string)
+    );
+    if (cohort) {
+      setCohort(cohort);
     } else {
-      setError("Authentication error, please log in again");
-      setLoading(false);
+      setError("Could not find cohort");
     }
-  }, [cohort, id]);
+  }, [cohorts, id]);
 
-  if (loading) return <Loading />;
   if (error || !cohort) return <EmptyState message={error} />;
   return (
     <>

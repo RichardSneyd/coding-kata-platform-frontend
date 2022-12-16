@@ -10,12 +10,9 @@ import {
   Typography,
   Fab,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import EmptyState from "../../components/global/EmptyState";
-import Loading from "../../components/global/Loading";
-import authService from "../../services/authService";
-import cohortServices from "../../services/cohortService";
+
 import styled from "@emotion/styled";
 import dayjs from "dayjs";
 import { AppContext, IAppContext } from "../../context/AppContext";

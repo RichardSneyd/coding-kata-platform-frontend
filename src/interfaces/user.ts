@@ -1,6 +1,7 @@
 import { ICohort } from "./cohort";
 
 export interface IUser {
+  [key: string]: any;
   id?: number;
   username: string;
   email: string;

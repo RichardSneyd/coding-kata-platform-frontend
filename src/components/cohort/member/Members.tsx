@@ -36,7 +36,7 @@ const Members = ({
       <Typography variant="h2">Members</Typography>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 550 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               {members.length > 0 &&
@@ -109,32 +109,5 @@ const RenderTableRow = ({
     </TableRow>
   );
 };
-
-// interface IRenderEditTableRowProps extends IRenderTableRowProps {
-//   setMemberEditIndex: (index: number) => void;
-// }
-
-// const RenderEditTableRow = ({
-//   row,
-//   index,
-//   setMemberEditIndex,
-//   displayScore,
-// }: IRenderEditTableRowProps) => {
-//   return (
-//     <TableRow key={`${row.id ? row.id : index}-${row.username}`}>
-//       <TableCell>{row.username}</TableCell>
-//       <TableCell>{row.email}</TableCell>
-//       <TableCell>{row.joinDate}</TableCell>
-//       {displayScore && <TableCell>{row.score}</TableCell>}
-//       {setMemberEditIndex && (
-//         <TableCell>
-//           <IconButton onClick={() => setMemberEditIndex(index)}>
-//             <Edit />
-//           </IconButton>
-//         </TableCell>
-//       )}
-//     </TableRow>
-//   );
-// };
 
 export default Members;
