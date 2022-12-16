@@ -1,4 +1,4 @@
-import { Edit } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Typography,
   TableContainer,
@@ -10,6 +10,7 @@ import {
   TableBody,
   IconButton,
 } from "@mui/material";
+import dayjs from "dayjs";
 import { IUser } from "../../../interfaces/user";
 
 interface IMemberProps {
@@ -17,6 +18,7 @@ interface IMemberProps {
   displayScore: boolean;
   displayEmptyCell?: boolean;
   setMemberEditIndex?: (index: number) => void;
+  deleteMember?: (index: number) => void;
 }
 
 const Members = ({
@@ -24,6 +26,7 @@ const Members = ({
   displayScore,
   displayEmptyCell = false,
   setMemberEditIndex,
+  deleteMember,
 }: IMemberProps) => {
   const tableFields = ["Name", "Email", "Start Date"];
 
@@ -57,6 +60,7 @@ const Members = ({
                   row={row}
                   index={index}
                   setMemberEditIndex={setMemberEditIndex}
+                  deleteMember={deleteMember}
                   displayScore={displayScore}
                 />
               ))
@@ -73,6 +77,7 @@ interface IRenderTableRowProps {
   index: number;
   displayScore: boolean;
   setMemberEditIndex?: (index: number) => void;
+  deleteMember?: (index: number) => void;
 }
 
 const RenderTableRow = ({
@@ -80,19 +85,26 @@ const RenderTableRow = ({
   index,
   displayScore,
   setMemberEditIndex,
+  deleteMember,
 }: IRenderTableRowProps) => {
   return (
     <TableRow>
       <TableCell>{row.username}</TableCell>
       <TableCell>{row.email}</TableCell>
-      <TableCell>{row.joinDate}</TableCell>
+      <TableCell>{dayjs(row.joinDate).format("MMM D, YYYY")}</TableCell>
       {displayScore && <TableCell>{row.score}</TableCell>}
-      {setMemberEditIndex && (
-        <TableCell>
-          <IconButton onClick={() => setMemberEditIndex(index)}>
-            <Edit />
-          </IconButton>
-        </TableCell>
+      {setMemberEditIndex && deleteMember && (
+        <>
+          <TableCell>
+            <IconButton onClick={() => setMemberEditIndex(index)}>
+              <Edit />
+            </IconButton>
+
+            <IconButton onClick={() => deleteMember(index)}>
+              <Delete />
+            </IconButton>
+          </TableCell>
+        </>
       )}
     </TableRow>
   );

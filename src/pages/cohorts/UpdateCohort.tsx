@@ -26,6 +26,7 @@ import CreateMember from "../../components/cohort/member/CreateSingleMember";
 import styled from "@emotion/styled";
 
 import UpdateMember from "../../components/cohort/member/UpdateMember";
+import { useSnackbar } from "notistack";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -46,6 +47,7 @@ const UpdateCohort = () => {
 
   const navigate = useNavigate();
   const { id } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const token = authService.getAccessToken();
@@ -102,12 +104,10 @@ const UpdateCohort = () => {
         try {
           await cohortServices.update(token, body);
 
-          // if (response?.id) {
+          enqueueSnackbar(`Cohort updated`, {
+            variant: "success",
+          });
           navigate(`/cohorts/${id}`);
-          // return;
-          // }
-          // setError(response.message ? response.message : "Server Error");
-          // setLoading(false);
         } catch (err: any) {
           setError(err.message ? err.message : "Server Error");
           setLoading(false);
@@ -120,8 +120,6 @@ const UpdateCohort = () => {
   };
 
   const updateEditedMember = (newMember: IUser) => {
-    console.log(newMember.username);
-
     setMembers(
       members.map((member, index) => {
         if (index === memberEditIndex) {
@@ -131,6 +129,10 @@ const UpdateCohort = () => {
       })
     );
     setMemberEditIndex(-1);
+  };
+
+  const deleteMember = (memberIndex: number) => {
+    setMembers(members.filter((member, index) => index !== memberIndex));
   };
 
   return (
@@ -199,6 +201,7 @@ const UpdateCohort = () => {
             displayScore={false}
             displayEmptyCell={true}
             setMemberEditIndex={setMemberEditIndex}
+            deleteMember={deleteMember}
           />
         </Grid>
 

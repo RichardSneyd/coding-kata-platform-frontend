@@ -10,6 +10,7 @@ import cohortServices from "../../services/cohortService";
 import Members from "../../components/cohort/member/Members";
 import styled from "@emotion/styled";
 import DeleteCohort from "../../components/cohort/DeleteCohort";
+import dayjs from "dayjs";
 
 /**
  * Injected styles
@@ -85,7 +86,9 @@ const Cohort = () => {
           {cohort.id && <DeleteCohort id={cohort.id} />}
         </TitleActionWrapper>
       </TitleWrapper>
-      <Typography variant="caption">{cohort.startDate}</Typography>
+      <Typography variant="caption">
+        {dayjs(cohort.startDate).format("MMM D, YYYY")}
+      </Typography>
 
       <br />
       <Members members={cohort.members} displayScore={true} />

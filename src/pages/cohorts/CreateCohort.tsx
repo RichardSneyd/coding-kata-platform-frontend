@@ -25,6 +25,7 @@ import { IUser } from "../../interfaces/user";
 import styled from "@emotion/styled";
 import EditMember from "../../components/cohort/member/UpdateMember";
 import CreateMemberWrapper from "../../components/cohort/member/CreateMemberWrapper";
+import { useSnackbar } from "notistack";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -43,6 +44,7 @@ const CreateCohort = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   const handleValidation = () => {
@@ -71,12 +73,10 @@ const CreateCohort = () => {
         try {
           const response = await cohortServices.create(token, body);
 
-          // if (response?.id) {
+          enqueueSnackbar(`Cohort created`, {
+            variant: "success",
+          });
           navigate(`/cohorts/${response?.id}`);
-          // return;
-          // }
-          // setError(response.message ? response.message : "Server Error");
-          // setLoading(false);
         } catch (err: any) {
           setError(err.message ? err.message : "Server Error");
           setLoading(false);
@@ -100,6 +100,10 @@ const CreateCohort = () => {
       })
     );
     setMemberEditIndex(-1);
+  };
+
+  const deleteMember = (memberIndex: number) => {
+    setMembers(members.filter((member, index) => index !== memberIndex));
   };
 
   return (
@@ -168,6 +172,7 @@ const CreateCohort = () => {
             displayScore={false}
             displayEmptyCell={true}
             setMemberEditIndex={setMemberEditIndex}
+            deleteMember={deleteMember}
           />
         </Grid>
 

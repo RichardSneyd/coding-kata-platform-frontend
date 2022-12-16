@@ -70,7 +70,7 @@ const cohortServices = {
   },
   delete: async (token: string, id: string) => {
     try {
-      const response = await axios.get(
+      const response = await axios.delete(
         `${GlobalConfig.server_url}/admin/cohorts/${id}`,
         {
           headers: {

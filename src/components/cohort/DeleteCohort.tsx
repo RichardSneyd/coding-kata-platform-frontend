@@ -14,6 +14,7 @@ import { useState } from "react";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
 import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 interface IDeleteCohortProps {
   id: number;
@@ -25,6 +26,7 @@ const DeleteCohort = ({ id }: IDeleteCohortProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const submit = () => {
     const token = authService.getAccessToken();
@@ -39,6 +41,7 @@ const DeleteCohort = ({ id }: IDeleteCohortProps) => {
             });
             setOpen(false);
             setLoading(false);
+            navigate("/cohorts");
           })
           .catch((err) => {
             enqueueSnackbar(err.message, {

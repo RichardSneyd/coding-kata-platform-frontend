@@ -18,6 +18,7 @@ import { ICohort } from "../../interfaces/cohort";
 import authService from "../../services/authService";
 import cohortServices from "../../services/cohortService";
 import styled from "@emotion/styled";
+import dayjs from "dayjs";
 
 /**
  * Injected styles
@@ -96,7 +97,9 @@ const ListCohorts = () => {
               >
                 <TableCell>{row.id}</TableCell>
                 <TableCell>{row.name}</TableCell>
-                <TableCell>{row.startDate}</TableCell>
+                <TableCell>
+                  {dayjs(row.startDate).format("MMM D, YYYY")}
+                </TableCell>
                 <TableCell>{row.members.length}</TableCell>
               </TableRow>
             ))}
