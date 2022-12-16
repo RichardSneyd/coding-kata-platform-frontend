@@ -61,12 +61,7 @@ const CreateBulkMember = ({
           variant: "error",
         });
       }
-      // const existingMemberIndex = members.findIndex(
-      //   (member) => member.email === email
-      // );
-      // const existingGlobalMembersIndex = existingGlobalMembers.findIndex(
-      //   (member) => member.email === email
-      // );
+
       const isGloballyUnique = checkIfValueIsUnique("email", email);
       const newMemberIndex = newMembers.findIndex(
         (member) => member.email === email
@@ -77,9 +72,8 @@ const CreateBulkMember = ({
         });
         return;
       }
-      //@TODO FIX THIS!!
+
       let username = email.split("@")[0];
-      // const isUnique = isGloballyUnique('username', username);
       if (!checkIfValueIsUnique("username", username)) {
         username = username + Math.floor(1000 + Math.random() * 9000);
       }
