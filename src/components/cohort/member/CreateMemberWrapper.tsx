@@ -56,10 +56,7 @@ const CreateMemberWrapper = ({
 
   return (
     <Card>
-      {/* <CardHeader> */}
-      <Box
-      // sx={{ borderBottom: 1, borderColor: "divider" }}
-      >
+      <Box>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -69,8 +66,7 @@ const CreateMemberWrapper = ({
           <Tab icon={<Group />} label="Bulk Create" {...a11yProps(1)} />
         </Tabs>
       </Box>
-      {/* </CardHeader> */}
-      {/* <CardContent> */}
+
       <TabPanel value={value} index={0}>
         <CreateSingleMember
           members={members}
@@ -85,7 +81,6 @@ const CreateMemberWrapper = ({
           startDate={startDate}
         />
       </TabPanel>
-      {/* </CardContent> */}
     </Card>
   );
 };

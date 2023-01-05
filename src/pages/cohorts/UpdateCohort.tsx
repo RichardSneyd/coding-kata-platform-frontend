@@ -177,11 +177,14 @@ const UpdateCohort = () => {
         </Grid>
         <Grid item md={6}>
           {memberEditIndex === -1 ? (
-            <CreateMember
-              members={members}
-              setMembers={setMembers}
-              startDate={startDate}
-            />
+            <Card>
+              <CardHeader title="Add a member" />
+              <CreateMember
+                members={members}
+                setMembers={setMembers}
+                startDate={startDate}
+              />
+            </Card>
           ) : (
             <UpdateMember
               members={members}

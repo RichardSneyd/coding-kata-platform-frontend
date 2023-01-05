@@ -85,7 +85,7 @@ const UpdateMember = ({
     });
 
     const existingMemberIndex = existingMembers.findIndex((member) => {
-      return member.username === username || member.email === email;
+      return member.username === username && member.email === email;
     });
 
     if (editedMemberIndex !== -1 || existingMemberIndex !== -1) {
