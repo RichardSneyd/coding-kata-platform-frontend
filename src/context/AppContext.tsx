@@ -4,9 +4,9 @@ import { IUser } from "../interfaces/user";
 
 export interface IAppContext {
   members: IUser[];
+  cohorts: ICohort[];
   setNewMembers: (members: IUser[]) => void;
   updateMember: (member: IUser) => void;
-  cohorts: ICohort[];
   setNewCohorts: (cohorts: ICohort[]) => void;
   updateCohort: (cohort: ICohort) => void;
 }
@@ -55,9 +55,9 @@ const AppProvider = ({ children }: IAppProvider) => {
     <AppContext.Provider
       value={{
         members,
+        cohorts,
         setNewMembers,
         updateMember,
-        cohorts,
         setNewCohorts,
         updateCohort,
       }}

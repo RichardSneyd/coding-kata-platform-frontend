@@ -7,6 +7,10 @@ import ListCohorts from "../pages/cohorts/ListCohorts";
 import UpdateCohort from "../pages/cohorts/UpdateCohort";
 import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
+// import CreateProblemSet from "../pages/problem-sets/CreateProblemSet";
+import ListProblemSets from "../pages/problem-sets/ListProblemSets";
+// import ProblemSet from "../pages/problem-sets/ProblemSet";
+// import UpdateProblemSet from "../pages/problem-sets/UpdateProblemSet";
 import Profile from "../pages/Profile";
 import ListUsers from "../pages/user/ListUsers";
 
@@ -107,14 +111,33 @@ const routes: IRouteType[] = [
     authed: UserRoles.ADMIN,
   },
 
-  // /**
-  //  * Modules
-  //  */
+  /**
+   * ProblemSet
+   */
   // {
-  //   name: "Create Module",
-  //   link: "/create/module",
-  //   component: CreateModule,
-  //   authed: true,
+  //   name: "Create Problem Set",
+  //   link: "/problems-sets/new",
+  //   Component: CreateProblemSet,
+  //   authed: UserRoles.ADMIN,
+  // },
+  {
+    name: "Problem Sets",
+    link: "/problem-sets",
+    Component: ListProblemSets,
+    authed: UserRoles.ADMIN,
+    showInMenuFor: UserRoles.ADMIN,
+  },
+  // {
+  //   name: "Problem Set",
+  //   link: "/problem-sets/:id",
+  //   Component: ProblemSet,
+  //   authed: UserRoles.ADMIN,
+  // },
+  // {
+  //   name: "Update Problem Set",
+  //   link: "/problem-sets/edit/:id",
+  //   Component: UpdateProblemSet,
+  //   authed: UserRoles.ADMIN,
   // },
 ];
 
