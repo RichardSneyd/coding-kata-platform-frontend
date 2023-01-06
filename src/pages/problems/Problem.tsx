@@ -10,9 +10,11 @@ import {
   CardHeader,
   CardContent,
   List,
+  Chip,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import CodeEditor from "../../components/CodeEditor";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
 // import DeleteProblem from "../../components/problem/DeleteProblem";
@@ -20,6 +22,7 @@ import DifficultyChip from "../../components/problem/DifficultyChip";
 
 import Tags from "../../components/problem/Tags";
 import TestCases from "../../components/problem/TestCases";
+import CodeEditorContainer from "../../containers/CodeEditorContainer";
 import { IProblem } from "../../interfaces/problemSet";
 
 import authService from "../../services/authService";
@@ -38,6 +41,10 @@ const TitleActionWrapper = styled("div")`
   a {
     margin: 0 5px;
   }
+`;
+
+const StyledChip = styled(Chip)`
+  margin: 10px 0;
 `;
 
 const ChipWrapper = styled("div")`
@@ -120,10 +127,17 @@ const Problem = () => {
       <Grid container spacing={5}>
         <Grid item sm={6}>
           <Card>
-            <CardHeader title="Public Test Cases" />
+            <CardHeader title="Test Cases" />
             <CardContent>
               <List>
+                <StyledChip label="Public" color="success" />
                 {problem.testSuite?.publicCases?.map((item, index) => {
+                  return <TestCases testCase={item} defaultOpen />;
+                })}
+                <Divider />
+                <StyledChip label="Private" color="warning" />
+
+                {problem.testSuite?.privateCases?.map((item, index) => {
                   return <TestCases testCase={item} />;
                 })}
               </List>
@@ -131,16 +145,12 @@ const Problem = () => {
           </Card>
         </Grid>
         <Grid item sm={6}>
-          <Card>
-            <CardHeader title="Private Test Cases" />
-            <CardContent>
-              <List>
-                {problem.testSuite?.privateCases?.map((item, index) => {
-                  return <TestCases testCase={item} />;
-                })}
-              </List>
-            </CardContent>
-          </Card>
+          <CodeEditor
+            lang="javascript"
+            value={problem.startCode?.js || ""}
+            onEditorValueChange={() => {}}
+            readOnly
+          />
         </Grid>
       </Grid>
     </>

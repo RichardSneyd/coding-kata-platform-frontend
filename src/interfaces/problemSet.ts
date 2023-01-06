@@ -31,8 +31,8 @@ export interface TestSuite {
 
 export interface Case {
   id?: number;
-  inputs?: Put[];
-  output?: Put;
+  inputs: Put[];
+  output: Put;
 }
 
 export interface Put {

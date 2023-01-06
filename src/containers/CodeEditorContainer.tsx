@@ -3,7 +3,7 @@ import CodeEditor from "../components/CodeEditor";
 import EditorTools from "../components/EditorTools";
 
 interface ICodeEditorContainerProps {
-  onSubmit: (code: string, lang: string) => Promise<void>;
+  onSubmit?: (code: string, lang: string) => Promise<void>;
   submitButtonTitle: string;
 }
 
