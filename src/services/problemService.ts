@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import GlobalConfig from "../config/GlobalConfig";
-import { IProblemSet } from "../interfaces/problemSet";
+import { IProblem, IProblemSet } from "../interfaces/problemSet";
 
 const problemServices = {
   getAll: async (token: string) => {
@@ -11,7 +11,7 @@ const problemServices = {
     });
     return res.data;
   },
-  getById: async (token: string, id: string): Promise<IProblemSet> => {
+  getById: async (token: string, id: string): Promise<IProblem> => {
     const res = await axios.get(
       `${GlobalConfig.server_url}/user/problems/${id}`,
       {

@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import CodeEditor from "../../components/CodeEditor";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
 // import DeleteProblem from "../../components/problem/DeleteProblem";
@@ -22,6 +21,7 @@ import DifficultyChip from "../../components/problem/DifficultyChip";
 
 import Tags from "../../components/problem/Tags";
 import TestCases from "../../components/problem/TestCases";
+import CodeEditorContainer from "../../components/editor/CodeEditorContainer";
 import { IProblem } from "../../interfaces/problemSet";
 
 import authService from "../../services/authService";
@@ -56,7 +56,7 @@ const ChipWrapper = styled("div")`
 `;
 
 const Problem = () => {
-  const [problem, setProblem] = useState<IProblem>();
+  const [problem, setProblem] = useState<IProblem | undefined>();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -152,12 +152,13 @@ const Problem = () => {
           </Card>
         </Grid>
         <Grid item sm={6}>
-          <CodeEditor
+          <CodeEditorContainer startCode={problem.startCode} />
+          {/* <CodeEditor
             lang="javascript"
             value={problem.startCode?.js || ""}
             onEditorValueChange={() => {}}
             readOnly
-          />
+          /> */}
         </Grid>
       </Grid>
     </>

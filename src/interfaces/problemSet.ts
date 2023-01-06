@@ -13,15 +13,16 @@ export interface IProblem {
   description?: string;
   difficulty?: string;
   testSuite?: TestSuite;
-  startCode?: StartCode;
+  startCode: StartCode;
   tags?: string[];
 }
 
 export interface StartCode {
-  id?: number;
-  js?: string;
-  py?: string;
-  java?: string;
+  [key: string]: any;
+  id: number;
+  js: string;
+  py: string;
+  java: string;
 }
 
 export interface TestSuite {
