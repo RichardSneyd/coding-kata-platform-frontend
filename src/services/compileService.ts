@@ -5,7 +5,7 @@ const CompileService = {
     
     compile: (lang = "javascript", code = "console.log('hello world')") => {
         return axios.post(
-            GlobalConfig.getApiOrigin + '/compile', {lang, code}
+            GlobalConfig.server_url + '/compile', {lang, code}
         );
     }
 }
