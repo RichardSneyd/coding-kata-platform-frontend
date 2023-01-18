@@ -134,17 +134,20 @@ const Problem = () => {
                   return (
                     <TestCases
                       key={`${index}-${item.id}`}
+                      functionName={problem.title || ""}
                       testCase={item}
-                      defaultOpen
                     />
                   );
                 })}
                 <Divider />
                 <StyledChip label="Private" color="warning" />
-
                 {problem.testSuite?.privateCases?.map((item, index) => {
                   return (
-                    <TestCases key={`${index}-${item.id}`} testCase={item} />
+                    <TestCases
+                      functionName={problem.title || ""}
+                      key={`${index}-${item.id}`}
+                      testCase={item}
+                    />
                   );
                 })}
               </List>

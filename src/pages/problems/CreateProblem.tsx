@@ -14,6 +14,7 @@ import {
   MenuItem,
   Select,
   FormControl,
+  List,
 } from "@mui/material";
 
 import { useState } from "react";
@@ -23,8 +24,13 @@ import authService from "../../services/authService";
 import styled from "@emotion/styled";
 
 import { useSnackbar } from "notistack";
-import { Difficulty, Put } from "../../interfaces/problemSet";
-import CreateTestCase from "../../components/problem/CreateTestCase";
+import { Case, Difficulty, Put } from "../../interfaces/problemSet";
+import CreateTestCase from "../../components/problem/test-case/CreateTestCase";
+import TestCases from "../../components/problem/TestCases";
+
+const StyledChip = styled(Chip)`
+  margin: 10px 0;
+`;
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -38,8 +44,8 @@ const CreateProblem = () => {
   const [descriptionError, setDescriptionError] = useState<string>("");
   const [difficulty, setDifficulty] = useState<string>("EASY");
   const [tags, setTags] = useState<string[]>([]);
-  const [publicCases, setPublicCases] = useState([]);
-  const [privateCases, setPrivateCases] = useState([]);
+  const [publicCases, setPublicCases] = useState<Case[]>([]);
+  const [privateCases, setPrivateCases] = useState<Case[]>([]);
   const [startCode, setStartCode] = useState({
     js: "",
     py: "",
@@ -107,7 +113,15 @@ const CreateProblem = () => {
     setTags([...tags, event.target.value]);
   };
 
-  const addTestCase = (name: string, data: Put) => {};
+  const addTestCase = (isPublic: boolean, inputs: Put[], output: Put) => {
+    console.log("here");
+    console.log(isPublic, inputs, output);
+    if (isPublic) {
+      setPublicCases([...publicCases, { inputs: inputs, output }]);
+    } else {
+      setPrivateCases([...privateCases, { inputs: inputs, output }]);
+    }
+  };
 
   return (
     <>
@@ -203,9 +217,42 @@ const CreateProblem = () => {
 
         <Grid item sm={12} md={6} xs={12}>
           <Card>
-            <CardHeader title="Problem details" />
             <StyledCardContent>
               <CreateTestCase setTestCase={addTestCase} />
+
+              <List>
+                <StyledChip label="Public" color="success" />
+                {publicCases.length === 0 ? (
+                  <Typography variant="body1" align="center">
+                    No public cases
+                  </Typography>
+                ) : (
+                  publicCases.map((item) => {
+                    return (
+                      <TestCases
+                        functionName={title || "functionName"}
+                        testCase={item}
+                      />
+                    );
+                  })
+                )}
+                <StyledChip label="Private" color="error" />
+
+                {privateCases.length === 0 ? (
+                  <Typography variant="body1" align="center">
+                    No public cases
+                  </Typography>
+                ) : (
+                  privateCases.map((item) => {
+                    return (
+                      <TestCases
+                        functionName={title || "functionName"}
+                        testCase={item}
+                      />
+                    );
+                  })
+                )}
+              </List>
             </StyledCardContent>
           </Card>
         </Grid>

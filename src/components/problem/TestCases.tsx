@@ -1,62 +1,57 @@
+import { Edit, InputOutlined } from "@mui/icons-material";
 import {
-  ExpandLess,
-  ExpandMore,
-  InputOutlined,
-  OutputOutlined,
-  SubdirectoryArrowRight,
-} from "@mui/icons-material";
-import {
-  ListSubheader,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Collapse,
-  List,
-  ListItemButton,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
-import { useState } from "react";
 import { Case } from "../../interfaces/problemSet";
 
 interface ITestCasesProps {
+  functionName: string;
   testCase: Case;
-  defaultOpen?: boolean;
 }
 
-const TestCases = ({ testCase, defaultOpen = false }: ITestCasesProps) => {
-  const [open, setOpen] = useState<boolean>(defaultOpen);
+const TestCases = ({ functionName, testCase }: ITestCasesProps) => {
   return (
     <>
-      <ListItemButton onClick={() => setOpen(!open)}>
+      <ListItem>
         <ListItemIcon>
           <InputOutlined />
         </ListItemIcon>
-        <ListItemText
-          primary={`Input${testCase.inputs?.length > 1 ? "s" : ""}`}
-        />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {testCase.inputs?.map((input, index) => {
-            return (
-              <ListItem key={`${index}-${input.id}`} sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <SubdirectoryArrowRight />
-                </ListItemIcon>
-                <ListItemText primary={`${input.value} (${input.dataType})`} />
-              </ListItem>
-            );
-          })}
-        </List>
-      </Collapse>
-      <ListSubheader>Expected Output</ListSubheader>
-      <ListItem>
+        <ListItemText>
+          <code>
+            {functionName}(
+            {testCase.inputs.map((input, index) => {
+              return (
+                <>
+                  <Tooltip
+                    key={`${input.value}-${index}`}
+                    style={{ cursor: "pointer" }}
+                    title={input.dataType}
+                  >
+                    <span>{input.value || ""}</span>
+                  </Tooltip>
+                  {index !== testCase.inputs.length - 1 ? "," : ""}
+                </>
+              );
+            })}
+            ) {"=> "}
+            <Tooltip
+              style={{ cursor: "pointer" }}
+              title={testCase.output.dataType}
+            >
+              <span>{testCase.output.value}</span>
+            </Tooltip>
+          </code>
+        </ListItemText>
+
         <ListItemIcon>
-          <OutputOutlined />
+          <IconButton>
+            <Edit />
+          </IconButton>
         </ListItemIcon>
-        <ListItemText
-          primary={`${testCase.output?.value} (${testCase.output?.dataType})`}
-        />
       </ListItem>
     </>
   );

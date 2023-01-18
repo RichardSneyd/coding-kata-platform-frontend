@@ -37,6 +37,7 @@ export interface Case {
 }
 
 export interface Put {
+  [key: string]: any;
   id?: number;
   value?: string;
   dataType?: DataType;
