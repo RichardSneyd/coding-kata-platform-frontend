@@ -92,7 +92,7 @@ const ListAllSolutions = () => {
                 <TableRow
                   key={`${row.id}-${row.problem?.title}`}
                   hover
-                  onClick={() => navigate(`/problems/${row.id}`)}
+                  onClick={() => navigate(`/solutions/${row.id}`)}
                   style={{ cursor: "pointer" }}
                 >
                   <TableCell>{row.id}</TableCell>
