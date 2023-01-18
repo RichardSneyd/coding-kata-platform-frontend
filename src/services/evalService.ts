@@ -10,7 +10,7 @@ interface IEvaluate {
 
 const EvalService = {
   evaluate: ({ userId, problemId, code, lang }: IEvaluate) => {
-    return axios.post(GlobalConfig.getApiOrigin + "/eval", {
+    return axios.post(GlobalConfig.server_url + "/eval", {
       userId,
       problemId,
       code,
