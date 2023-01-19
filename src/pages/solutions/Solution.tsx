@@ -1,25 +1,25 @@
 import styled from "@emotion/styled";
 import { ArrowBack, Done } from "@mui/icons-material";
 import {
-    Button,
-    Typography,
-    Fab,
-    Divider,
-    Grid,
-    Card,
-    CardHeader,
-    CardContent,
-    List,
-    Chip,
-    Paper,
-    TableContainer,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
+  Button,
+  Typography,
+  Fab,
+  Divider,
+  Grid,
+  Card,
+  CardHeader,
+  CardContent,
+  List,
+  Chip,
+  Paper,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import {useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
 // import DeleteProblem from "../../components/problem/DeleteProblem";
@@ -62,121 +62,138 @@ const ChipWrapper = styled("div")`
 `;
 
 const Solution = () => {
-    const [solution, setSolution] = useState<ISolution | undefined>();
-    const [error, setError] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(true);
+  const [solution, setSolution] = useState<ISolution | undefined>();
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
-    const { id } = useParams();
-    const navigate = useNavigate();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = authService.getAccessToken();
+  useEffect(() => {
+    const token = authService.getAccessToken();
 
-        if (token) {
-            if (!solution && id) {
-                setError("");
-                setLoading(true);
-                solutionService
-                    .getById(token, id)
-                    .then((result) => {
-                        setSolution(result);
-                        setLoading(false);
-                    })
-                    .catch((err) => {
-                        console.log("Error getting problem sets", err);
-                        setError("Error fetching data");
-                        setLoading(false);
-                    });
-            }
-        } else {
-            setError("Authentication error, please log in again");
+    if (token) {
+      if (!solution && id) {
+        setError("");
+        setLoading(true);
+        solutionService
+          .getById(token, id)
+          .then((result) => {
+            setSolution(result);
             setLoading(false);
-        }
-    }, [solution, id]);
+          })
+          .catch((err) => {
+            console.log("Error getting problem sets", err);
+            setError("Error fetching data");
+            setLoading(false);
+          });
+      }
+    } else {
+      setError("Authentication error, please log in again");
+      setLoading(false);
+    }
+  }, [solution, id]);
 
-    if (loading) return <Loading />;
-    if (error || !solution) return <EmptyState message={error} />;
-    return (
-        <>
-            <Button
-                color="info"
-                onClick={() => navigate(-1)}
-                startIcon={<ArrowBack />}
-            >
-                Back
-            </Button>
-            <ChipWrapper>
-                <DifficultyChip label={solution.problem.difficulty || ""} />
-                <Divider orientation="vertical" flexItem />
-                <Tags tags={solution.problem?.tags} />
-            </ChipWrapper>
-            <TitleWrapper>
-                <Typography variant="h1">{`Solution for '${solution.problem.title}' by '${solution.user.username}'`}</Typography>
-                <TitleActionWrapper>
-                    <Fab
-                        color="secondary"
-                        aria-label="Edit problem set"
-                    >
-                        <Done />
-                    </Fab>
+  if (loading) return <Loading />;
+  if (error || !solution) return <EmptyState message={error} />;
+  return (
+    <>
+      <Button
+        color="info"
+        onClick={() => navigate(-1)}
+        startIcon={<ArrowBack />}
+      >
+        Back
+      </Button>
+      <ChipWrapper>
+        <DifficultyChip label={solution.problem.difficulty || ""} />
+        <Divider orientation="vertical" flexItem />
+        <Tags tags={solution.problem?.tags} />
+      </ChipWrapper>
+      <TitleWrapper>
+        <Typography variant="h1">{`Solution for '${solution.problem.title}' by '${solution.user.username}'`}</Typography>
+        <TitleActionWrapper>
+          <Fab color="secondary" aria-label="Edit problem set">
+            <Done />
+          </Fab>
 
-                    {/* {problem.id && <DeleteProblem id={problem.id} />} */}
-                </TitleActionWrapper>
-            </TitleWrapper>
+          {/* {problem.id && <DeleteProblem id={problem.id} />} */}
+        </TitleActionWrapper>
+      </TitleWrapper>
 
-            <Typography variant="subtitle1">{solution.problem?.description}</Typography>
+      <Typography variant="subtitle1">
+        {solution.problem?.description}
+      </Typography>
 
-            <br />
-            <Grid container spacing={5}>
-                <Grid item md={6} sm={12} xs={12}>
-                    <Card>
-                        <CardHeader title="Test Cases" />
-                        <CardContent>
-                            <List>
-                                <StyledChip label="Public" color="success" />
-                                {solution.problem?.testSuite?.publicCases?.map((item, index) => {
-                                    return (
-                                        <TestCases
-                                            key={`${index}-${item.id}`}
-                                            testCase={item}
-                                            defaultOpen
-                                        />
-                                    );
-                                })}
-                                <Divider />
-                                <StyledChip label="Private" color="warning" />
+      <br />
+      <Grid container spacing={5}>
+        <Grid item md={6} sm={12} xs={12}>
+          <Card>
+            <CardHeader title="Test Cases" />
+            <CardContent>
+              <List>
+                <StyledChip label="Public" color="success" />
+                {solution.problem?.testSuite?.publicCases?.map(
+                  (item, index) => {
+                    return (
+                      <TestCases
+                        key={`${index}-${item.id}`}
+                        testCase={item}
+                        functionName={solution.problem.title || "functionName"}
+                      />
+                    );
+                  }
+                )}
+                <Divider />
+                <StyledChip label="Private" color="warning" />
 
-                                {solution.problem?.testSuite?.privateCases?.map((item, index) => {
-                                    return (
-                                        <TestCases key={`${index}-${item.id}`} testCase={item} />
-                                    );
-                                })}
-                            </List>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item md={6} sm={12} xs={12}>
-                    <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell><Typography>{`User: ${solution.user.username}`}</Typography></TableCell>
-                                    <TableCell><Typography>{`Language: ${solution.lang === "js" ? "javascript" : solution.lang}`}</Typography></TableCell>
-                                    <TableCell><Typography>{`Sumbitted: ${solution.submissionDate}`}</Typography></TableCell>
-                                </TableRow>
-                            </TableHead>
-                        </Table>
-                    </TableContainer>
-                    <CodeEditor fontSize={16}
-                        theme={'monokai'}
-                        language={solution.lang === "js" ? "javascript" : solution.lang}
-                        value={solution.code}
-                        onEditorValueChange={() => { }}
-                        readOnly />
-                </Grid>
-            </Grid>
-        </>
-    );
+                {solution.problem?.testSuite?.privateCases?.map(
+                  (item, index) => {
+                    return (
+                      <TestCases
+                        key={`${index}-${item.id}`}
+                        testCase={item}
+                        functionName={solution.problem.title || "functionName"}
+                      />
+                    );
+                  }
+                )}
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item md={6} sm={12} xs={12}>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Typography>{`User: ${solution.user.username}`}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{`Language: ${
+                      solution.lang === "js" ? "javascript" : solution.lang
+                    }`}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{`Sumbitted: ${solution.submissionDate}`}</Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+            </Table>
+          </TableContainer>
+          <CodeEditor
+            fontSize={16}
+            theme={"monokai"}
+            language={solution.lang === "js" ? "javascript" : solution.lang}
+            value={solution.code}
+            onEditorValueChange={() => {}}
+            readOnly
+          />
+        </Grid>
+      </Grid>
+    </>
+  );
 };
 
 export default Solution;
