@@ -1,62 +1,74 @@
+import { Delete, Edit, InputOutlined } from "@mui/icons-material";
 import {
-  ExpandLess,
-  ExpandMore,
-  InputOutlined,
-  OutputOutlined,
-  SubdirectoryArrowRight,
-} from "@mui/icons-material";
-import {
-  ListSubheader,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Collapse,
-  List,
-  ListItemButton,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
-import { useState } from "react";
 import { Case } from "../../interfaces/problemSet";
 
 interface ITestCasesProps {
+  functionName: string;
   testCase: Case;
-  defaultOpen?: boolean;
+  isPublic?: boolean;
+  index?: number;
+  testCaseAction?: (isPublic: boolean, action: string, index: number) => void;
 }
 
-const TestCases = ({ testCase, defaultOpen = false }: ITestCasesProps) => {
-  const [open, setOpen] = useState<boolean>(defaultOpen);
+const TestCases = ({
+  functionName,
+  testCase,
+  isPublic = false,
+  index = 0,
+  testCaseAction,
+}: ITestCasesProps) => {
   return (
     <>
-      <ListItemButton onClick={() => setOpen(!open)}>
+      <ListItem>
         <ListItemIcon>
           <InputOutlined />
         </ListItemIcon>
-        <ListItemText
-          primary={`Input${testCase.inputs?.length > 1 ? "s" : ""}`}
-        />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {testCase.inputs?.map((input, index) => {
-            return (
-              <ListItem key={`${index}-${input.id}`} sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <SubdirectoryArrowRight />
-                </ListItemIcon>
-                <ListItemText primary={`${input.value} (${input.dataType})`} />
-              </ListItem>
-            );
-          })}
-        </List>
-      </Collapse>
-      <ListSubheader>Expected Output</ListSubheader>
-      <ListItem>
-        <ListItemIcon>
-          <OutputOutlined />
-        </ListItemIcon>
-        <ListItemText
-          primary={`${testCase.output?.value} (${testCase.output?.dataType})`}
-        />
+        <ListItemText>
+          <code>
+            {functionName}(
+            {testCase.inputs.map((input, index) => {
+              return (
+                <span key={`${input.value}-${index}`}>
+                  <Tooltip style={{ cursor: "pointer" }} title={input.dataType}>
+                    <span>{input.value || ""}</span>
+                  </Tooltip>
+                  {index !== testCase.inputs.length - 1 ? "," : ""}
+                </span>
+              );
+            })}
+            ) {"=> "}
+            <Tooltip
+              style={{ cursor: "pointer" }}
+              title={testCase.output.dataType}
+            >
+              <span>{testCase.output.value}</span>
+            </Tooltip>
+          </code>
+        </ListItemText>
+        {testCaseAction && (
+          <>
+            <ListItemIcon>
+              <IconButton
+                onClick={() => testCaseAction(isPublic, "edit", index)}
+              >
+                <Edit />
+              </IconButton>
+            </ListItemIcon>
+            <ListItemIcon>
+              <IconButton
+                onClick={() => testCaseAction(isPublic, "delete", index)}
+              >
+                <Delete />
+              </IconButton>
+            </ListItemIcon>
+          </>
+        )}
       </ListItem>
     </>
   );
