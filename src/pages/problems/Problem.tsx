@@ -20,7 +20,7 @@ import Loading from "../../components/global/Loading";
 import DifficultyChip from "../../components/problem/DifficultyChip";
 
 import Tags from "../../components/problem/Tags";
-import TestCases from "../../components/problem/TestCases";
+import TestCases from "../../components/problem/test-case/TestCases";
 import CodeEditorContainer from "../../components/editor/CodeEditorContainer";
 import { IProblem } from "../../interfaces/problemSet";
 

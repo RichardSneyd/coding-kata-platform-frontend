@@ -6,7 +6,7 @@ import {
   Tooltip,
   IconButton,
 } from "@mui/material";
-import { Case } from "../../interfaces/problemSet";
+import { Case } from "../../../interfaces/problemSet";
 
 interface ITestCasesProps {
   functionName: string;
@@ -36,7 +36,11 @@ const TestCases = ({
               return (
                 <span key={`${input.value}-${index}`}>
                   <Tooltip style={{ cursor: "pointer" }} title={input.dataType}>
-                    <span>{input.value || ""}</span>
+                    <span>
+                      {input.dataType?.includes("ARRAY") ? "[" : ""}
+                      {input.value || ""}
+                      {input.dataType?.includes("ARRAY") ? "]" : ""}
+                    </span>
                   </Tooltip>
                   {index !== testCase.inputs.length - 1 ? "," : ""}
                 </span>

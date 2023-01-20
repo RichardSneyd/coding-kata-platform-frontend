@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Case, DataType, Put } from "../../../interfaces/problemSet";
-import TestCases from "../TestCases";
+import TestCases from "./TestCases";
 import CreateData from "./CreateData";
 
 /**
@@ -50,13 +50,9 @@ const CreateTestCase = ({
   const [open, setOpen] = useState(false);
 
   const [isPublic, setIsPublic] = useState(false);
-  const [inputs, setInputs] = useState<Put[]>([
-    { value: "", dataType: "INT" as DataType },
-  ]);
-  const [output, setOutput] = useState<Put>({
-    value: "",
-    dataType: "INT" as DataType,
-  });
+
+  const [inputs, setInputs] = useState<Put[]>([{ ...defaultInputValue }]);
+  const [output, setOutput] = useState<Put>({ ...defaultInputValue });
 
   const handleValidation = () => {
     let passed = true;
@@ -66,8 +62,8 @@ const CreateTestCase = ({
 
   const resetData = () => {
     setOpen(false);
-    setInputs([defaultInputValue]);
-    setOutput(defaultInputValue);
+    setInputs([{ ...defaultInputValue }]);
+    setOutput({ ...defaultInputValue });
     setIsPublic(false);
     setExistingTestCase(null);
   };
@@ -79,9 +75,6 @@ const CreateTestCase = ({
       setIsPublic(existingTestCase.isPublic || false);
       setOpen(true);
     }
-    // if (open === false && inputs.length > 0) {
-    //   resetData();
-    // }
   }, [existingTestCase, inputs.length, open, setExistingTestCase]);
 
   const submit = () => {
@@ -161,6 +154,7 @@ const CreateTestCase = ({
               control={
                 <Switch
                   value={isPublic}
+                  defaultChecked={isPublic}
                   onChange={(e) => setIsPublic(e.target.checked)}
                 />
               }
@@ -199,7 +193,7 @@ const CreateTestCase = ({
           </>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => resetData()}>Cancel</Button>
           <Button variant="contained" color="primary" onClick={submit}>
             Save
           </Button>

@@ -24,9 +24,10 @@ import authService from "../../services/authService";
 import styled from "@emotion/styled";
 
 import { useSnackbar } from "notistack";
-import { Case, Difficulty, Put } from "../../interfaces/problemSet";
+import { Case, Difficulty, IProblem, Put } from "../../interfaces/problemSet";
 import CreateTestCase from "../../components/problem/test-case/CreateTestCase";
-import TestCases from "../../components/problem/TestCases";
+import TestCases from "../../components/problem/test-case/TestCases";
+import problemServices from "../../services/problemService";
 
 const StyledChip = styled(Chip)`
   margin: 10px 0;
@@ -79,37 +80,39 @@ const CreateProblem = () => {
   const submit = async () => {
     const token = authService.getAccessToken();
 
-    // if (token) {
-    //   if (handleValidation()) {
-    //     const body: IProblem = {
-    //       title,
-    //       description,
-    //       tags,
-    //       difficulty
-    //     };
-    //     setLoading(true);
-    //     try {
-    //       const response = await problemServices.create(token, body);
+    if (token) {
+      if (handleValidation()) {
+        const body: IProblem = {
+          title,
+          description,
+          tags,
+          difficulty,
+          testSuite: { publicCases, privateCases },
+          startCode,
+        };
+        setLoading(true);
+        try {
+          const response = await problemServices.create(token, body);
 
-    //       enqueueSnackbar(`Problem Set created`, {
-    //         variant: "success",
-    //       });
+          enqueueSnackbar(`Problem Set created`, {
+            variant: "success",
+          });
 
-    //       navigate(`/problem-sets/${response?.id}`);
-    //     } catch (err: any) {
-    //       enqueueSnackbar(err.message, {
-    //         variant: "error",
-    //       });
+          navigate(`/problems/${response?.id}`);
+        } catch (err: any) {
+          enqueueSnackbar(err.message, {
+            variant: "error",
+          });
 
-    //       setLoading(false);
-    //     }
-    //   }
-    // } else {
-    //   enqueueSnackbar("Authentication error, please log in again", {
-    //     variant: "error",
-    //   });
-    //   setLoading(false);
-    // }
+          setLoading(false);
+        }
+      }
+    } else {
+      enqueueSnackbar("Authentication error, please log in again", {
+        variant: "error",
+      });
+      setLoading(false);
+    }
   };
 
   const updateTags = (event: any) => {
@@ -117,8 +120,6 @@ const CreateProblem = () => {
   };
 
   const addTestCase = (isPublic: boolean, inputs: Put[], output: Put) => {
-    console.log("here");
-    console.log(isPublic, inputs, output);
     if (isPublic) {
       setPublicCases([...publicCases, { inputs: inputs, output }]);
     } else {
@@ -130,22 +131,39 @@ const CreateProblem = () => {
     const newTestCases = testCase.isPublic
       ? [...publicCases]
       : [...privateCases];
-    newTestCases[testCase.id || 0] = {
-      inputs: testCase.inputs,
-      output: testCase.output,
-    };
+
+    if (testCase.isPublic !== existingTestCase?.isPublic) {
+      let oldTestCases = existingTestCase?.isPublic
+        ? [...publicCases]
+        : [...privateCases];
+      oldTestCases.splice(testCase.id || 0, 1);
+
+      existingTestCase?.isPublic
+        ? setPublicCases(oldTestCases)
+        : setPrivateCases(oldTestCases);
+
+      newTestCases.push({ inputs: testCase.inputs, output: testCase.output });
+    } else {
+      newTestCases[testCase.id || 0] = {
+        inputs: testCase.inputs,
+        output: testCase.output,
+      };
+    }
+
     testCase.isPublic
       ? setPublicCases(newTestCases)
       : setPrivateCases(newTestCases);
+    setExistingTestCase(null);
   };
 
   const testCaseAction = (isPublic: boolean, action: string, index: number) => {
     if (action === "edit") {
-      const testCaseToEdit = isPublic
-        ? publicCases[index]
-        : privateCases[index];
-      testCaseToEdit.isPublic = isPublic;
-      testCaseToEdit.id = index;
+      const testCaseToEdit = {
+        ...(isPublic ? publicCases[index] : privateCases[index]),
+        isPublic,
+        id: index,
+      };
+
       setExistingTestCase(testCaseToEdit);
     } else {
       let newTestCases = [...(isPublic ? publicCases : privateCases)];
@@ -281,7 +299,7 @@ const CreateProblem = () => {
 
                 {privateCases.length === 0 ? (
                   <Typography variant="body1" align="center">
-                    No public cases
+                    No private cases
                   </Typography>
                 ) : (
                   privateCases.map((item, index) => {

@@ -26,7 +26,7 @@ import Loading from "../../components/global/Loading";
 import DifficultyChip from "../../components/problem/DifficultyChip";
 
 import Tags from "../../components/problem/Tags";
-import TestCases from "../../components/problem/TestCases";
+import TestCases from "../../components/problem/test-case/TestCases";
 
 import authService from "../../services/authService";
 import { ISolution } from "../../interfaces/solutions";
@@ -111,15 +111,17 @@ const Solution = () => {
         <Tags tags={solution.problem?.tags} />
       </ChipWrapper>
       <TitleWrapper>
-        <Typography variant="h1">{`${solution.correct ? "Correct" : "Attempted"} Solution for '${solution.problem.title}'`}</Typography>
+        <Typography variant="h1">{`${
+          solution.correct ? "Correct" : "Attempted"
+        } Solution for '${solution.problem.title}'`}</Typography>
         <TitleActionWrapper>
-        <Fab
-                        color= {solution.correct ? "success" : "error"}
-                        aria-label="Correct"
-                    >
-                    {/* {problem.id && <DeleteProblem id={problem.id} />} */}
-                        {solution.correct ? <Done /> : <Typography>X</Typography>}
-                    </Fab>
+          <Fab
+            color={solution.correct ? "success" : "error"}
+            aria-label="Correct"
+          >
+            {/* {problem.id && <DeleteProblem id={problem.id} />} */}
+            {solution.correct ? <Done /> : <Typography>X</Typography>}
+          </Fab>
 
           {/* {problem.id && <DeleteProblem id={problem.id} />} */}
         </TitleActionWrapper>
@@ -131,7 +133,8 @@ const Solution = () => {
 
       <br />
       <Grid container spacing={5}>
-        <Grid item md={6} sm={12} xs={12}>``
+        <Grid item md={6} sm={12} xs={12}>
+          ``
           <Card>
             <CardHeader title="Test Cases" />
             <CardContent>
@@ -148,9 +151,9 @@ const Solution = () => {
                     );
                   }
                 )}
-                <Divider />``
+                <Divider />
+                ``
                 <StyledChip label="Private" color="warning" />
-
                 {solution.problem?.testSuite?.privateCases?.map(
                   (item, index) => {
                     return (
@@ -175,9 +178,13 @@ const Solution = () => {
                     <Typography>{`User: ${solution.user.username}`}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{`Language: ${solution.lang === "js" 
-                                    ? "JavaScript" : solution.lang === "python" ? "Python": "Java"
-                                }`}</Typography>
+                    <Typography>{`Language: ${
+                      solution.lang === "js"
+                        ? "JavaScript"
+                        : solution.lang === "python"
+                        ? "Python"
+                        : "Java"
+                    }`}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography>{`Sumbitted: ${solution.submissionDate}`}</Typography>
