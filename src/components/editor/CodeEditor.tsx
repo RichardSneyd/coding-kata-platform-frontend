@@ -12,6 +12,7 @@ import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-terminal";
 import "ace-builds/src-noconflict/theme-solarized_light";
+import "ace-builds/src-noconflict/theme-solarized_dark";
 
 import "ace-builds/src-noconflict/ext-language_tools";
 
