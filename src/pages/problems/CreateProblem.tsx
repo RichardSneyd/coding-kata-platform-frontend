@@ -28,6 +28,7 @@ import { Case, Difficulty, IProblem, Put } from "../../interfaces/problemSet";
 import CreateTestCase from "../../components/problem/test-case/CreateTestCase";
 import TestCases from "../../components/problem/test-case/TestCases";
 import problemServices from "../../services/problemService";
+import CodeEditorContainer from "../../components/editor/CodeEditorContainer";
 
 const StyledChip = styled(Chip)`
   margin: 10px 0;
@@ -317,6 +318,12 @@ const CreateProblem = () => {
               </List>
             </StyledCardContent>
           </Card>
+        </Grid>
+        <Grid item md={12} sm={12} xs={12}>
+          <CodeEditorContainer
+            startCode={startCode}
+            setStartCode={setStartCode}
+          />
         </Grid>
 
         <Grid item md={12} xs={12}>
