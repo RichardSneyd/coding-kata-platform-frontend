@@ -1,4 +1,5 @@
 import { ICohort } from "./cohort";
+import { ISolution } from "./solutions";
 
 export interface IUser {
   [key: string]: any;
@@ -9,6 +10,6 @@ export interface IUser {
   roles?: string[];
   score?: number;
   joinDate?: string;
-  solutions?: any[];
+  solutions?: ISolution[];
   completedProblems?: any[];
 }
