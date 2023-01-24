@@ -54,11 +54,10 @@ const Dashboard = () => {
               setCohortBoard(res);
               console.log(res);
             })
-            .catch((err) => {
-              console.log("Error getting leaderboard", err);
-              setError("Error fetching leaderboard data");
-              setLoading(false);
-            });
+            // .catch((err) => {
+            //   console.log("Error getting leaderboard", err);
+            //   setError("Error fetching leaderboard data");
+            // });
           })
           .catch((err) => {
             console.log("Error getting cohorts", err);
