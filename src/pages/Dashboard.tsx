@@ -7,7 +7,6 @@ import UserService from "../services/userService";
 import { useEffect, useState } from "react";
 import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
-import { Class, LockClock, Mail, SportsEsports } from "@mui/icons-material";
 import { ListItemText } from "@material-ui/core";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
@@ -100,7 +99,7 @@ const Dashboard = () => {
         <Grid item xs={12}>
         <Card>
             <CardContent>
-              <Typography variant="h4">Progress</Typography>
+              <Typography variant="h6">Total Progress</Typography>
               <BorderLinearProgress variant="determinate" value={50} />
             </CardContent>
           </Card>
