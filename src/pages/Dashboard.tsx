@@ -2,7 +2,6 @@ import {
   Button,
   Card,
   CardContent,
-  CardHeader,
   Container,
   Grid,
   List,
@@ -31,7 +30,12 @@ import CohortLeaderoard from "../components/user/Leaderboard";
 
 const Dashboard = () => {
   const [user, setUser] = useState<IUser>();
-  const [userProgress, setUserProgress] = useState<IUserProgress>({username: '', problemsSolved: 0, totalProblems: 0, score: 0});
+  const [userProgress, setUserProgress] = useState<IUserProgress>({
+    username: "",
+    problemsSolved: 0,
+    totalProblems: 0,
+    score: 0,
+  });
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [nextProblem, setNextProblem] = useState<IProblem>();
@@ -48,9 +52,11 @@ const Dashboard = () => {
   ];
 
   const progressPercentage = () => {
-    const prog = Math.round((userProgress.problemsSolved / userProgress.totalProblems) * 100);
+    const prog = Math.round(
+      (userProgress.problemsSolved / userProgress.totalProblems) * 100
+    );
     return prog;
-  }
+  };
 
   useEffect(() => {
     const user = authService.getUser();
@@ -60,10 +66,10 @@ const Dashboard = () => {
         setError("");
         setLoading(true);
         UserService.getUserProgress(token, user.userId.toString())
-        .then((result) => {
-          setUserProgress(result);
-        })
-        .catch((err) => {
+          .then((result) => {
+            setUserProgress(result);
+          })
+          .catch((err) => {
             console.log("Error getting progress ", err);
             setError("Error fetching progress data");
           });
@@ -133,7 +139,10 @@ const Dashboard = () => {
               <Typography variant="h6">
                 Total Progress (Score: {user.score})
               </Typography>
-              <BorderLinearProgress variant="determinate" value={progressPercentage()} />
+              <BorderLinearProgress
+                variant="determinate"
+                value={progressPercentage()}
+              />
             </CardContent>
           </Card>
         </Grid>

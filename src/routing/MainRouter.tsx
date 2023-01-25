@@ -99,7 +99,7 @@ const MainRouter = (): JSX.Element => {
       <Grid
         container
         component="main"
-        style={{ marginTop: "20px", marginBottom: "20px" }}
+        style={{ marginTop: "20px", marginBottom: "20px", height: "90vh" }}
         justifyContent="space-evenly"
       >
         <Grid item xs={11}>

@@ -14,6 +14,7 @@ import UpdateProblemSet from "../pages/problem-sets/UpdateProblemSet";
 import CreateProblem from "../pages/problems/CreateProblem";
 import ListProblems from "../pages/problems/ListProblems";
 import Problem from "../pages/problems/Problem";
+import UpdateProblem from "../pages/problems/UpdateProblem";
 import Profile from "../pages/Profile";
 import ListSolutions from "../pages/solutions/ListAllSolutions";
 import Solution from "../pages/solutions/Solution";
@@ -169,11 +170,20 @@ const routes: IRouteType[] = [
     authed: UserRoles.ADMIN,
   },
   {
+    name: "Update Problem",
+    link: "/problems/edit/:id",
+    Component: UpdateProblem,
+    authed: UserRoles.ADMIN,
+  },
+  /**
+   * Solution
+   */
+  {
     name: "Solutions",
     link: "/solutions",
     Component: ListSolutions,
     authed: UserRoles.ADMIN,
-    showInMenuFor: UserRoles.ADMIN
+    showInMenuFor: UserRoles.ADMIN,
   },
   {
     name: "Solution",
@@ -181,12 +191,6 @@ const routes: IRouteType[] = [
     Component: Solution,
     authed: UserRoles.USER,
   },
-  // {
-  //   name: "Update Problem",
-  //   link: "/problems/edit/:id",
-  //   Component: UpdateProblem,
-  //   authed: UserRoles.ADMIN,
-  // },
 ];
 
 export default routes;

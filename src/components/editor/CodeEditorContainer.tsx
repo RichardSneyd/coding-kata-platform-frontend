@@ -40,9 +40,6 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
   const updateStartCode = (value: string, event: any) => {
     let newStartCode = { ...startCode };
     newStartCode[languageOptions[language]] = value;
-    // console.log("update", newStartCode, languageOptions[language]);
-
-    // console.log(startCode[languageOptions[language]]);
     if (setStartCode) setStartCode(newStartCode);
   };
 
