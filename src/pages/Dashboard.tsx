@@ -76,6 +76,7 @@ const Dashboard = () => {
           });
         UserService.getById(token, user.userId.toString())
           .then((result) => {
+            console.log("user: ", result);
             setUser(result);
             setLoading(false);
             UserService.getCohortLeaderoard(
@@ -194,7 +195,18 @@ const Dashboard = () => {
         <Grid item xs={4}>
           <Card>
             <CardContent>
-              <Typography variant="h6">Next Recommended Task</Typography>
+              <Grid container>
+                <Grid item xs={9}>
+                  <Typography variant="h6">Suggested Task</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <DifficultyChip
+                    label={
+                      nextProblem?.difficulty ? nextProblem.difficulty : ""
+                    }
+                  />
+                </Grid>
+              </Grid>
               <List>
                 <ListItem>
                   <ListItemText
