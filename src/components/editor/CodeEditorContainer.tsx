@@ -2,7 +2,7 @@ import { useState } from "react";
 import CodeEditor from "./CodeEditor";
 import EditorTools from "./EditorTools";
 import { StartCode } from "../../interfaces/problemSet";
-import { languageOptions, languagePlaceholders } from "./EditorVariables";
+import { languageOptions } from "./EditorVariables";
 
 interface ICodeEditorContainerProps {
   // onSubmit?: (code: string, lang: string) => Promise<void>;
@@ -47,6 +47,10 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
     if (setStartCode) setStartCode(newStartCode);
   };
 
+  const editorValue = setStartCode
+    ? startCode[languageOptions[language]]
+    : value;
+
   return (
     <>
       <EditorTools
@@ -62,8 +66,8 @@ const CodeEditorContainer: React.FC<ICodeEditorContainerProps> = ({
         fontSize={fontSize}
         theme={theme}
         language={language}
-        defaultValue={languagePlaceholders[language]}
-        value={setStartCode ? startCode[languageOptions[language]] : value}
+        // defaultValue={editorValue === "" ? languagePlaceholders[language] : }
+        value={editorValue}
         onEditorValueChange={setStartCode ? updateStartCode : setValue}
         readOnly={readOnly}
       />
