@@ -23,6 +23,7 @@ import ListSolutions from "../pages/solutions/ListAllSolutions";
 import Solution from "../pages/solutions/Solution";
 
 import ListUsers from "../pages/user/ListUsers";
+import User from "../pages/user/User";
 
 export enum UserRoles {
   UNAUTHED,
@@ -98,6 +99,12 @@ const routes: IRouteType[] = [
     Component: ListUsers,
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN,
+  },
+  {
+    name: "User",
+    link: "/users/:id",
+    Component: User,
+    authed: UserRoles.ADMIN,
   },
 
   /**
