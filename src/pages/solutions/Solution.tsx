@@ -111,12 +111,10 @@ const Solution = () => {
         <Tags tags={solution.problem?.tags} />
       </ChipWrapper>
       <TitleWrapper>
-        <Typography variant="h1">{`${
-          solution.correctness > 80 ? "Correct" : "Attempted"
-        } Solution for '${solution.problem.title}'`}</Typography>
+        <Typography variant="h1">{`Solution for '${solution.problem.title}' (${solution.correctness}%)`}</Typography>
         <TitleActionWrapper>
           <Fab
-            color={solution.correctness > 80 ? "success" : "error"}
+            color={solution.correctness > 70 ? "success" : "error"}
             aria-label="Correct"
           >
             {/* {problem.id && <DeleteProblem id={problem.id} />} */}
