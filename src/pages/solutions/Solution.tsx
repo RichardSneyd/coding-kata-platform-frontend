@@ -112,15 +112,15 @@ const Solution = () => {
       </ChipWrapper>
       <TitleWrapper>
         <Typography variant="h1">{`${
-          solution.correct ? "Correct" : "Attempted"
+          solution.correctness > 80 ? "Correct" : "Attempted"
         } Solution for '${solution.problem.title}'`}</Typography>
         <TitleActionWrapper>
           <Fab
-            color={solution.correct ? "success" : "error"}
+            color={solution.correctness > 80 ? "success" : "error"}
             aria-label="Correct"
           >
             {/* {problem.id && <DeleteProblem id={problem.id} />} */}
-            {solution.correct ? <Done /> : <Typography>X</Typography>}
+            <Typography>{solution.correctness + "%"}</Typography>
           </Fab>
 
           {/* {problem.id && <DeleteProblem id={problem.id} />} */}

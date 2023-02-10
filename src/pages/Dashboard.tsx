@@ -49,7 +49,7 @@ const Dashboard = () => {
     "Difficulty",
     "Language",
     "Submission Date",
-    "Status",
+    "Correctness",
   ];
 
   const progressPercentage = () => {
@@ -182,7 +182,8 @@ const Dashboard = () => {
                       <TableCell>{solution.submissionDate}</TableCell>
                       <TableCell>
                         <SuccessChip
-                          label={solution.correct ? "Correct" : "Incorrect"}
+                          label={solution.correctness.toString() + "%"}
+                          score={solution.correctness}
                         />
                       </TableCell>
                     </TableRow>

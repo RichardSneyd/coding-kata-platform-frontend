@@ -35,7 +35,7 @@ const ListAllSolutions = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  const tableFields = ["ID", "Problem",  "Difficulty", "Language", "User", "Submission Date", "Status"];
+  const tableFields = ["ID", "Problem",  "Difficulty", "Language", "User", "Submission Date", "Correctness"];
 
   const navigate = useNavigate();
 
@@ -104,7 +104,7 @@ const ListAllSolutions = () => {
                   <TableCell>{row.lang}</TableCell>
                   <TableCell>{row.user?.username}</TableCell>
                   <TableCell>{row.submissionDate}</TableCell>
-                  <TableCell><SuccessChip label={row.correct ? "Correct" : "Incorrect"} /></TableCell>
+                  <TableCell><SuccessChip score={row.correctness} label={row.correctness.toString() + "%"} /></TableCell>
                 </TableRow>
                 
               ))
