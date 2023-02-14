@@ -98,7 +98,7 @@ const routes: IRouteType[] = [
     authed: UserRoles.ADMIN,
   },
   {
-    name: "NewUser",
+    name: "Create User",
     link: "/users/new",
     Component: CreateUser,
     authed: UserRoles.ADMIN,
