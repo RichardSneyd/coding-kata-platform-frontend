@@ -17,7 +17,6 @@ import EmptyState from "../../components/global/EmptyState";
 import Loading from "../../components/global/Loading";
 import { IUser } from "../../interfaces/user";
 import authService from "../../services/authService";
-import problemSetServices from "../../services/problemSetService";
 import userService from "../../services/userService";
 
 const User = () => {
@@ -64,7 +63,7 @@ const User = () => {
       setError("Authentication error, please log in again");
       setLoading(false);
     }
-  }, [user, id]);
+  }, [user, id, token]);
 
   if (loading) return <Loading />;
   if (error || !user) return <EmptyState message={error} />;
