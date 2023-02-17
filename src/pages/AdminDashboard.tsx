@@ -38,6 +38,7 @@ import { AppContext, IAppContext } from "../context/AppContext";
 import dayjs from "dayjs";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import SolutionsChart from "../components/SolutionsChart";
 
 const StyledCardActions = styled(CardActions)`
   justify-content: flex-end;
@@ -108,6 +109,57 @@ const AdminDashboard = () => {
         </Grid>
         <Grid item xs={8}>
           <Card>
+            <CardHeader title="📊 Solutions by month" />
+            <CardContent>
+              <SolutionsChart solutions={solutions} />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={4}>
+          <Card>
+            <CardHeader title="👨‍🎓 Recent Cohorts" />
+            <TableContainer sx={{ height: 350 }}>
+              <List>
+                {cohorts.length === 0 ? (
+                  <ListItem>
+                    <ListItemText>No Cohorts added yet</ListItemText>
+                  </ListItem>
+                ) : (
+                  cohorts.slice(0, 4).map((cohort) => {
+                    return (
+                      <ListItem>
+                        <ListItemButton>
+                          <ListItemIcon>
+                            <Groups />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={`${cohort.name} - ${
+                              cohort.members.length
+                            } member${cohort.members.length > 1 ? "s" : ""}`}
+                            secondary={`Started ${dayjs(
+                              cohort.startDate
+                            ).fromNow()}`}
+                          ></ListItemText>
+
+                          <ListItemSecondaryAction>
+                            <ArrowRight />
+                          </ListItemSecondaryAction>
+                        </ListItemButton>
+                      </ListItem>
+                    );
+                  })
+                )}
+              </List>
+            </TableContainer>
+            <StyledCardActions>
+              <Button endIcon={<ArrowForward />} component={Link} to="/cohorts">
+                All Cohorts
+              </Button>
+            </StyledCardActions>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          <Card>
             <CardHeader title="✏️ Recent Student Submissions" />
             <CardContent>
               <TableContainer sx={{ height: 308 }}>
@@ -164,49 +216,6 @@ const AdminDashboard = () => {
                 to="/solutions"
               >
                 All Solutions
-              </Button>
-            </StyledCardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={4}>
-          <Card>
-            <CardHeader title="👨‍🎓 Recent Cohorts" />
-            <TableContainer sx={{ height: 340 }}>
-              <List>
-                {cohorts.length === 0 ? (
-                  <ListItem>
-                    <ListItemText>No Cohorts added yet</ListItemText>
-                  </ListItem>
-                ) : (
-                  cohorts.slice(0, 4).map((cohort) => {
-                    return (
-                      <ListItem>
-                        <ListItemButton>
-                          <ListItemIcon>
-                            <Groups />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={`${cohort.name} - ${
-                              cohort.members.length
-                            } member${cohort.members.length > 1 ? "s" : ""}`}
-                            secondary={`Started ${dayjs(
-                              cohort.startDate
-                            ).fromNow()}`}
-                          ></ListItemText>
-
-                          <ListItemSecondaryAction>
-                            <ArrowRight />
-                          </ListItemSecondaryAction>
-                        </ListItemButton>
-                      </ListItem>
-                    );
-                  })
-                )}
-              </List>
-            </TableContainer>
-            <StyledCardActions>
-              <Button endIcon={<ArrowForward />} component={Link} to="/cohorts">
-                All Cohorts
               </Button>
             </StyledCardActions>
           </Card>
