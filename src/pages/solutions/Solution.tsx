@@ -137,7 +137,7 @@ const Solution = () => {
       <br />
       <Grid container spacing={5}>
         <Grid container spacing={2} item xs={12} md={6}>
-          <Grid item md={12}>
+          <Grid item xs={12} md={12}>
             <Card>
               <CardHeader title="Submission Details" />
               <List>
