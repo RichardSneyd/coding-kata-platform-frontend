@@ -11,6 +11,7 @@ import routes, { UserRoles } from "./routes";
 import { AppContext, IAppContext } from "../context/AppContext";
 import userService from "../services/userService";
 import cohortServices from "../services/cohortService";
+import GlobalConfig from "../config/GlobalConfig";
 
 /**
  * Handles Routing for the application
@@ -27,6 +28,8 @@ const MainRouter = (): JSX.Element => {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  console.log(GlobalConfig.server_url);
 
   // Runs when route updates
   useEffect(() => {
