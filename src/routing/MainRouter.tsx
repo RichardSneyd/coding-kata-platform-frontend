@@ -29,7 +29,7 @@ const MainRouter = (): JSX.Element => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(GlobalConfig.server_url);
+  console.log("Server: ", GlobalConfig.server_url);
 
   // Runs when route updates
   useEffect(() => {
