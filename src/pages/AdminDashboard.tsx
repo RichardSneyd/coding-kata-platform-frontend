@@ -11,12 +11,7 @@ import {
   ListItemButton,
   ListItemSecondaryAction,
   ListItemText,
-  Table,
-  TableBody,
-  TableCell,
   TableContainer,
-  TableHead,
-  TableRow,
   Typography,
 } from "@mui/material";
 import { IUser } from "../interfaces/user";
@@ -25,10 +20,6 @@ import UserService from "../services/userService";
 import { useContext, useEffect, useState } from "react";
 import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
-import { useNavigate } from "react-router-dom";
-import DifficultyChip from "../components/problem/DifficultyChip";
-import SuccessChip from "../components/problem/SuccessChip";
-import CohortLeaderoard from "../components/user/Leaderboard";
 import solutionService from "../services/solutionService";
 import { ISolution } from "../interfaces/solutions";
 import { IJWTUser } from "../interfaces/network";
@@ -38,6 +29,8 @@ import { AppContext, IAppContext } from "../context/AppContext";
 import dayjs from "dayjs";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import SolutionsChart from "../components/SolutionsChart";
+import FilterTable, { ITableFields } from "../components/global/FilterTable";
 
 const StyledCardActions = styled(CardActions)`
   justify-content: flex-end;
@@ -52,16 +45,22 @@ const AdminDashboard = () => {
   const [solutions, setSolutions] = useState<ISolution[]>([]);
 
   const [globalBoard, setGlobalBoard] = useState<IUser[]>();
-  const navigate = useNavigate();
 
-  const solutionTablelFields = [
-    "ID",
-    "Problem",
-    "Difficulty",
-    "Language",
-    "User",
-    "Submission Date",
-    "Correctness",
+  const solutionTableFields: ITableFields[] = [
+    { label: "ID", field: "id", type: "string" },
+    { label: "Problem", field: "problem.title", type: "string" },
+    { label: "Difficulty", field: "problem.difficulty", type: "difficulty" },
+    { label: "Language", field: "lang", type: "string" },
+    { label: "User", field: "user.username", type: "string" },
+    { label: "Submission Date", field: "submissionDate", type: "date" },
+    { label: "Correctness", field: "correctness", type: "success" },
+  ];
+
+  const leaderboardTableFields: ITableFields[] = [
+    { label: "Rank", field: "id", type: "index" },
+    { label: "User", field: "username", type: "string" },
+    { label: "Score", field: "score", type: "string" },
+    { label: "Cohort", field: "cohort.name", type: "string" },
   ];
 
   useEffect(() => {
@@ -106,72 +105,18 @@ const AdminDashboard = () => {
         <Grid item xs={12}>
           <Typography variant="h1">Hi, {user?.sub} 👋🏻</Typography>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={12} md={8}>
           <Card>
-            <CardHeader title="✏️ Recent Student Submissions" />
+            <CardHeader title="📊 Solutions by month" />
             <CardContent>
-              <TableContainer sx={{ height: 308 }}>
-                <Table sx={{ minWidth: 650 }} aria-label="Solutions table">
-                  <TableHead>
-                    <TableRow>
-                      {solutionTablelFields.map((cell, index) => (
-                        <TableCell key={`${index}-${cell}`}>{cell}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {solutions.length === 0 ? (
-                      <TableRow>
-                        <TableCell>No Solutions added yet</TableCell>
-                      </TableRow>
-                    ) : (
-                      solutions.map((row) => (
-                        <TableRow
-                          key={`${row.id}-${row.problem?.title}`}
-                          hover
-                          onClick={() => navigate(`/solutions/${row.id}`)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <TableCell>{row.id}</TableCell>
-                          <TableCell>{row.problem?.title}</TableCell>
-                          <TableCell>
-                            <DifficultyChip
-                              label={row.problem?.difficulty || ""}
-                            />
-                          </TableCell>
-                          <TableCell>{row.lang}</TableCell>
-                          <TableCell>{row.user?.username}</TableCell>
-                          <TableCell>
-                            {dayjs(row.submissionDate).fromNow()}
-                          </TableCell>
-                          <TableCell>
-                            <SuccessChip
-                              score={row.correctness}
-                              label={row.correctness.toString() + "%"}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <SolutionsChart solutions={solutions} />
             </CardContent>
-            <StyledCardActions>
-              <Button
-                endIcon={<ArrowForward />}
-                component={Link}
-                to="/solutions"
-              >
-                All Solutions
-              </Button>
-            </StyledCardActions>
           </Card>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <Card>
             <CardHeader title="👨‍🎓 Recent Cohorts" />
-            <TableContainer sx={{ height: 340 }}>
+            <TableContainer sx={{ height: 350 }}>
               <List>
                 {cohorts.length === 0 ? (
                   <ListItem>
@@ -180,8 +125,11 @@ const AdminDashboard = () => {
                 ) : (
                   cohorts.slice(0, 4).map((cohort) => {
                     return (
-                      <ListItem>
-                        <ListItemButton>
+                      <ListItem key={cohort.id}>
+                        <ListItemButton
+                          component={Link}
+                          to={`/cohorts/${cohort.id}`}
+                        >
                           <ListItemIcon>
                             <Groups />
                           </ListItemIcon>
@@ -211,19 +159,22 @@ const AdminDashboard = () => {
             </StyledCardActions>
           </Card>
         </Grid>
+        <Grid item xs={12}>
+          <FilterTable
+            rows={solutions}
+            viewLink={"/solutions/"}
+            fields={solutionTableFields}
+            title={"✏️ Recent Student Submissions"}
+          />
+        </Grid>
 
         <Grid item xs={12}>
-          <Card>
-            <CardHeader title="🏆 Global Leaderboard" />
-            <CardContent>
-              <TableContainer sx={{ height: 500 }}>
-                <CohortLeaderoard
-                  leaderboard={globalBoard}
-                  userId={user?.userId || 0}
-                />
-              </TableContainer>
-            </CardContent>
-          </Card>
+          <FilterTable
+            fields={leaderboardTableFields}
+            rows={globalBoard}
+            highlightId={user?.userId}
+            title={"🏆 Global Leaderboard"}
+          />
         </Grid>
       </Grid>
     </Container>

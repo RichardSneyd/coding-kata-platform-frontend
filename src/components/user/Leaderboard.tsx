@@ -9,23 +9,13 @@ import {
 import { orange } from "@mui/material/colors";
 import { IUser } from "../../interfaces/user";
 
-// const useStyles = makeStyles(() => ({
-//   activeRow: {
-//     backgroundColor: orange[100],
-//     // color: theme.palette.primary.light
-//   },
-//   headText: {
-//     fontWeight: "bold",
-//   },
-// }));
-
 type IStyledRowProps = {
-  isActive: boolean;
+  active: number;
 };
 
 const StyledRow = styled(TableRow)`
   background-color: ${(props: IStyledRowProps) =>
-    props.isActive ? orange[100] : "inherit"};
+    props.active ? orange[100] : "inherit"};
 `;
 
 const leaderboardFields = ["Rank", "User", "Score"];
@@ -50,7 +40,7 @@ const CohortLeaderoard = ({
         </TableHead>
         <TableBody>
           {leaderboard?.map((u: IUser, index: number) => (
-            <StyledRow key={index} isActive={u.id === userId}>
+            <StyledRow key={index} active={u.id === userId ? 1 : 0}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>{u.username}</TableCell>
               <TableCell>{u.score}</TableCell>
