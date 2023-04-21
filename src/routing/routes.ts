@@ -12,6 +12,7 @@ import Home from "../pages/Home";
 import CreateProblemSet from "../pages/problem-sets/CreateProblemSet";
 import ListProblemSets from "../pages/problem-sets/ListProblemSets";
 import ProblemSet from "../pages/problem-sets/ProblemSet";
+import ProblemSetUser from "../pages/user-level/problem-sets/ProblemSet";
 import UpdateProblemSet from "../pages/problem-sets/UpdateProblemSet";
 import Attempt from "../pages/problems/Attempt";
 import CreateProblem from "../pages/problems/CreateProblem";
@@ -21,8 +22,9 @@ import UpdateProblem from "../pages/problems/UpdateProblem";
 import Profile from "../pages/Profile";
 import ListSolutions from "../pages/solutions/ListAllSolutions";
 import Solution from "../pages/solutions/Solution";
-
-import ListUsers from "../pages/user/ListUsers";
+import CreateUser from "../pages/users/CreateUser";
+import ListUsers from "../pages/users/ListUsers";
+import UserInfo from "../pages/users/UserInfo";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { SvgIconTypeMap } from "@mui/material";
 import {
@@ -33,6 +35,7 @@ import {
   Person,
   Rule,
 } from "@mui/icons-material";
+import ListProblemSetsForUsers from "../pages/user-level/problem-sets/ListProblemSetsForUsers";
 
 export enum UserRoles {
   UNAUTHED,
@@ -65,7 +68,7 @@ const routes: IRouteType[] = [
   },
   {
     name: "Reset Password",
-    link: "/reset-password/:id",
+    link: "/reset-password",
     Component: ResetPassword,
     authed: UserRoles.UNAUTHED,
   },
@@ -113,7 +116,18 @@ const routes: IRouteType[] = [
     showInMenuFor: UserRoles.ADMIN,
     icon: Person,
   },
-
+  {
+    name: "User",
+    link: "/users/:id",
+    Component: UserInfo,
+    authed: UserRoles.ADMIN,
+  },
+  {
+    name: "Create User",
+    link: "/users/new",
+    Component: CreateUser,
+    authed: UserRoles.ADMIN,
+  },
   /**
    * Cohort
    */
@@ -162,10 +176,24 @@ const routes: IRouteType[] = [
     icon: List,
   },
   {
+    name: "Problem Sets",
+    link: "/users/problem-sets",
+    Component: ListProblemSetsForUsers,
+    authed: UserRoles.USER,
+    showInMenuFor: UserRoles.USER,
+    icon: List,
+  },
+  {
     name: "Problem Set",
     link: "/problem-sets/:id",
     Component: ProblemSet,
     authed: UserRoles.ADMIN,
+  },
+  {
+    name: "Problem Set",
+    link: "/users/problem-sets/:id",
+    Component: ProblemSetUser,
+    authed: UserRoles.USER,
   },
   {
     name: "Update Problem Set",

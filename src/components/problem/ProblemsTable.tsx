@@ -16,9 +16,10 @@ import Tags from "./Tags";
 
 interface IProblemProps {
   problems: IProblem[];
+  attempt?: boolean;
 }
 
-const ProblemsTable = ({ problems }: IProblemProps) => {
+const ProblemsTable = ({ problems, attempt = false}: IProblemProps) => {
   const tableFields = ["Title", "Difficulty", "Tags"];
 
   return (
@@ -46,6 +47,7 @@ const ProblemsTable = ({ problems }: IProblemProps) => {
                 <RenderTableRow
                   key={`${row.id ? row.id : index}-${row.title}`}
                   row={row}
+                  attempt={attempt}
                 />
               ))
             )}
@@ -58,15 +60,16 @@ const ProblemsTable = ({ problems }: IProblemProps) => {
 
 interface IRenderTableRowProps {
   row: IProblem;
+  attempt: boolean;
 }
 
-const RenderTableRow = ({ row }: IRenderTableRowProps) => {
+const RenderTableRow = ({ row, attempt = false }: IRenderTableRowProps) => {
   const navigate = useNavigate();
 
   return (
     <TableRow
       hover
-      onClick={() => navigate(`/problems/${row.id}`)}
+      onClick={() => navigate(attempt ? `/problems/attempt/${row.id}` : `/problems/${row.id}`)}
       style={{ cursor: "pointer" }}
     >
       <TableCell>{row.title}</TableCell>
