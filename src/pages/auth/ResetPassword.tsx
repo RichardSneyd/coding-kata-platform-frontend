@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   Button,
@@ -33,8 +33,13 @@ const ResetPassword = () => {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const { id } = useParams();
-  const token = window.location.search.split("token=")[1];
+  //const { id, secret = '' } = useParams();
+  // const secret = window.location.search.split("secret=")[1];
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const id = queryParams.get('id') || '';
+  const secret = queryParams.get('secret') || '';
 
   const handleValidation = () => {
     let passed = true;
@@ -75,15 +80,17 @@ const ResetPassword = () => {
       setError("");
       setLoading(true);
       const body = {
-        secret: token,
+        secret: secret,
         userId: id,
         newPassword: password,
       };
       try {
         await authService.resetPassword(body);
 
-        navigate("/login");
+        navigate("/");
       } catch (err: any) {
+        console.log("errors: " + err);
+        console.log(body);
         setError(err.message ? err.message : "Server Error");
         setLoading(false);
       }
@@ -139,7 +146,7 @@ const ResetPassword = () => {
             disabled={loading}
             endIcon={loading ? <CircularProgress size={18} /> : <Check />}
           >
-            ResetPassword
+            Reset Password
           </Button>
         </CardActions>
       </Card>

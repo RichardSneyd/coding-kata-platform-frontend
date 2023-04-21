@@ -68,7 +68,7 @@ const routes: IRouteType[] = [
   },
   {
     name: "Reset Password",
-    link: "/reset-password/:id",
+    link: "/reset-password",
     Component: ResetPassword,
     authed: UserRoles.UNAUTHED,
   },
