@@ -12,6 +12,7 @@ import Home from "../pages/Home";
 import CreateProblemSet from "../pages/problem-sets/CreateProblemSet";
 import ListProblemSets from "../pages/problem-sets/ListProblemSets";
 import ProblemSet from "../pages/problem-sets/ProblemSet";
+import ProblemSetUser from "../pages/user-level/problem-sets/ProblemSet";
 import UpdateProblemSet from "../pages/problem-sets/UpdateProblemSet";
 import Attempt from "../pages/problems/Attempt";
 import CreateProblem from "../pages/problems/CreateProblem";
@@ -33,6 +34,7 @@ import {
   Person,
   Rule,
 } from "@mui/icons-material";
+import ListProblemSetsForUsers from "../pages/user-level/problem-sets/ListProblemSetsForUsers";
 
 export enum UserRoles {
   UNAUTHED,
@@ -162,10 +164,24 @@ const routes: IRouteType[] = [
     icon: List,
   },
   {
+    name: "Problem Sets",
+    link: "/users/problem-sets",
+    Component: ListProblemSetsForUsers,
+    authed: UserRoles.USER,
+    showInMenuFor: UserRoles.USER,
+    icon: List,
+  },
+  {
     name: "Problem Set",
     link: "/problem-sets/:id",
     Component: ProblemSet,
     authed: UserRoles.ADMIN,
+  },
+  {
+    name: "Problem Set",
+    link: "/users/problem-sets/:id",
+    Component: ProblemSetUser,
+    authed: UserRoles.USER,
   },
   {
     name: "Update Problem Set",
