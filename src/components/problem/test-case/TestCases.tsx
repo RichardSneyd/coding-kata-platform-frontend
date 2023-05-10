@@ -51,7 +51,12 @@ const TestCases = ({
               style={{ cursor: "pointer" }}
               title={testCase.output.dataType}
             >
-              <span>{testCase.output.dataType?.includes("STRING") ? testCase.output.value?.split(",").map(word => `"${word.trim()}"`).join(",") : testCase.output.value ? testCase.output.value : ""}</span>
+              
+              <span>
+                {testCase.output.dataType?.includes("ARRAY") ? "[" : ""}
+                {testCase.output.dataType?.includes("STRING") ? testCase.output.value?.split(",").map(word => `"${word.trim()}"`).join(",") : testCase.output.value ? testCase.output.value : ""}
+                {testCase.output.dataType?.includes("ARRAY") ? "]" : ""}
+                </span>
             </Tooltip>
           </code>
         </ListItemText>
