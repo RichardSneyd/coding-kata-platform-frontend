@@ -51,6 +51,7 @@ const UpdateProblem = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [publicCases, setPublicCases] = useState<Case[]>([]);
   const [privateCases, setPrivateCases] = useState<Case[]>([]);
+  const [testSuiteId, setTestSuiteId] = useState<number | undefined>(undefined);
 
   const [existingTestCase, setExistingTestCase] = useState<Case | null>(null);
 
@@ -77,13 +78,14 @@ const UpdateProblem = () => {
         ProblemService.getById(token, id)
           .then((result) => {
             // result.
-
+            console.log(result);
             setTitle(result.title || "");
             setDescription(result.description || "");
             setDifficulty(result.difficulty || "");
             setTags(result.tags || []);
             setPublicCases(result.testSuite?.publicCases || []);
             setPrivateCases(result.testSuite?.privateCases || []);
+            setTestSuiteId(result.testSuite?.id || undefined);
             setStartCode(result.startCode);
 
             setLoading(false);
@@ -121,15 +123,17 @@ const UpdateProblem = () => {
 
     if (token) {
       if (handleValidation()) {
+
         const body: IProblem = {
           id: parseInt(id || "0"),
           title,
           description,
           tags,
           difficulty,
-          testSuite: { publicCases, privateCases },
+          testSuite: {id: testSuiteId, publicCases, privateCases },
           startCode,
         };
+        console.log(body);
         setLoading(true);
         try {
           const response = await ProblemService.update(token, body);
