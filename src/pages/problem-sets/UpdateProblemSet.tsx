@@ -213,6 +213,27 @@ const UpdateProblemSet = () => {
 
               <br />
 
+              <FormControl>
+                <InputLabel variant="standard" id="difficulty-label">
+                  Difficulty
+                </InputLabel>
+                <Select
+                  variant="standard"
+                  labelId="difficulty-label"
+                  value={difficulty}
+                  label="Difficulty"
+                  onChange={(e) => setDifficulty(e.target.value as Difficulty)}
+                >
+                  {Object.keys(Difficulty).map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item.replace("_", " ").toLowerCase()}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <br />
+
               <Autocomplete
                 multiple
                 id="problem-tags"

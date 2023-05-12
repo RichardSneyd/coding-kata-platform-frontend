@@ -10,6 +10,7 @@ const DifficultyChip = ({ label, size = "medium" }: IDifficultyChip) => {
       return <Chip size={size} label={label} color="warning" />;
 
     case "HARD":
+    case "VERY_HARD":
       return <Chip size={size} label={label} color="error" />;
 
     default:
