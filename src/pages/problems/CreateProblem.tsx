@@ -24,7 +24,7 @@ import authService from "../../services/authService";
 import styled from "@emotion/styled";
 
 import { useSnackbar } from "notistack";
-import { Case, Difficulty, IProblem, Put } from "../../interfaces/problemSet";
+import { Case, Difficulty, IProblem, Put, sanitizeCase } from "../../interfaces/problemSet";
 import CreateTestCase from "../../components/problem/test-case/CreateTestCase";
 import TestCases from "../../components/problem/test-case/TestCases";
 import ProblemService from "../../services/problemService";
@@ -122,14 +122,18 @@ const CreateProblem = () => {
   };
 
   const addTestCase = (isPublic: boolean, inputs: Put[], output: Put) => {
+    
+    const testCase = sanitizeCase({inputs, output});
+
     if (isPublic) {
-      setPublicCases([...publicCases, { inputs: inputs, output }]);
+      setPublicCases([...publicCases, testCase]);
     } else {
-      setPrivateCases([...privateCases, { inputs: inputs, output }]);
+      setPrivateCases([...privateCases, testCase]);
     }
   };
 
   const updateExistingTestCase = (testCase: Case) => {
+    testCase = sanitizeCase(testCase);
     const newTestCases = testCase.isPublic
       ? [...publicCases]
       : [...privateCases];

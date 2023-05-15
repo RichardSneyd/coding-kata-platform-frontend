@@ -3,7 +3,8 @@
     "jsx": "react-jsx",
     "lib": [
       "es6",
-      "dom"
+      "dom",
+      "ES2021.String"
     ],
     "noImplicitAny": true,
     "sourceMap": true,

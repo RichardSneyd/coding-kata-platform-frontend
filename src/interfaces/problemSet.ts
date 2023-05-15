@@ -64,3 +64,21 @@ export enum Difficulty {
   HARD = "Hard",
   VERY_HARD = "Very Hard",
 }
+
+export const sanitizeCase = (testCase: Case) => {
+  testCase.inputs = testCase.inputs.map(input => {
+    if(input.dataType?.includes("ARRAY")) {
+      input.value = input.value?.replaceAll(", ", ",");
+    }
+    // if(!input.dataType?.includes("STRING")) input.value = input.value?.replaceAll(" ", "");
+    return input;
+  });
+  
+  if(testCase.output.dataType?.includes("ARRAY")) {
+    testCase.output.value = testCase.output.value?.replaceAll(", ", ",");
+  }
+  // if(!testCase.output.dataType?.includes("STRING")) {
+  //   testCase.output.value = testCase.output.value?.replaceAll(" ", "");
+  // }
+  return testCase;
+}
