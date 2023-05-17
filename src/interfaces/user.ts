@@ -1,6 +1,7 @@
 import { ICohort } from "./cohort";
 import { ISolution } from "./solutions";
 
+
 export interface IUser {
   [key: string]: any;
   id?: number;
