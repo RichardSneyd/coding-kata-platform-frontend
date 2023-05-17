@@ -71,6 +71,7 @@ export const sanitizeCase = (testCase: Case): Case => {
     if(dataType?.includes("ARRAY")) {
       return value?.replace(/,\s/g, ",").replace(/\s,/g, ",");
     }
+    return value;
   }
   testCase.inputs = testCase.inputs.map(input => {
     input.value = sanitizeValue(input.value, input.dataType)
