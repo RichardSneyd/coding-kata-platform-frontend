@@ -86,7 +86,7 @@ const StudentDashboard = () => {
             if (result?.cohort) {
               UserService.getCohortLeaderoard(
                 token,
-                result?.cohort?.id.toString()
+                result?.cohort?.id?.toString() || ''
               ).then((res) => {
                 setCohortBoard(res);
               });

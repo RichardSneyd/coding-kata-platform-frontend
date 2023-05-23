@@ -36,6 +36,7 @@ import {
   Rule,
 } from "@mui/icons-material";
 import ListProblemSetsForUsers from "../pages/user-level/problem-sets/ListProblemSetsForUsers";
+import UpdateUser from "../pages/users/UpdateUser";
 
 export enum UserRoles {
   UNAUTHED,
@@ -126,6 +127,12 @@ const routes: IRouteType[] = [
     name: "Create User",
     link: "/users/new",
     Component: CreateUser,
+    authed: UserRoles.ADMIN,
+  },
+  {
+    name: "Update User",
+    link: "/users/edit/:id",
+    Component: UpdateUser,
     authed: UserRoles.ADMIN,
   },
   /**

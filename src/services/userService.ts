@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import GlobalConfig from "../config/GlobalConfig";
 import { IUser } from "../interfaces/user";
+import { ICohort } from "../interfaces/cohort";
 
 const userService = {
   getAll: async (token: string) => {
@@ -11,7 +12,7 @@ const userService = {
     });
     return res.data;
   },
-  getById: async (token: string, id: string) => {
+  getById: async (token: string, id: string) : Promise<IUser> => {
     const res = await axios.get(`${GlobalConfig.server_url}/user/users/${id}`, {
       headers: {
         Authorization: "Bearer " + token,
@@ -27,15 +28,30 @@ const userService = {
     });
     return res.data;
   },
-  updateUser: async (token: string, user: IUser) => {
-    const res = await axios.put(`${GlobalConfig.server_url}/admin/users`, {
-      user,
-      headers: {
-        Authorization: "Bearer " + token,
+  update: async (token: string, body: IUser) => {
+    try {
+      const response = await axios.put(
+        GlobalConfig.server_url + "/admin/users/",
+        body,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      
+      if (response.status === 200) return response.data;
+      
+      throw AxiosError;
+    } catch (err: any) {
+      // If we get an axios error, we can assume the server down
+      if (err?.code === "ERR_NETWORK") {
+        throw new Error("Server error, please try again later");
+      }
+      if (typeof err.response.data === "string") throw new Error(err.response.data);
 
-      },
-    });
-    return res.data;
+      throw new Error("Could not update User");
+    }
   },
   getUserProgress: async (token: string, id: string) => {
     const res = await axios.get(
@@ -48,7 +64,7 @@ const userService = {
     );
     return res.data;
   },
-  getCohortLeaderoard: async (token: string, cid: string) => {
+  getCohortLeaderoard: async (token: string, cid: string) : Promise<IUser[]> => {
     const res = await axios.get(
       `${GlobalConfig.server_url}/user/users/leaderboard/${cid}`,
       {
