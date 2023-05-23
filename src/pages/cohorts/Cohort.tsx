@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
 import { ICohort } from "../../interfaces/cohort";
-import Members from "../../components/cohort/member/Members";
+// import Members from "../../components/cohort/member/Members";
 import styled from "@emotion/styled";
 import DeleteCohort from "../../components/cohort/DeleteCohort";
 import dayjs from "dayjs";
@@ -85,13 +85,11 @@ const Cohort = () => {
       </Typography>
 
       <br />
-      {/* <Members members={cohort.members} displayScore={true} /> */}
       <FilterTable
       title="Cohort Members"
       viewLink={"/users/"}
       rows={cohort.members}
       fields={tableFields}
-      // createLink={`/users/new`}
     />
     </>
   );
