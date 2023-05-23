@@ -99,7 +99,7 @@ const UserInfo = ({title = "User Info"}) => {
                     <Lock />
                   </ListItemIcon>
                   <ListItemText
-                    primary={user.roles?.toString()}
+                    primary={user.roles ? user.roles[0] : ''}
                     secondary="Role"
                   />
                 </ListItem>
