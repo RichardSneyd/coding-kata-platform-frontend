@@ -19,6 +19,24 @@ const userService = {
     });
     return res.data;
   },
+  deleteById: async (token: string, id: string) => {
+    const res = await axios.delete(`${GlobalConfig.server_url}/admin/users/${id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return res.data;
+  },
+  updateUser: async (token: string, user: IUser) => {
+    const res = await axios.put(`${GlobalConfig.server_url}/admin/users`, {
+      user,
+      headers: {
+        Authorization: "Bearer " + token,
+
+      },
+    });
+    return res.data;
+  },
   getUserProgress: async (token: string, id: string) => {
     const res = await axios.get(
       `${GlobalConfig.server_url}/user/users/${id}/progress`,

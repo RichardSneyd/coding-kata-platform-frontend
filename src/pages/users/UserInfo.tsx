@@ -5,6 +5,7 @@ import {
   LockClock,
   Lock,
   ArrowBack,
+  Edit,
 } from "@mui/icons-material";
 import {
   Typography,
@@ -17,6 +18,8 @@ import {
   ListItemText,
   Button,
   Grid,
+  styled,
+  Fab,
 } from "@mui/material";
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -30,6 +33,22 @@ import { IUser } from "../../interfaces/user";
 import authService from "../../services/authService";
 import userService from "../../services/userService";
 import FilterTable, { ITableFields } from "../../components/global/FilterTable";
+import DeleteUser from "../../components/user/DeleteUser";
+
+/**
+ * Injected styles
+ *
+ */
+const TitleWrapper = styled("div")`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const TitleActionWrapper = styled("div")`
+  a {
+    margin: 0 5px;
+  }
+`;
 
 dayjs.extend(relativeTime);
 
@@ -86,7 +105,24 @@ const UserInfo = ({title = "User Info"}) => {
       >
         Back
       </Button>
-      <Typography variant="h1">{title}</Typography>
+      <TitleWrapper>
+        <Typography variant="h1">{title}</Typography>
+        <TitleActionWrapper>
+          <Fab
+            color="primary"
+            aria-label="Edit cohort"
+            component={Link}
+            to={`/users/edit/${user.id}`}
+          >
+            <Edit />
+          </Fab>
+
+          {user.id && <DeleteUser id={user.id} />}
+        </TitleActionWrapper>
+      </TitleWrapper>
+      <Typography variant="caption">
+        {dayjs(user.startDate).format("MMM D, YYYY")}
+      </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
           <Card>
