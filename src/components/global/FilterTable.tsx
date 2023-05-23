@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 import DifficultyChip from "../problem/DifficultyChip";
 import SuccessChip from "../problem/SuccessChip";
 import Tags from "../problem/Tags";
-import { Fab, Tooltip } from "@mui/material";
+import { Fab, TextField, Tooltip } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
@@ -30,6 +30,11 @@ const StyledTableRow = styled(TableRow)<IStyledRowProps>`
   background-color: ${(props: IStyledRowProps) =>
     props.active ? orange[100] : "inherit"};
 `;
+
+const FilterField = styled(TextField)`
+  margin-right: 16px; // adjust this value to your needs
+`;
+
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -156,6 +161,7 @@ const FilterTable = ({
   const [orderBy, setOrderBy] = React.useState<string>("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [filterText, setFilterText] = React.useState("");
 
   const navigate = useNavigate();
 
@@ -170,6 +176,39 @@ const FilterTable = ({
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+  };
+
+  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterText(event.target.value);
+  };
+
+  const getFilteredRows = (rows: any[]) => {
+    if (!filterText) {
+      return rows;
+    }
+
+    return rows.filter((row) =>
+      fields.some((field) => {
+        let value: any = row;
+        const parts = field.field.split(".");
+        for (const part of parts) {
+          if (value[part] === null || value[part] === undefined) {
+            value = "";
+            break;
+          }
+          value = value[part];
+        }
+
+        if (value === undefined || value === null) {
+          value = "";
+        }
+
+        return value
+          .toString()
+          .toLowerCase()
+          .includes(filterText.toLowerCase());
+      })
+    );
   };
 
   const handleChangeRowsPerPage = (
@@ -225,6 +264,12 @@ const FilterTable = ({
           >
             {title}
           </Typography>
+          <FilterField
+            variant="outlined"
+            value={filterText}
+            onChange={handleFilterChange}
+            placeholder="Filter"
+          />
           {createLink && (
             <Tooltip title="Add">
               <Fab
@@ -264,7 +309,7 @@ const FilterTable = ({
                   </TableCell>
                 </TableRow>
               ) : (
-                stableSort(rows, getComparator(order, orderBy))
+                stableSort(getFilteredRows(rows), getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
