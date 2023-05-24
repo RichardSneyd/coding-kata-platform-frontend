@@ -127,7 +127,7 @@ const MainRouter = (): JSX.Element => {
                       "You need to be logged in to view this page"
                     );
                   }
-                  if (authed === UserRoles.USER && role !== UserRoles.USER) {
+                  if (authed === UserRoles.USER && (role !== UserRoles.USER && role !== UserRoles.ADMIN)) {
                     return displayAuthState(
                       i,
                       link,
