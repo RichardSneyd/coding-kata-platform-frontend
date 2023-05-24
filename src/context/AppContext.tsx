@@ -7,6 +7,8 @@ export interface IAppContext {
   cohorts: ICohort[];
   setNewMembers: (members: IUser[]) => void;
   updateMember: (member: IUser) => void;
+  addMember: (member: IUser) => void;
+  deleteMember: (id: number) => void;
   setNewCohorts: (cohorts: ICohort[]) => void;
   updateCohort: (cohort: ICohort) => void;
 }
@@ -36,6 +38,10 @@ const AppProvider = ({ children }: IAppProvider) => {
     );
   };
 
+  const deleteMember = (memberId: number) => {setMembers(members.filter(member => member.id !== memberId))} 
+
+  const addMember = (member: IUser) => setMembers([...members, member]);
+
   const setNewCohorts = (newCohorts: ICohort[]) => {
     setCohorts(newCohorts);
   };
@@ -60,6 +66,8 @@ const AppProvider = ({ children }: IAppProvider) => {
         updateMember,
         setNewCohorts,
         updateCohort,
+        deleteMember,
+        addMember
       }}
     >
       {children}

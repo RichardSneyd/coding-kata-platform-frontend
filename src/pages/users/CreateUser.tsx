@@ -23,7 +23,7 @@ const StyledCardContent = styled(CardContent)`
 
 
 const CreateUser = () => {
-  const { cohorts } = useContext(AppContext) as IAppContext;
+  const { cohorts, addMember } = useContext(AppContext) as IAppContext;
 
   const [customStartDate, setCustomStartDate] = useState(true)
 
@@ -83,7 +83,7 @@ const CreateUser = () => {
         setLoading(true);
         try {
           const response = await userService.create(token, body);
-
+          addMember(body);
           enqueueSnackbar(`User created`, {
             variant: "success",
           });

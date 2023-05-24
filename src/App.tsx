@@ -14,6 +14,7 @@ import AppProvider from "./context/AppContext";
 const App = (): JSX.Element => {
   return (
     <>
+    
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <SnackbarProvider maxSnack={6}>

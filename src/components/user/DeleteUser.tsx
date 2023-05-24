@@ -9,7 +9,9 @@ import {
   DialogTitle,
   Fab,
 } from "@mui/material";
-import { useState } from "react";
+
+import { useContext, useState } from "react";
+import {AppContext, IAppContext } from "../../context/AppContext";
 
 import authService from "../../services/authService";
 import { useSnackbar } from "notistack";
@@ -21,6 +23,8 @@ interface IDeleteUserProps {
 }
 
 const DeleteUser = ({ id }: IDeleteUserProps) => {
+  const { deleteMember } = useContext(AppContext) as IAppContext;
+
   const [open, setOpen] = useState(false);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,6 +40,7 @@ const DeleteUser = ({ id }: IDeleteUserProps) => {
         userService
           .deleteById(token, id.toString())
           .then((result) => {
+            deleteMember(id);
             enqueueSnackbar(`User deleted`, {
               variant: "success",
             });
