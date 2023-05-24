@@ -35,7 +35,6 @@ const FilterField = styled(TextField)`
   margin-right: 16px; // adjust this value to your needs
 `;
 
-
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -272,14 +271,16 @@ const FilterTable = ({
           />
           {createLink && (
             <Tooltip title="Add">
-              <Fab
-                color="primary"
-                aria-label="add"
-                component={Link}
-                to={createLink}
-              >
-                <Add />
-              </Fab>
+              <Box display="flex" alignItems="center">
+                <Fab
+                  color="primary"
+                  aria-label="add"
+                  component={Link}
+                  to={createLink}
+                >
+                  <Add />
+                </Fab>
+              </Box>
             </Tooltip>
           )}
         </Toolbar>
