@@ -42,6 +42,7 @@ export enum UserRoles {
   UNAUTHED,
   USER,
   ADMIN,
+  CLIENT
 }
 
 /**
