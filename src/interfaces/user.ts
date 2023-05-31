@@ -1,5 +1,5 @@
 import { ICohort } from "./cohort";
-import { IFile } from "./file";
+// import { IFile } from "./file";
 import { ISolution } from "./solutions";
 
 
@@ -24,8 +24,8 @@ export interface IUserProfile {
   workExperience?: string[];
   education: string[];
   bio?: string;
-  headshot?: IFile;
-  resume?: IFile;
+  headshot?: string | null;
+  resume?: string | null;
 }
 
 export interface IUserProgress {

@@ -4,7 +4,6 @@ import authService from "../../services/authService";
 
 import styled from "@emotion/styled";
 
-import { IUser } from "../../interfaces/user";
 import dayjs, { Dayjs } from "dayjs";
 import { ArrowBack, Check } from "@mui/icons-material";
 import {
@@ -31,6 +30,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ICohort } from "../../interfaces/cohort";
 import { UserRoles } from "../../routing/routes";
 import userService from "../../services/userService";
+import userProfileService from "../../services/userProfileService"; // Assuming you have a userProfileService
+
+import { IUserProfile, IUser } from "../../interfaces/user";
+// import { IFile } from "../../interfaces/file";
+import FileInput from "../../components/global/FileInput";
+import EditableList from "../../components/global/EditableList";
 import { AppContext, IAppContext } from "../../context/AppContext";
 import Loading from "../../components/global/Loading";
 import EmptyState from "../../components/global/EmptyState";
@@ -52,7 +57,14 @@ const UpdateUser = () => {
   const [cohort, setCohort] = useState<ICohort | null>(null);
   const [username, setUsername] = useState("");
   const [roles, setRoles] = useState<string[]>([UserRoles[UserRoles.USER]]);
-//   const [userId, setUserId] = useState<number | undefined>(undefined);
+
+  // UserProfile states
+  const [fullName, setFullName] = useState("");
+  const [bio, setBio] = useState("");
+  const [headshot, setHeadshot] = useState<string | null>(null);
+  const [resume, setResume] = useState<string | null>(null);
+  const [education, setEducation] = useState<string[]>([]);
+  const [workHistory, setWorkHistory] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -63,36 +75,77 @@ const UpdateUser = () => {
 
   useEffect(() => {
     const token = authService.getAccessToken();
-
+  
     if (token) {
       if (id) {
         setError("");
         setLoading(true);
+  
+        // const userPromise = userService.getById(token, id);
+        // const userProfilePromise = userProfileService.getById(token, id);
+  
         userService
-          .getById(token, id)
-          .then((result) => {
-            console.log(result);
+        .getById(token, id)
+        .then((userResult) => {
+          setCohort(userResult?.cohort || null);
+          setEmail(userResult?.email || "");
+          setUsername(userResult?.username || "");
+          setRoles(userResult?.roles || []);
+          setStartDate(userResult?.joinDate ? dayjs(userResult.joinDate) : null);
 
-            // setUserId(result.id);
-            setCohort(result.cohort || null);
-            setEmail(result.email || "");
-            setUsername(result.username || "");
-            setRoles(result.roles || []);
-            setStartDate(dayjs(result.joinDate) || null);
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.log("Error getting cohorts", err);
-            setError("Error fetching data");
-            setLoading(false);
-          });
+          userProfileService
+            .getById(token, id)
+            .then((userProfileResult) => {
+              setFullName(userProfileResult?.fullName || "");
+              setBio(userProfileResult?.bio || "");
+              setHeadshot(userProfileResult?.headshot || null);
+              setResume(userProfileResult?.resume || null);
+              setEducation(userProfileResult?.education || []);
+              setWorkHistory(userProfileResult?.workHistory || []);
+            })
+            .catch((err) => {
+              console.log("Error fetching user profile", err);
+            })
+            .finally(() => setLoading(false));
+        })
+        .catch((err) => {
+          console.log("Error fetching user", err);
+          setError("Error fetching data");
+          setLoading(false);
+        });
       }
     } else {
       setError("Authentication error, please log in again");
       setLoading(false);
     }
   }, [id]);
+  
+  
+  const handleHeadshotChange = (newFile: File | null) => {
+    setHeadshot(newFile ? newFile.name : null);
+  };
+  
+  const handleResumeChange = (newFile: File | null) => {
+    setResume(newFile ? newFile.name : null);
+  };
 
+
+const handleAddEducation = (newEducation: string) => {
+  setEducation(prevEducation => [...prevEducation, newEducation]);
+};
+
+const handleDeleteEducation = (index: number) => {
+  setEducation(prevEducation => prevEducation.filter((_, i) => i !== index));
+};
+
+const handleAddWorkHistory = (newWorkHistory: string) => {
+  setWorkHistory(prevWorkHistory => [...prevWorkHistory, newWorkHistory]);
+};
+
+const handleDeleteWorkHistory = (index: number) => {
+  setWorkHistory(prevWorkHistory => prevWorkHistory.filter((_, i) => i !== index));
+};
+  
   const handleValidation = () => {
     let passed = true;
 
@@ -115,27 +168,42 @@ const UpdateUser = () => {
 
     if (token) {
       if (handleValidation()) {
-       //setUsername(email.split("@")[0]);
+        //setUsername(email.split("@")[0]);
 
-        const body: IUser = {
-          id: parseInt(id || "0") ,
+        const userBody: IUser = {
+          id: parseInt(id || "0"),
           username,
           email,
           startDate,
           roles,
           cohort,
         };
-        console.log(body);
+
+        const userProfileBody: IUserProfile = {
+          // Assuming id refers to UserProfile's id
+          id: parseInt(id || "0"),
+          fullName,
+          bio,
+          headshot,
+          resume,
+          education,
+          workHistory,
+          user: userBody
+        };
+
+        console.log(userBody);
         debugger;
         setLoading(true);
         try {
-          const response = await userService.update(token, body);
-
+          //const response = await userService.update(token, userBody);
+          const updateUserPromise = userService.update(token, userBody);
+          const updateUserProfilePromise = userProfileService.update(token, id || "", userProfileBody);
+          await Promise.all([updateUserPromise, updateUserProfilePromise]);
           enqueueSnackbar(`User updated`, {
             variant: "success",
           });
 
-          navigate(`/users/${response?.id}`);
+          navigate(`/users/${id}`);
         } catch (err: any) {
           enqueueSnackbar(err.message, {
             variant: "error",
@@ -156,7 +224,7 @@ const UpdateUser = () => {
       setLoading(false);
     }
   };
-  
+
   if (loading) return <Loading />;
   if (error) return <EmptyState message={error} />;
   return (
@@ -284,6 +352,49 @@ const UpdateUser = () => {
               </FormControl>
             </StyledCardContent>
           </Card>
+        </Grid>
+        <Grid item md={12} xs={12}>
+        <Card>
+    <CardHeader title="User Profile" />
+    <StyledCardContent>
+      <TextField
+        variant="standard"
+        label="Full Name"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && submit()}
+      />
+      <TextField
+        variant="standard"
+        label="Bio"
+        value={bio}
+        onChange={(e) => setBio(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && submit()}
+      />
+      <FileInput
+        label="Headshot"
+        file={headshot ? new File([], headshot) : null}
+        onChange={handleHeadshotChange}
+      />
+      <FileInput
+        label="Resume"
+        file={resume ? new File([], resume) : null}
+        onChange={handleResumeChange}
+      />
+      <EditableList
+        label="Education"
+        items={education}
+        onAddItem={handleAddEducation}
+        onDeleteItem={handleDeleteEducation}
+      />
+      <EditableList
+        label="Work History"
+        items={workHistory}
+        onAddItem={handleAddWorkHistory}
+        onDeleteItem={handleDeleteWorkHistory}
+      />
+    </StyledCardContent>
+  </Card>
         </Grid>
 
         <Grid item md={12} xs={12}>
