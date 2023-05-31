@@ -1,4 +1,5 @@
 import { ICohort } from "./cohort";
+import { IFile } from "./file";
 import { ISolution } from "./solutions";
 
 
@@ -13,6 +14,18 @@ export interface IUser {
   joinDate?: string;
   solutions?: ISolution[];
   completedProblems?: any[];
+}
+
+export interface IUserProfile {
+  [key: string]: any;
+  id?: number;
+  user: IUser;
+  fullName?: string;
+  workExperience?: string[];
+  education: string[];
+  bio?: string;
+  headshot?: IFile;
+  resume?: IFile;
 }
 
 export interface IUserProgress {
