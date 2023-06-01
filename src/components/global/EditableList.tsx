@@ -1,7 +1,8 @@
 // EditableList.tsx
 import { FC, useState } from "react";
-import { Button, TextField, List, ListItem, IconButton } from "@mui/material";
+import {TextField, List, ListItem, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import StyledButton from "./StyledButton";
 
 interface EditableListProps {
   label: string;
@@ -35,13 +36,15 @@ const EditableList: FC<EditableListProps> = ({
         label={label}
         value={newItem}
         onChange={(e) => setNewItem(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+        fullWidth={true}
       />
-      <Button variant="contained" color="primary" onClick={handleAdd}>
+      <StyledButton variant="contained" color="primary" onClick={handleAdd}>
         Add
-      </Button>
+      </StyledButton>
       <List>
         {items.map((item, index) => (
-          <ListItem key={index}>
+          <ListItem sx={{width: '100%'}} key={index}>
             {item}
             <IconButton edge="end" onClick={() => handleDelete(index)}>
               <Delete />

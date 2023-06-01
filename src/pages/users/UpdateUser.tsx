@@ -67,9 +67,12 @@ const UpdateUser = () => {
   const [resume, setResume] = useState<string | null>(null);
   const [education, setEducation] = useState<string[]>([]);
   const [workHistory, setWorkHistory] = useState<string[]>([]);
+  const [preferredLocations, setPrefferedLocations] = useState<string[]>([]);
+  const [preferredJobRoles, setPreferredJobRoles] = useState<string[]>([]);
 
   const [headshotImage, setHeadshotImage] = useState<File | null>(null);
 
+  const [hasProfile, setHasProfile] = useState(false)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -102,11 +105,15 @@ const UpdateUser = () => {
             userProfileService
               .getById(token, id)
               .then((userProfileResult) => {
+                setHasProfile(true);
                 setFullName(userProfileResult?.fullName || "");
                 setBio(userProfileResult?.bio || "");
                 setHeadshot(userProfileResult?.headshot || null);
                 setResume(userProfileResult?.resume || null);
                 setEducation(userProfileResult?.education || []);
+                setWorkHistory(userProfileResult?.workHistory || []);
+                setPreferredJobRoles(userProfileResult?.preferredJobRoles || []);
+                setPrefferedLocations(userProfileResult?.preferredLocations || []);
                 setWorkHistory(userProfileResult?.workHistory || []);
                 setGithubLink(userProfileResult?.githubLink || "");
               })
@@ -153,6 +160,26 @@ const UpdateUser = () => {
   const handleDeleteEducation = (index: number) => {
     setEducation((prevEducation) =>
       prevEducation.filter((_, i) => i !== index)
+    );
+  };
+
+  const handleAddLocation = (location: string) => {
+    setPrefferedLocations((prevLocations) => [...prevLocations, location]);
+  };
+
+  const handleDeleteLocation = (index: number) => {
+    setPrefferedLocations((prevLocations) =>
+      prevLocations.filter((_, i) => i !== index)
+    );
+  };
+
+  const handleAddJobRole= (location: string) => {
+    setPrefferedLocations((prevLocations) => [...prevLocations, location]);
+  };
+
+  const handleDeleteJobRole = (index: number) => {
+    setPreferredJobRoles((prevRoles) =>
+      prevRoles.filter((_, i) => i !== index)
     );
   };
 
