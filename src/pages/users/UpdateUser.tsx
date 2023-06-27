@@ -9,6 +9,7 @@ import { ArrowBack, Check } from "@mui/icons-material";
 import {
   Button,
   Typography,
+  Link as MUILink,
   Grid,
   CardHeader,
   TextField,
@@ -72,6 +73,7 @@ const UpdateUser = () => {
   const [preferredRoles, setPreferredRoles] = useState<string[]>([]);
 
   const [headshotImage, setHeadshotImage] = useState<File | null>(null);
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
 
   const [hasProfile, setHasProfile] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -113,9 +115,7 @@ const UpdateUser = () => {
                 setResume(userProfileResult?.resume || null);
                 setEducation(userProfileResult?.education || []);
                 setWorkExperience(userProfileResult?.workExperience || []);
-                setPreferredRoles(
-                  userProfileResult?.preferredRoles || []
-                );
+                setPreferredRoles(userProfileResult?.preferredRoles || []);
                 setPrefferedLocations(
                   userProfileResult?.preferredLocations || []
                 );
@@ -133,6 +133,7 @@ const UpdateUser = () => {
           });
 
         loadHeadshot(token, id);
+        loadResume(token, id);
       }
     } else {
       setError("Authentication error, please log in again");
@@ -149,12 +150,17 @@ const UpdateUser = () => {
     setHeadshotImage(blob);
   };
 
+  const loadResume = async (token: string, id: string) => {
+    const blob: File = await userProfileService.getResume(token, id);
+    setResumeFile(blob);
+  };
+
   const handleHeadshotChange = (newFile: File | null) => {
     setHeadshotImage(newFile ? newFile : null);
   };
 
   const handleResumeChange = (newFile: File | null) => {
-    setResume(newFile ? newFile.name : null);
+    setResumeFile(newFile ? newFile : null);
   };
 
   const handleAddEducation = (newEducation: string) => {
@@ -182,9 +188,7 @@ const UpdateUser = () => {
   };
 
   const handleDeleteJobRole = (index: number) => {
-    setPreferredRoles((prevRoles) =>
-      prevRoles.filter((_, i) => i !== index)
-    );
+    setPreferredRoles((prevRoles) => prevRoles.filter((_, i) => i !== index));
   };
 
   const handleAddWorkHistory = (newWorkHistory: string) => {
@@ -346,7 +350,17 @@ const UpdateUser = () => {
                       onChange={(e) => setBio(e.target.value)}
                       // onKeyDown={(e) => e.key === "Enter" && submit()}
                     />
-
+                    {resumeFile && (
+                      <Typography variant="body1">
+                        <MUILink
+                          href={URL.createObjectURL(resumeFile)}
+                          download={resumeFile.name}
+                        >
+                          Download Resume.pdf
+                          
+                        </MUILink>
+                      </Typography>
+                    )}
                     <FileInput
                       label="Resume (PDF)"
                       file={resume ? new File([], resume) : null}
@@ -354,7 +368,7 @@ const UpdateUser = () => {
                       accept=".pdf"
                     />
                   </Grid>
-                  <Grid item md={4} xs={12} sm={12}>
+                 < Grid item md={4} xs={12} sm={12}>
                     <HeadshotInput
                       headshot={headshotImage ? headshotImage : null}
                       onChange={handleHeadshotChange}

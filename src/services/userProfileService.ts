@@ -78,62 +78,55 @@ const userProfileService = {
         });
         return res.data;
     },
-    uploadHeadshot: async (token: string, id: string, file: File) => {
+    getResume: async (token: string, id: string): Promise<File> => {
+        const res = await axios.get(`${GlobalConfig.server_url}/user/users/${id}/resume`, {
+            headers: {
+                Authorization: "Bearer " + token,
+            },
+            responseType: 'blob'
+        });
+        return new File([res.data], 'resume.pdf', { type: 'application/pdf' });
+    },
+    getHeadshot: async (token: string, id: string): Promise<File> => {
+        const res = await axios.get(`${GlobalConfig.server_url}/user/users/${id}/headshot`, {
+            headers: {
+                Authorization: "Bearer " + token,
+            },
+            responseType: 'blob'
+        });
+        return new File([res.data], 'headshot.jpg', { type: 'image/jpeg' });
+    },
+    uploadHeadshot: async (token: string, id: string, file: File): Promise<any> => {
         let formData = new FormData();
         formData.append('file', file);
 
-        const res = await axios.post(
-            `${GlobalConfig.server_url}/user/profiles/${id}/headshot`,
-            formData,
-            {
+        try {
+            const res = await axios.post(`${GlobalConfig.server_url}/user/users/${id}/headshot`, formData, {
                 headers: {
-                    Authorization: "Bearer " + token,
+                    'Authorization': "Bearer " + token,
+                    'Content-Type': 'multipart/form-data'
                 },
-            },
-        );
-        return res.data;
+            });
+            return res.data;
+        } catch (error) {
+            console.error(error);
+        }
     },
-
-    getHeadshot: async (token: string, id: string) => {
-        const res = await axios.get(
-            `${GlobalConfig.server_url}/user/profiles/${id}/headshot`,
-            {
-                headers: {
-                    Authorization: "Bearer " + token,
-                },
-                responseType: 'blob'
-            },
-        );
-        return res.data;
-    },
-
-    uploadResume: async (token: string, id: string, file: File) => {
+    uploadResume: async (token: string, id: string, file: File): Promise<any> => {
         let formData = new FormData();
         formData.append('file', file);
 
-        const res = await axios.post(
-            `${GlobalConfig.server_url}/user/profiles/${id}/cv`,
-            formData,
-            {
+        try {
+            const res = await axios.post(`${GlobalConfig.server_url}/user/users/${id}/resume`, formData, {
                 headers: {
-                    Authorization: "Bearer " + token,
+                    'Authorization': "Bearer " + token,
+                    'Content-Type': 'multipart/form-data'
                 },
-            },
-        );
-        return res.data;
-    },
-
-    getResume: async (token: string, id: string) => {
-        const res = await axios.get(
-            `${GlobalConfig.server_url}/user/profiles/${id}/cv`,
-            {
-                headers: {
-                    Authorization: "Bearer " + token,
-                },
-                responseType: 'blob'
-            },
-        );
-        return res.data;
+            });
+            return res.data;
+        } catch (error) {
+            console.error(error);
+        }
     },
 };
 

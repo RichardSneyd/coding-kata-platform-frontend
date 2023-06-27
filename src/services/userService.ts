@@ -11,7 +11,7 @@ const userService = {
     });
     return res.data;
   },
-  getById: async (token: string, id: string) : Promise<IUser> => {
+  getById: async (token: string, id: string): Promise<IUser> => {
     const res = await axios.get(`${GlobalConfig.server_url}/user/users/${id}`, {
       headers: {
         Authorization: "Bearer " + token,
@@ -38,9 +38,9 @@ const userService = {
           },
         }
       );
-      
+
       if (response.status === 200) return response.data;
-      
+
       throw AxiosError;
     } catch (err: any) {
       // If we get an axios error, we can assume the server down
@@ -63,7 +63,7 @@ const userService = {
     );
     return res.data;
   },
-  getCohortLeaderoard: async (token: string, cid: string) : Promise<IUser[]> => {
+  getCohortLeaderoard: async (token: string, cid: string): Promise<IUser[]> => {
     const res = await axios.get(
       `${GlobalConfig.server_url}/user/users/leaderboard/${cid}`,
       {
@@ -111,6 +111,8 @@ const userService = {
       throw new Error("Could not create User");
     }
   },
+ 
+
 };
 
 export default userService;
