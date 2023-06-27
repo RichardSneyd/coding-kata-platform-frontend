@@ -13,6 +13,7 @@ export const HeadshotInput = ({
     headshot ? URL.createObjectURL(headshot) : null
   );
   const editorRef = useRef<any>(null);
+  const [cropped, setCropped] = useState<boolean>(false);
 
   useEffect(() => {
     if (headshot) {
@@ -21,6 +22,7 @@ export const HeadshotInput = ({
   }, [headshot]);
 
   const onHeadshotClick = () => {
+   // if(cropped) return;
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = "image/jpeg";
@@ -28,6 +30,7 @@ export const HeadshotInput = ({
       const target = e.target as HTMLInputElement;
       const file = target.files ? target.files[0] : null;
       if (file) {
+        setCropped(false);
         setHeadshotUrl(URL.createObjectURL(file));
         onChange(file);
       }
@@ -35,7 +38,7 @@ export const HeadshotInput = ({
     fileInput.click();
   };
 
-  const handleImageUpload = () => {
+  const handleImageResample = () => {
     if (editorRef.current) {
       const canvas = editorRef.current.getImageScaledToCanvas();
       canvas.toBlob((blob: Blob) => {
@@ -43,12 +46,13 @@ export const HeadshotInput = ({
         onChange(downsizedFile);
       }, 'image/jpeg');
     }
+    setCropped(true);
   };
 
   return (
-    <Box sx={{ cursor: "pointer" }} onClick={onHeadshotClick}>
+    <Box sx={{ }} >
       {headshot ? (
-        <Box sx={{ position: 'relative', width: 150, height: 150 }}>
+        <Box sx={{ position: 'relative', width: 150, height: 150, cursor: "pointer"  }} onClick={()=>{if(cropped) onHeadshotClick()}}>
           <AvatarEditor
             ref={editorRef}
             image={headshotUrl ? headshotUrl : ''}
@@ -60,9 +64,9 @@ export const HeadshotInput = ({
             rotate={0}
             borderRadius={75}
           />
-          <Box sx={{ position: 'absolute', bottom: 10, right: 10 }}>
-            <button onClick={handleImageUpload}>Save</button>
-          </Box>
+          {!cropped && <Box sx={{ position: 'absolute', bottom: 10, right: 10 }} >
+            <button onClick={handleImageResample}>Crop</button>
+          </Box>}
         </Box>
       ) : (
         <Box
@@ -73,7 +77,7 @@ export const HeadshotInput = ({
             height: 150,
             width: 150,
             backgroundColor: "grey",
-          }}
+          }} onClick={onHeadshotClick}
         >
           <Typography variant="body1" align="center">
             Click to upload headshot
