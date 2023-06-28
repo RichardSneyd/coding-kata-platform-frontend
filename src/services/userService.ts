@@ -30,7 +30,7 @@ const userService = {
   update: async (token: string, body: IUser) => {
     try {
       const response = await axios.put(
-        GlobalConfig.server_url + "/admin/users/",
+        GlobalConfig.server_url + "/user/users/",
         body,
         {
           headers: {

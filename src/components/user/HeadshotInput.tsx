@@ -1,4 +1,4 @@
-import { Box, CardMedia, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import AvatarEditor from 'react-avatar-editor';
 

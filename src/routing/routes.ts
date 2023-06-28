@@ -122,7 +122,7 @@ const routes: IRouteType[] = [
     name: "User",
     link: "/users/:id",
     Component: UserInfo,
-    authed: UserRoles.ADMIN,
+    authed: UserRoles.USER,
   },
   {
     name: "Create User",
@@ -134,7 +134,7 @@ const routes: IRouteType[] = [
     name: "Update User",
     link: "/users/edit/:id",
     Component: UpdateUser,
-    authed: UserRoles.ADMIN,
+    authed: UserRoles.USER,
   },
   /**
    * Cohort
