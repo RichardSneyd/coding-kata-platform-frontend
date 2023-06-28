@@ -314,248 +314,256 @@ const UpdateUser = () => {
         Back
       </Button>
       <Typography variant="h1">Update User</Typography>
-      <Grid container spacing={5}>
+      <Grid container spacing={3}>
         {/* left col */}
-        <Grid container sm={12} md={8} xs={12}>
-          <Grid item md={12} xs={12} sm={12}>
-            <StyledCard>
-              <CardHeader title="User Profile" />
-              <StyledCardContent>
-                <Grid container spacing={5}>
-                  <Grid item md={8} xs={12} sm={12}>
-                    <TextField
-                      sx={{ width: "100%" }}
-                      variant="standard"
-                      label="Full Name"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && submit()}
-                    />
-                    <br />
-                    <TextField
-                      sx={{ width: "100%" }}
-                      variant="standard"
-                      label="Github Link"
-                      value={githubLink}
-                      onChange={(e) => handleGithubLinkChange(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && submit()}
-                    />
-                    <br />
-                    <TextField
-                      multiline
-                      sx={{ width: "100%", minHeight: "5em" }}
-                      variant="standard"
-                      label="Bio"
-                      value={bio}
-                      onChange={(e) => setBio(e.target.value)}
-                      // onKeyDown={(e) => e.key === "Enter" && submit()}
-                    />
-                    {resumeFile && (
-                      <Typography variant="body1">
-                        <MUILink
-                          href={URL.createObjectURL(resumeFile)}
-                          download={resumeFile.name}
-                        >
-                          Download Resume.pdf
-                          
-                        </MUILink>
-                      </Typography>
-                    )}
-                    <FileInput
-                      label="Resume (PDF)"
-                      file={resume ? new File([], resume) : null}
-                      onChange={handleResumeChange}
-                      accept=".pdf"
-                    />
+        <Grid item sm={12} md={8} xs={12}>
+          <Grid container sm={12} md={12} xs={12} spacing={3}>
+            <Grid item md={12} xs={12} sm={12}>
+              <StyledCard>
+                <CardHeader title="User Profile" />
+                <StyledCardContent>
+                  <Grid container spacing={5}>
+                    <Grid item md={8} xs={12} sm={12}>
+                      <TextField
+                        sx={{ width: "100%" }}
+                        variant="standard"
+                        label="Full Name"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && submit()}
+                      />
+                      <br />
+                      <TextField
+                        sx={{ width: "100%" }}
+                        variant="standard"
+                        label="Github Link"
+                        value={githubLink}
+                        onChange={(e) => handleGithubLinkChange(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && submit()}
+                      />
+                      <br />
+                      <TextField
+                        multiline
+                        sx={{ width: "100%", minHeight: "5em" }}
+                        variant="standard"
+                        label="Bio"
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        // onKeyDown={(e) => e.key === "Enter" && submit()}
+                      />
+                      {resumeFile && (
+                        <Typography variant="body1">
+                          <MUILink
+                            href={URL.createObjectURL(resumeFile)}
+                            download={resumeFile.name}
+                          >
+                            Download Resume.pdf
+                          </MUILink>
+                        </Typography>
+                      )}
+                      <FileInput
+                        label="Resume (PDF)"
+                        file={resume ? new File([], resume) : null}
+                        onChange={handleResumeChange}
+                        accept=".pdf"
+                      />
+                    </Grid>
+                    <Grid item md={4} xs={12} sm={12}>
+                      <HeadshotInput
+                        headshot={headshotImage ? headshotImage : null}
+                        onChange={handleHeadshotChange}
+                      />
+                    </Grid>
                   </Grid>
-                 < Grid item md={4} xs={12} sm={12}>
-                    <HeadshotInput
-                      headshot={headshotImage ? headshotImage : null}
-                      onChange={handleHeadshotChange}
-                    />
-                  </Grid>
-                </Grid>
-              </StyledCardContent>
-            </StyledCard>
-          </Grid>
+                </StyledCardContent>
+              </StyledCard>
+            </Grid>
 
-          {/* left sub col */}
-          <Grid container md={6} xs={12} sm={12}>
-            <Grid item md={12} xs={12} sm={12}>
-              <StyledCard>
-                <StyledCardContent>
-                  <CardHeader title="Roles of Interest" />
-                  <EditableList
-                    label="Roles"
-                    items={preferredRoles}
-                    onAddItem={handleAddJobRole}
-                    onDeleteItem={handleDeleteJobRole}
-                  />
-                </StyledCardContent>
-              </StyledCard>
+            {/* left sub col */}
+            <Grid item md={6} xs={12} sm={12}>
+              <Grid container md={12} xs={12} sm={12}>
+                <Grid item md={12} xs={12} sm={12}>
+                  <StyledCard>
+                    <StyledCardContent>
+                      <CardHeader title="Roles of Interest" />
+                      <EditableList
+                        label="Roles"
+                        items={preferredRoles}
+                        onAddItem={handleAddJobRole}
+                        onDeleteItem={handleDeleteJobRole}
+                      />
+                    </StyledCardContent>
+                  </StyledCard>
+                </Grid>
+                <Grid item md={12} xs={12} sm={12}>
+                  <StyledCard>
+                    <StyledCardContent>
+                      <CardHeader title="Education & Skills" />
+                      <EditableList
+                        label="Education"
+                        items={education}
+                        onAddItem={handleAddEducation}
+                        onDeleteItem={handleDeleteEducation}
+                      />
+                    </StyledCardContent>
+                  </StyledCard>
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item md={12} xs={12} sm={12}>
-              <StyledCard>
-                <StyledCardContent>
-                  <CardHeader title="Education & Skills" />
-                  <EditableList
-                    label="Education"
-                    items={education}
-                    onAddItem={handleAddEducation}
-                    onDeleteItem={handleDeleteEducation}
-                  />
-                </StyledCardContent>
-              </StyledCard>
-            </Grid>
-          </Grid>
-          {/* right sub col */}
-          <Grid container md={6} xs={12} sm={12}>
-            <Grid item md={12} xs={12} sm={12}>
-              <StyledCard>
-                <StyledCardContent>
-                  <CardHeader title="Preferred Locations" />
-                  <EditableList
-                    label="Locations"
-                    items={preferredLocations}
-                    onAddItem={handleAddLocation}
-                    onDeleteItem={handleDeleteLocation}
-                  />
-                </StyledCardContent>
-              </StyledCard>
-            </Grid>
-            <Grid item md={12} xs={12} sm={12}>
-              <StyledCard>
-                <StyledCardContent>
-                  <CardHeader title="Work Experience" />
-                  <EditableList
-                    label="Work History"
-                    items={workExperience}
-                    onAddItem={handleAddWorkHistory}
-                    onDeleteItem={handleDeleteWorkHistory}
-                  />
-                </StyledCardContent>
-              </StyledCard>
+            {/* right sub col */}
+            <Grid item md={6} xs={12} sm={12}>
+              <Grid container md={12} xs={12} sm={12}>
+                <Grid item md={12} xs={12} sm={12}>
+                  <StyledCard>
+                    <StyledCardContent>
+                      <CardHeader title="Preferred Locations" />
+                      <EditableList
+                        label="Locations"
+                        items={preferredLocations}
+                        onAddItem={handleAddLocation}
+                        onDeleteItem={handleDeleteLocation}
+                      />
+                    </StyledCardContent>
+                  </StyledCard>
+                </Grid>
+                <Grid item md={12} xs={12} sm={12}>
+                  <StyledCard>
+                    <StyledCardContent>
+                      <CardHeader title="Work Experience" />
+                      <EditableList
+                        label="Work History"
+                        items={workExperience}
+                        onAddItem={handleAddWorkHistory}
+                        onDeleteItem={handleDeleteWorkHistory}
+                      />
+                    </StyledCardContent>
+                  </StyledCard>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
+
         {/* right col */}
         <Grid item sm={12} md={4} xs={12}>
-          {/* Basic Credentials */}
-          <Grid item sm={12} md={12} xs={12}>
-            <StyledCard>
-              <CardHeader title="Basic Credentials" />
-              <StyledCardContent>
-                <TextField
-                  variant="standard"
-                  name="title"
-                  label="Email"
-                  autoFocus={true}
-                  margin="normal"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && submit()}
-                  error={emailError !== ""}
-                  helperText={emailError}
-                />
-                <TextField
-                  variant="standard"
-                  name="title"
-                  label="Username"
-                  margin="normal"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && submit()}
-                />
-                <br />
-                <FormControl variant="standard">
-                  <InputLabel id="cohort-label">Cohort</InputLabel>
-                  <Select
+          <Grid container sm={12} md={12} xs={12}>
+            {/* Basic Credentials */}
+            <Grid item sm={12} md={12} xs={12}>
+              <StyledCard>
+                <CardHeader title="Basic Credentials" />
+                <StyledCardContent>
+                  <TextField
                     variant="standard"
-                    labelId="cohort-label"
-                    value={cohort?.name}
-                    label="Cohort"
-                    onChange={
-                      (e) =>
-                        setCohort(
-                          cohorts.filter(
-                            (cohort) => cohort.name === e.target.value
-                          )[0]
-                        )
-                      // setCohort(e.target.value)
-                    }
-                  >
-                    {cohorts.map((cohort) => (
-                      <MenuItem value={cohort.name} key={cohort?.id}>
-                        {cohort.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <br />
-
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DesktopDatePicker
-                    label="Start Date"
-                    inputFormat="DD/MM/YYYY"
-                    value={customStartDate ? startDate : cohort?.startDate}
-                    onChange={(e: Dayjs | null) => setStartDate(e)}
-                    renderInput={(params) => (
-                      <TextField variant="standard" {...params} />
-                    )}
-                    disabled={!customStartDate}
+                    name="title"
+                    label="Email"
+                    autoFocus={true}
+                    margin="normal"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && submit()}
+                    error={emailError !== ""}
+                    helperText={emailError}
                   />
-                </LocalizationProvider>
-                {cohort ? (
-                  <FormGroup>
-                    <FormControlLabel
-                      control={<Checkbox checked={!customStartDate} />}
-                      onChange={() => setCustomStartDate(!customStartDate)}
-                      value={customStartDate}
-                      label="Use same start date as Cohort"
-                    />
-                  </FormGroup>
-                ) : (
-                  <br />
-                )}
-
-                <FormControl>
-                  <InputLabel variant="standard" id="role-label">
-                    Role
-                  </InputLabel>
-                  <Select
+                  <TextField
                     variant="standard"
-                    multiple
-                    labelId="role-label"
-                    value={roles}
-                    label="Role"
-                    renderValue={(selected) => {
-                      //  console.log(selected);
-                      return selected.join(", ");
-                    }}
-                    onChange={(e) => {
-                      let value = e.target.value;
-                      console.log(value);
-                      setRoles(
-                        typeof value === "string" ? value.split(",") : value
-                      );
-                    }}
-                  >
-                    {Object.keys(UserRoles)
-                      .filter((key) => Number(key) > 0)
-                      .map((item) => (
-                        <MenuItem key={item} value={UserRoles[Number(item)]}>
-                          <Checkbox
-                            checked={
-                              roles.indexOf(UserRoles[Number(item)]) > -1
-                            }
-                          />
-                          <ListItemText primary={UserRoles[Number(item)]} />
+                    name="title"
+                    label="Username"
+                    margin="normal"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && submit()}
+                  />
+                  <br />
+                  <FormControl variant="standard">
+                    <InputLabel id="cohort-label">Cohort</InputLabel>
+                    <Select
+                      variant="standard"
+                      labelId="cohort-label"
+                      value={cohort?.name}
+                      label="Cohort"
+                      onChange={
+                        (e) =>
+                          setCohort(
+                            cohorts.filter(
+                              (cohort) => cohort.name === e.target.value
+                            )[0]
+                          )
+                        // setCohort(e.target.value)
+                      }
+                    >
+                      {cohorts.map((cohort) => (
+                        <MenuItem value={cohort.name} key={cohort?.id}>
+                          {cohort.name}
                         </MenuItem>
                       ))}
-                  </Select>
-                </FormControl>
-              </StyledCardContent>
-            </StyledCard>
+                    </Select>
+                  </FormControl>
+                  <br />
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DesktopDatePicker
+                      label="Start Date"
+                      inputFormat="DD/MM/YYYY"
+                      value={customStartDate ? startDate : cohort?.startDate}
+                      onChange={(e: Dayjs | null) => setStartDate(e)}
+                      renderInput={(params) => (
+                        <TextField variant="standard" {...params} />
+                      )}
+                      disabled={!customStartDate}
+                    />
+                  </LocalizationProvider>
+                  {cohort ? (
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Checkbox checked={!customStartDate} />}
+                        onChange={() => setCustomStartDate(!customStartDate)}
+                        value={customStartDate}
+                        label="Use same start date as Cohort"
+                      />
+                    </FormGroup>
+                  ) : (
+                    <br />
+                  )}
+
+                  <FormControl>
+                    <InputLabel variant="standard" id="role-label">
+                      Role
+                    </InputLabel>
+                    <Select
+                      variant="standard"
+                      multiple
+                      labelId="role-label"
+                      value={roles}
+                      label="Role"
+                      renderValue={(selected) => {
+                        //  console.log(selected);
+                        return selected.join(", ");
+                      }}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        console.log(value);
+                        setRoles(
+                          typeof value === "string" ? value.split(",") : value
+                        );
+                      }}
+                    >
+                      {Object.keys(UserRoles)
+                        .filter((key) => Number(key) > 0)
+                        .map((item) => (
+                          <MenuItem key={item} value={UserRoles[Number(item)]}>
+                            <Checkbox
+                              checked={
+                                roles.indexOf(UserRoles[Number(item)]) > -1
+                              }
+                            />
+                            <ListItemText primary={UserRoles[Number(item)]} />
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </StyledCardContent>
+              </StyledCard>
+            </Grid>
           </Grid>
         </Grid>
         <Grid item md={12} xs={12} sm={12}>
