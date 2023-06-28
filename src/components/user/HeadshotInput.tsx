@@ -13,7 +13,7 @@ export const HeadshotInput = ({
     headshot ? URL.createObjectURL(headshot) : null
   );
   const editorRef = useRef<any>(null);
-  const [cropped, setCropped] = useState<boolean>(false);
+  const [cropped, setCropped] = useState<boolean>(true);
 
   useEffect(() => {
     if (headshot) {
