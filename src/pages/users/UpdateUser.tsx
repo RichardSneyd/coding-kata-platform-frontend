@@ -355,14 +355,14 @@ const UpdateUser = () => {
                         onChange={(e) => setFullName(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && submit()}
                       />
-                      <br />
+                      <br /><br />
                       <URLTextField
                         label="Github Link"
                         value={githubLink}
                         onChange={handleGithubLinkChange}
                         onKeyDown={(e) => e.key === "Enter" && submit()}
                       />
-                      <br />
+                      <br /><br />
                       <TextField
                         multiline
                         sx={{ width: "100%", minHeight: "5em" }}
@@ -382,6 +382,8 @@ const UpdateUser = () => {
                         // onKeyDown={(e) => e.key === "Enter" && submit()}
                       />
                       {resumeFile && (
+                        <>
+                        <br /> <br />
                         <Typography variant="body1">
                           <MUILink
                             href={URL.createObjectURL(resumeFile)}
@@ -390,6 +392,7 @@ const UpdateUser = () => {
                             Download Resume.pdf
                           </MUILink>
                         </Typography>
+                        </>
                       )}
                       <FileInput
                         label="Resume (PDF)"
