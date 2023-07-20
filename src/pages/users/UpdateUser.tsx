@@ -543,7 +543,7 @@ const UpdateUser = () => {
                       disabled={!customStartDate}
                     />
                   </LocalizationProvider>
-                  {cohort ? (
+                  
                     <FormGroup>
                       <FormControlLabel
                         control={<Checkbox checked={available} />}
@@ -552,9 +552,7 @@ const UpdateUser = () => {
                         label="Available for Hire (Uncheck when placed)"
                       />
                     </FormGroup>
-                  ) : (
-                    <br />
-                  )}
+                 
                   {cohort ? (
                     <FormGroup>
                       <FormControlLabel
