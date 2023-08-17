@@ -41,11 +41,16 @@ const PublicProfile: React.FC = () => {
 
     const fetchData = async () => {
       setLoading(true);
+      try {
       const resumeFile = await userProfileService.getResume(token || "", id || "");
       setResume(URL.createObjectURL(resumeFile));
 
       const headshotFile = await userProfileService.getHeadshot(token || "", id || "");
       setHeadshot(URL.createObjectURL(headshotFile));
+      }
+      catch (error: any) {
+        setLoading(false);
+      }
       try {
 
         const userProfileData = await userProfileService.getById(token || "", id || "");
@@ -57,17 +62,10 @@ const PublicProfile: React.FC = () => {
         setLoading(false);
         console.error("Error fetching user profile: ", error);
     }
-    console.log(userProfile);
-    console.log(headshot);
-    console.log(resume);
     };
 
     fetchData();
   }, [id]);
-
-  if (loading) {
-    return <Loading />;
-  }
 
   if (!userProfile) {
     return <Typography variant="h6">User profile not found</Typography>;
@@ -85,6 +83,7 @@ const PublicProfile: React.FC = () => {
 
   if (error) return <EmptyState message={error} />;
   if (loading) return <Loading />;
+  if (!resume || !headshot) return <div>Profile incomplete, resume and/or headshot missing.</div>
   return (
     <Box p={3}>
       {/* <Typography variant="h1" align="left">Candidate Profile</Typography> */}
