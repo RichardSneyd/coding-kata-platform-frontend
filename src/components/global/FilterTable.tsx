@@ -224,7 +224,7 @@ const FilterTable = ({
   ) => {
     switch (type) {
       case "date":
-        return dayjs(value as string).fromNow();
+        return dayjs(value as string).format("DD-MM-YYYY");
       case "difficulty":
         return <DifficultyChip label={value as string} />;
       case "success":

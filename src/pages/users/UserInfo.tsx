@@ -6,7 +6,6 @@ import {
   Lock,
   ArrowBack,
   Edit,
-  AccountCircle,
   ArrowForward,
 } from "@mui/icons-material";
 import {
@@ -131,7 +130,7 @@ const UserInfo = ({title = "User Info"}) => {
             <Edit />
           </Fab>
 
-          {user.id && <DeleteUser id={user.id} />}
+          {user.id && authService?.getUser()?.roles?.includes("ADMIN") && <DeleteUser id={user.id} />}
         </TitleActionWrapper>
       </TitleWrapper>
       <Typography variant="caption">
@@ -183,7 +182,7 @@ const UserInfo = ({title = "User Info"}) => {
                     <LockClock />
                   </ListItemIcon>
                   <ListItemText
-                    primary={dayjs(user.joinDate).fromNow()}
+                    primary={dayjs(user.joinDate).format("DD-MM-YYYY")}
                     secondary="Joined"
                   />
                 </ListItem>

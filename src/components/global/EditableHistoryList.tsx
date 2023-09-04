@@ -27,11 +27,11 @@ const EditableHistoryList: FC<EditableHistoryListProps> = ({
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
   const handleAdd = () => {
-    if (!title || !location || !startDate || !endDate || endDate <= startDate)
+    if (!title || !location || !startDate || ( endDate && endDate < startDate))
       return;
     const newItem = `${title} @ ${location} (${startDate
       .toISOString()
-      .substring(0, 10)} to ${endDate.toISOString().substring(0, 10)})`;
+      .substring(0, 10)} to ${endDate ? endDate?.toISOString().substring(0, 10) : "present"})`;
     onAddItem(newItem);
     setTitle("");
     setLocation("");
@@ -78,7 +78,7 @@ const EditableHistoryList: FC<EditableHistoryListProps> = ({
             value={startDate}
             onChange={(e: Dayjs | null) => setStartDate(e)}
             renderInput={(params) => (
-              <TextField variant="standard" {...params} onKeyDown={handleAdd} />
+              <TextField variant="standard" {...params} onKeyDown={(e) => e.key === "Enter" && handleAdd()} />
             )}
           />
           <DesktopDatePicker
@@ -87,7 +87,7 @@ const EditableHistoryList: FC<EditableHistoryListProps> = ({
             value={endDate}
             onChange={(e: Dayjs | null) => setEndDate(e)}
             renderInput={(params) => (
-              <TextField variant="standard" {...params} onKeyDown={handleAdd} />
+              <TextField variant="standard" {...params} onKeyDown={(e) => e.key === "Enter" && handleAdd()} />
             )}
           />
         </LocalizationProvider>

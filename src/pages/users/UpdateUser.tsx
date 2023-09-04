@@ -26,8 +26,8 @@ import {
   Box,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ICohort } from "../../interfaces/cohort";
 import { UserRoles } from "../../routing/routes";
 import userService from "../../services/userService";
@@ -53,7 +53,7 @@ const StyledCardContent = styled(CardContent)`
 const UpdateUser = () => {
   const { cohorts } = useContext(AppContext) as IAppContext;
 
-  const [customStartDate, setCustomStartDate] = useState(true);
+  // const [customStartDate, setCustomStartDate] = useState(true);
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -143,6 +143,7 @@ const UpdateUser = () => {
       setError("Authentication error, please log in again");
       setLoading(false);
     }
+    console.log(authService.getUser());
   }, [id]);
 
   const loadHeadshot = async (token: string, id: string) => {
@@ -530,19 +531,6 @@ const UpdateUser = () => {
                     </Select>
                   </FormControl>
                   <br />
-
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DesktopDatePicker
-                      label="Start Date"
-                      inputFormat="DD/MM/YYYY"
-                      value={customStartDate ? startDate : cohort?.startDate}
-                      onChange={(e: Dayjs | null) => setStartDate(e)}
-                      renderInput={(params) => (
-                        <TextField variant="standard" {...params} />
-                      )}
-                      disabled={!customStartDate}
-                    />
-                  </LocalizationProvider>
                   
                     <FormGroup>
                       <FormControlLabel
@@ -553,21 +541,8 @@ const UpdateUser = () => {
                       />
                     </FormGroup>
                  
-                  {cohort ? (
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox checked={!customStartDate} />}
-                        onChange={() => setCustomStartDate(!customStartDate)}
-                        value={customStartDate}
-                        label="Use same start date as Cohort"
-                      />
-                    </FormGroup>
-                  ) : (
-                    <br />
-                  )}
-                  
-
-                  <FormControl>
+        
+                {authService.getUser()?.roles?.includes("ADMIN") &&  <FormControl>
                     <InputLabel variant="standard" id="role-label">
                       Role
                     </InputLabel>
@@ -602,7 +577,7 @@ const UpdateUser = () => {
                           </MenuItem>
                         ))}
                     </Select>
-                  </FormControl>
+                  </FormControl>}
                 </StyledCardContent>
               </StyledCard>
             </Grid>

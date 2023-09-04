@@ -136,7 +136,7 @@ const MainRouter = (): JSX.Element => {
                       "You need user or admin access to view this page. Contact an adminstrator if you do not have an account."
                     );
                   }
-                  if (authed === UserRoles.CLIENT && (role === UserRoles.UNAUTHED || role === UserRoles.USER)) {
+                  if (authed === UserRoles.CLIENT && (role === UserRoles.UNAUTHED)) {
                     return displayAuthState(
                       i,
                       link,
