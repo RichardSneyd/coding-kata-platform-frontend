@@ -10,7 +10,7 @@ const ListUsers = () => {
     { label: "ID", field: "id", type: "string" },
     { label: "Cohort", field: "cohort.name", type: "string" },
     { label: "Username", field: "username", type: "string" },
-    { label: "Start Date", field: "startDate", type: "date" },
+    { label: "Start Date", field: "joinDate", type: "date" },
     { label: "Score", field: "score", type: "string" },
   ];
 
