@@ -39,10 +39,10 @@ const ListAllSolutions = () => {
 
   const tableFields: ITableFields[] = [
     { label: "ID", field: "id", type: "string" },
+    { label: "User", field: "user.username", type: "string" },
     { label: "Problem", field: "problem.title", type: "string" },
     { label: "Difficulty", field: "problem.difficulty", type: "difficulty" },
     { label: "Language", field: "lang", type: "string" },
-    { label: "User", field: "user.username", type: "string" },
     { label: "Submission Date", field: "submissionDate", type: "date" },
     { label: "Correctness", field: "correctness", type: "success" },
   ];
@@ -56,6 +56,8 @@ const ListAllSolutions = () => {
       rows={solutions}
       fields={tableFields}
       viewLink={`/solutions/`}
+      defaultOrder="desc"
+      defaultOrderBy="submissionDate"
     />
   );
 };
