@@ -146,6 +146,8 @@ interface IFilterTableProps {
   title: string;
   rows: any;
   fields: ITableFields[];
+  defaultOrder?: Order;
+  defaultOrderBy?: string;
 }
 
 const FilterTable = ({
@@ -155,9 +157,11 @@ const FilterTable = ({
   title,
   rows,
   fields,
+  defaultOrder,
+  defaultOrderBy
 }: IFilterTableProps) => {
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<string>("");
+  const [order, setOrder] = React.useState<Order>(defaultOrder || "asc");
+  const [orderBy, setOrderBy] = React.useState<string>(defaultOrderBy || "");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [filterText, setFilterText] = React.useState("");

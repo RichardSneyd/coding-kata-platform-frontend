@@ -123,7 +123,7 @@ const AdminDashboard = () => {
                     <ListItemText>No Cohorts added yet</ListItemText>
                   </ListItem>
                 ) : (
-                  cohorts.slice(0, 4).map((cohort) => {
+                  cohorts.slice(0, 4).sort((a, b)=> new  Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((cohort) => {
                     return (
                       <ListItem key={cohort.id}>
                         <ListItemButton
@@ -165,6 +165,8 @@ const AdminDashboard = () => {
             viewLink={"/solutions/"}
             fields={solutionTableFields}
             title={"✏️ Recent Student Submissions"}
+            defaultOrder="desc"
+            defaultOrderBy="submissionDate"
           />
         </Grid>
 
