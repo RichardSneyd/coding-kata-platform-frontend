@@ -3,14 +3,45 @@ import GlobalConfig from "../config/GlobalConfig";
 import { ISolution } from "../interfaces/solutions";
 
 const solutionService = {
-  getAll: async (token: string) => {
-    const res = await axios.get(GlobalConfig.server_url + "/admin/solutions", {
+  getPage: async (token: string, page: number = 0, size: number = 10) => {
+    const url = `${GlobalConfig.server_url}/admin/solutions?page=${page}&size=${size}`;
+    const response = await axios.get(url, {
       headers: {
         Authorization: "Bearer " + token,
       },
     });
-    return res.data;
+    return response.data.content;  // or response.data based on your API structure
   },
+
+  getAll: async (token: string, callback: Function) => {
+    let page = 0;
+    const size = 10;  // or whatever default size you prefer
+    let allSolutions: ISolution[] = [];
+    let hasMore = true;
+
+    while (hasMore) {
+      try {
+        const solutions = await solutionService.getPage(token, page, size);
+
+        // You might want to check the length of the result to see if there's more data
+        if (solutions.length < size) {
+          hasMore = false;
+        }
+
+        allSolutions = [...allSolutions, ...solutions];
+
+        // Callback to update the state or any other action you'd like to take
+        callback && callback(allSolutions);
+
+        page++;
+      } catch (error) {
+        console.error('Error fetching page:', error);
+        hasMore = false;  // terminate loop if there's an error
+      }
+    }
+    return allSolutions;
+  },
+
   getById: async (token: string, id: string): Promise<ISolution> => {
     const res = await axios.get(
       `${GlobalConfig.server_url}/user/problems/solutions/${id}`,

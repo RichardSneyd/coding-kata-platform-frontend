@@ -22,6 +22,7 @@ const EvalService = {
         }
       );
       if (response.status === 200) {
+        console.log(JSON.stringify(response.data));
         return response.data;
       }
       throw AxiosError;

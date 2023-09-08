@@ -20,15 +20,19 @@ const ListAllSolutions = () => {
         setError("");
         setLoading(true);
         solutionService
-          .getAll(token)
-          .then((result) => {
-            setSolutions(result);
-            setLoading(false);
+          .getAll(
+            token, 
+            (updatedSolutions: ISolution[]) => {
+              // Update the component's state for each page retrieved
+              setSolutions(updatedSolutions);
+            }
+          )
+          .then(() => {
+            console.log("Finished fetching all solutions");
           })
           .catch((err) => {
             console.log("Error getting solutions", err);
             setError("Error fetching data");
-            setLoading(false);
           });
       }
     } else {
