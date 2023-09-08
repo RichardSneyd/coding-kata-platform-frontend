@@ -15,7 +15,7 @@ const solutionService = {
 
   getAll: async (token: string, callback: Function) => {
     let page = 0;
-    const size = 10;  // or whatever default size you prefer
+    const size = 5;  // or whatever default size you prefer
     let allSolutions: ISolution[] = [];
     let hasMore = true;
 

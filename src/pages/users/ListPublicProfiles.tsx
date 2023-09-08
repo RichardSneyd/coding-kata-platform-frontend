@@ -20,17 +20,21 @@ const ListPublicProfiles = () => {
       setLoading(true);
 
       userProfileService
-        .getAll(token)
-        .then((profiles) => {
+      .getAll(
+        token, 
+        (updatedProfiles: IUserProfile[]) => {
+          // Update the component's state for each page retrieved
           setLoading(false);
-          setProfiles(profiles);
-          console.log(profiles);
-        })
-        .catch((err) => {
-          console.log("Error fetching profiles", err);
-          setError("Error fetching data");
-          setLoading(false);
-        });
+          setProfiles(updatedProfiles);
+        }
+      )
+      .then(() => {
+        console.log("Finished fetching all solutions");
+      })
+      .catch((err) => {
+        console.log("Error getting solutions", err);
+        setError("Error fetching data");
+      });
     }
   }, []);
 

@@ -3,14 +3,45 @@ import GlobalConfig from "../config/GlobalConfig";
 import { IUserProfile } from "../interfaces/user";
 
 const userProfileService = {
-    getAll: async (token: string) => {
-        const res = await axios.get(GlobalConfig.server_url + "/user/profiles/", {
-            headers: {
-                Authorization: "Bearer " + token,
-            },
+    getPage: async (token: string, page: number = 0, size: number = 10) => {
+        const url = `${GlobalConfig.server_url}/user/profiles?page=${page}&size=${size}`;
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
         });
-        return res.data;
-    },
+        return response.data.content; // or response.data based on your API structure
+      },
+    
+      getAll: async (token: string, callback: Function) => {
+        let page = 0;
+        const size = 5; // or whatever default size you prefer
+        let allProfiles: IUserProfile[] = [];
+        let hasMore = true;
+    
+        while (hasMore) {
+          try {
+            const profiles = await userProfileService.getPage(token, page, size);
+    
+            // You might want to check the length of the result to see if there's more data
+            if (profiles.length < size) {
+              hasMore = false;
+            }
+    
+            allProfiles = [...allProfiles, ...profiles];
+    
+            // Callback to update the state or any other action you'd like to take
+            callback && callback(allProfiles);
+    
+            page++;
+          } catch (error) {
+            console.error('Error fetching page:', error);
+            hasMore = false;  // terminate loop if there's an error
+          }
+        }
+        return allProfiles;
+      },
+
     getById: async (token: string, id: string): Promise<IUserProfile> => {
         const res = await axios.get(`${GlobalConfig.server_url}/user/profiles/${id}`, {
             headers: {
