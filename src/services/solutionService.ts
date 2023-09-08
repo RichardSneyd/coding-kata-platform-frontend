@@ -10,22 +10,27 @@ const solutionService = {
         Authorization: "Bearer " + token,
       },
     });
-    return response.data.content;  // or response.data based on your API structure
-  },
+    return response.data;  // This will return the entire data object now
+},
 
-  getAll: async (token: string, callback: Function) => {
+getPageContent: async (token: string, page: number, size: number) => {
+    const response = await solutionService.getPage(token, page, size);
+    return response.content;
+},
+
+getAll: async (token: string, callback: Function) => {
     let page = 0;
     const size = 5;  // or whatever default size you prefer
     let allSolutions: ISolution[] = [];
-    let hasMore = true;
+    let isLastPage = false;
 
-    while (hasMore) {
+    while (!isLastPage) {
       try {
-        const solutions = await solutionService.getPage(token, page, size);
+        const response = await solutionService.getPage(token, page, size);
+        const solutions = response.content;
 
-        // You might want to check the length of the result to see if there's more data
-        if (solutions.length < size) {
-          hasMore = false;
+        if (response.last) {
+          isLastPage = true;
         }
 
         allSolutions = [...allSolutions, ...solutions];
@@ -36,11 +41,12 @@ const solutionService = {
         page++;
       } catch (error) {
         console.error('Error fetching page:', error);
-        hasMore = false;  // terminate loop if there's an error
+        isLastPage = true;  // terminate loop if there's an error
       }
     }
     return allSolutions;
-  },
+},
+
 
   getById: async (token: string, id: string): Promise<ISolution> => {
     const res = await axios.get(

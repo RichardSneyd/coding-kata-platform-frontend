@@ -10,22 +10,27 @@ const userProfileService = {
             Authorization: "Bearer " + token,
           },
         });
-        return response.data.content; // or response.data based on your API structure
+        return response.data;
+      },
+    
+      getPageContent: async (token: string, page: number = 0, size: number = 10) => {
+        const data = await userProfileService.getPage(token, page, size);
+        return data.content;
       },
     
       getAll: async (token: string, callback: Function) => {
         let page = 0;
-        const size = 5; // or whatever default size you prefer
+        const size = 10; // or whatever default size you prefer
         let allProfiles: IUserProfile[] = [];
-        let hasMore = true;
+        let isLastPage = false;
     
-        while (hasMore) {
+        while (!isLastPage) {
           try {
-            const profiles = await userProfileService.getPage(token, page, size);
+            const response = await userProfileService.getPage(token, page, size);
+            const profiles = response.content;
     
-            // You might want to check the length of the result to see if there's more data
-            if (profiles.length < size) {
-              hasMore = false;
+            if (response.last) {
+              isLastPage = true;
             }
     
             allProfiles = [...allProfiles, ...profiles];
@@ -36,11 +41,12 @@ const userProfileService = {
             page++;
           } catch (error) {
             console.error('Error fetching page:', error);
-            hasMore = false;  // terminate loop if there's an error
+            isLastPage = true;  // terminate loop if there's an error
           }
         }
         return allProfiles;
       },
+    
 
     getById: async (token: string, id: string): Promise<IUserProfile> => {
         const res = await axios.get(`${GlobalConfig.server_url}/user/profiles/${id}`, {

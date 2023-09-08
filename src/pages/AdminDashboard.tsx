@@ -107,7 +107,7 @@ const AdminDashboard = () => {
   
 
   if (loading) return <Loading />;
-  if (error !== "") return <EmptyState message={error} />;
+  if (error) return <EmptyState message={error} />;
   return (
     <Container maxWidth="lg">
       <Grid container spacing={3}>
