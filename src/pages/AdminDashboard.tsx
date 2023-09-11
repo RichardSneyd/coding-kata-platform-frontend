@@ -91,7 +91,7 @@ const AdminDashboard = () => {
     setLoading(true);
 
     solutionService
-      .getPageContent(token, 0, 10)
+      .getPageContent(token, 0, 5)
       .then((updatedSolutions: ISolution[]) => {
         // Update the component's state for each page retrieved
         setLoading(false);
@@ -102,7 +102,7 @@ const AdminDashboard = () => {
       })
       .catch((err) => {
         console.log("Error getting solutions", err);
-        setError("Error fetching data");
+        setError("Error fetching solutions data");
         setLoading(false);
       });
 
