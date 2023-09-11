@@ -252,7 +252,7 @@ const AdminDashboard = () => {
                           <ListItem key={submission.id} divider>
                             <ListItemButton
                               component={Link}
-                              to={`/submissions/${submission.id}`}
+                              to={`/solutions/${submission.id}`}
                             >
                               <Grid container spacing={2}>
                                 <Grid item xs={1}>
