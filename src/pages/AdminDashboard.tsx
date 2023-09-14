@@ -36,7 +36,7 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import SolutionsChart from "../components/SolutionsChart";
 import FilterTable, { ITableFields } from "../components/global/FilterTable";
-import { ICohort } from "../interfaces/cohort";
+import { ICohort, ICohortDTO } from "../interfaces/cohort";
 import cohortService from "../services/cohortService";
 import SuccessChip from "../components/problem/SuccessChip";
 
@@ -46,7 +46,7 @@ const StyledCardActions = styled(CardActions)`
 
 const AdminDashboard = () => {
   // const { cohorts } = useContext(AppContext) as IAppContext;
-  const [cohorts, setCohorts] = useState<ICohort[]>([]);
+  const [cohorts, setCohorts] = useState<ICohortDTO[]>([]);
   const [user, setUser] = useState<IJWTUser>();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -182,8 +182,8 @@ const AdminDashboard = () => {
                             </ListItemIcon>
                             <ListItemText
                               primary={`${cohort.name} - ${
-                                cohort.members.length
-                              } member${cohort.members.length > 1 ? "s" : ""}`}
+                                cohort.numberOfMembers
+                              } member${cohort.numberOfMembers > 1 ? "s" : ""}`}
                               secondary={`Started ${dayjs(
                                 cohort.startDate
                               ).fromNow()}`}
@@ -207,15 +207,6 @@ const AdminDashboard = () => {
           </Card>
         </Grid>
         <Grid item xs={12}>
-          {/* {solutions && solutions.length > 0 && <PreviewTable
-            viewAllLink="/solutions"
-            rows={solutions || []}
-            viewLink={"/solutions/"}
-            fields={solutionTableFields}
-            title={"✏️ Recent Student Submissions"}
-            defaultOrder="desc"
-            defaultOrderBy="submissionDate"
-          />} */}
           {solutions && solutions.length > 0 && (
             <Card>
               <CardHeader title="📋 Recent Submissions" />

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import FilterTable, { ITableFields } from "../../components/global/FilterTable";
-import { ICohort } from "../../interfaces/cohort";
+import {ICohortDTO } from "../../interfaces/cohort";
 import cohortService from "../../services/cohortService";
 import authService from "../../services/authService";
 
 const ListCohorts = () => {
-  const [cohorts, setCohorts] = useState<ICohort[]>([]);
+  const [cohorts, setCohorts] = useState<ICohortDTO[]>([]);
 
   useEffect(() => {
     const token = authService.getAccessToken() || "";
-    cohortService.getAll(token, (cohorts: ICohort[]) => {
+    cohortService.getAll(token, (cohorts: ICohortDTO[]) => {
       setCohorts(cohorts);
     });
   }, []);
@@ -18,7 +18,7 @@ const ListCohorts = () => {
     { label: "ID", field: "id", type: "string" },
     { label: "Name", field: "name", type: "string" },
     { label: "Start Date", field: "startDate", type: "date" },
-    { label: "# Members", field: "members", type: "count" },
+    { label: "# Members", field: "members", type: "string" },
   ];
 
   return (
