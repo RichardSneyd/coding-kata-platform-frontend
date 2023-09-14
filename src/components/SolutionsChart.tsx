@@ -10,7 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { ISolution } from "../interfaces/solutions";
+import { ISolution, ISolutionDTO } from "../interfaces/solutions";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear"; // for week support
 
@@ -37,7 +37,7 @@ export const options = {
 };
 
 interface ISolutionsChart {
-  solutions: ISolution[];
+  solutions: ISolutionDTO[];
   granularity: "day" | "week" | "month";
   maxPoints?: number; // New prop
 }

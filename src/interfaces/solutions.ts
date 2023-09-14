@@ -11,6 +11,19 @@ export interface ISolution {
     user: IUser;
 }
 
+export interface ISolutionDTO {
+    id?: number;
+    code: string;
+    lang: string;
+    correctness: number;
+    username: string;
+    title: string;
+    description: string;
+    difficulty: string;
+    submissionDate: string;
+    user: IUser;
+}
+
 export interface IEvalInput {
     lang?: string;
     code?: string;

@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import EmptyState from "../components/global/EmptyState";
 import Loading from "../components/global/Loading";
 import solutionService from "../services/solutionService";
-import { ISolution } from "../interfaces/solutions";
+import { ISolution, ISolutionDTO } from "../interfaces/solutions";
 import { IJWTUser } from "../interfaces/network";
 import { ListItemIcon } from "@material-ui/core";
 import {
@@ -52,7 +52,7 @@ const AdminDashboard = () => {
   const [user, setUser] = useState<IJWTUser>();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-  const [solutions, setSolutions] = useState<ISolution[]>([]);
+  const [solutions, setSolutions] = useState<ISolutionDTO[]>([]);
 
   const [globalBoard, setGlobalBoard] = useState<IUser[]>();
 
@@ -92,7 +92,7 @@ const AdminDashboard = () => {
 
     solutionService
       .getPageContent(token, 0, 5)
-      .then((updatedSolutions: ISolution[]) => {
+      .then((updatedSolutions: ISolutionDTO[]) => {
         // Update the component's state for each page retrieved
         setLoading(false);
         setSolutions(updatedSolutions);
@@ -247,7 +247,7 @@ const AdminDashboard = () => {
                           new Date(a.submissionDate).getTime()
                       )
                       .slice(0, 4)
-                      .map((submission: ISolution) => {
+                      .map((submission: ISolutionDTO) => {
                         return (
                           <ListItem key={submission.id} divider>
                             <ListItemButton
@@ -262,12 +262,12 @@ const AdminDashboard = () => {
                                 </Grid>
                                 <Grid item xs={3}>
                                   <ListItemText
-                                    primary={`${submission.problem.title} (${submission.problem.difficulty})`}
+                                    primary={`${submission.title} (${submission.difficulty})`}
                                   ></ListItemText>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <ListItemText
-                                    primary={submission.user.username}
+                                    primary={submission.username}
                                   ></ListItemText>
                                 </Grid>
                                 <Grid item xs={3}>

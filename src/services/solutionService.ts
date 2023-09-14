@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import GlobalConfig from "../config/GlobalConfig";
-import { ISolution } from "../interfaces/solutions";
+import { ISolution, ISolutionDTO } from "../interfaces/solutions";
 
 const solutionService = {
   getPage: async (token: string, page: number = 0, size: number = 10) => {
@@ -77,7 +77,7 @@ const solutionService = {
     return allSolutions;
   },
 
-  getById: async (token: string, id: string): Promise<ISolution> => {
+  getById: async (token: string, id: string): Promise<ISolutionDTO> => {
     const res = await axios.get(
       `${GlobalConfig.server_url}/user/problems/solutions/${id}`,
       {
@@ -88,7 +88,7 @@ const solutionService = {
     );
     return res.data;
   },
-  getAllForUser: async (token: string, id: string): Promise<ISolution> => {
+  getAllForUser: async (token: string, id: string): Promise<ISolutionDTO> => {
     const res = await axios.get(
       `${GlobalConfig.server_url}/admin/solutions/user/${id}`,
       {
@@ -99,7 +99,7 @@ const solutionService = {
     );
     return res.data;
   },
-  getAllForProblem: async (token: string, id: string): Promise<ISolution> => {
+  getAllForProblem: async (token: string, id: string): Promise<ISolutionDTO> => {
     const res = await axios.get(
       `${GlobalConfig.server_url}/admin/solutions/problem/${id}`,
       {

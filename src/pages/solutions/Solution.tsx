@@ -25,7 +25,7 @@ import Tags from "../../components/problem/Tags";
 import TestCases from "../../components/problem/test-case/TestCases";
 
 import authService from "../../services/authService";
-import { ISolution } from "../../interfaces/solutions";
+import { ISolutionDTO } from "../../interfaces/solutions";
 import solutionService from "../../services/solutionService";
 import dayjs from "dayjs";
 import PreviewCodeEditorContainer from "../../components/editor/PreviewCodeEditorContainer";
@@ -64,7 +64,7 @@ const StyledListItemText = styled(ListItemText)`
 `;
 
 const Solution = () => {
-  const [solution, setSolution] = useState<ISolution | undefined>();
+  const [solution, setSolution] = useState<ISolutionDTO | null>(null);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -108,13 +108,13 @@ const Solution = () => {
         Back
       </Button>
       <ChipWrapper>
-        <DifficultyChip label={solution.problem.difficulty || ""} />
+        <DifficultyChip label={solution.difficulty || ""} />
         <Divider orientation="vertical" flexItem />
-        <Tags tags={solution.problem?.tags} />
+        {/* <Tags tags={solution.problem?.tags} /> */}
       </ChipWrapper>
       <TitleWrapper>
         <Typography variant="h1">
-          Solution for <code>'{solution.problem.title}'</code> (
+          Solution for <code>'{solution.title}'</code> (
           {solution.correctness}%)
         </Typography>
         <TitleActionWrapper>
@@ -131,7 +131,7 @@ const Solution = () => {
       </TitleWrapper>
 
       <Typography variant="subtitle1">
-        {solution.problem?.description}
+        {solution.description}
       </Typography>
 
       <br />
@@ -146,7 +146,7 @@ const Solution = () => {
                     <Person />
                   </ListItemIcon>
                   <StyledListItemText
-                    primary={solution.user.username}
+                    primary={solution.username}
                     secondary="Username"
                   />
                 </ListItem>
@@ -172,7 +172,7 @@ const Solution = () => {
             </Card>
           </Grid>
           <Grid item xs={12}>
-            <Card>
+            {/* <Card>
               <CardHeader title="Test Cases" />
               <CardContent>
                 <List>
@@ -208,7 +208,7 @@ const Solution = () => {
                   )}
                 </List>
               </CardContent>
-            </Card>
+            </Card> */}
           </Grid>
         </Grid>
         <Grid item md={6} sm={12} xs={12}>
