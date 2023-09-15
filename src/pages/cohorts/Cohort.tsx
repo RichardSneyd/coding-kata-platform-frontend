@@ -1,6 +1,6 @@
 import { ArrowBack, Edit } from "@mui/icons-material";
 import { Button, Fab, Typography } from "@mui/material";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import EmptyState from "../../components/global/EmptyState";
 import { ICohort } from "../../interfaces/cohort";
@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import FilterTable, { ITableFields } from "../../components/global/FilterTable";
 import cohortService from "../../services/cohortService";
 import authService from "../../services/authService";
+import Loading from "../../components/global/Loading";
 
 /**
  * Injected styles
@@ -28,19 +29,28 @@ const TitleActionWrapper = styled("div")`
 `;
 
 const Cohort = () => {
-
   const [cohort, setCohort] = useState<ICohort>();
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const { id } = useParams();
 
   useEffect(() => {
     const token = authService.getAccessToken();
-    if(!token) {
+    if (!token) {
       setError("Authentication failed. Please log in again");
       return;
     }
-    cohortService.getById(token, id || "").then((cohort)=> setCohort(cohort));
+    cohortService
+      .getById(token, id || "")
+      .then((cohort) => {
+        setCohort(cohort);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
   }, []);
 
   const tableFields: ITableFields[] = [
@@ -52,6 +62,7 @@ const Cohort = () => {
     { label: "Score", field: "score", type: "string" },
   ];
 
+  if (loading) return <Loading />;
   if (error || !cohort) return <EmptyState message={error} />;
   return (
     <>
@@ -84,11 +95,11 @@ const Cohort = () => {
 
       <br />
       <FilterTable
-      title="Cohort Members"
-      viewLink={"/users/"}
-      rows={cohort.members}
-      fields={tableFields}
-    />
+        title="Cohort Members"
+        viewLink={"/users/"}
+        rows={cohort.members}
+        fields={tableFields}
+      />
     </>
   );
 };
