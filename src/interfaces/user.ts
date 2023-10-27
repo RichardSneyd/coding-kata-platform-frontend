@@ -1,4 +1,4 @@
-import { ICohort } from "./cohort";
+import { ICohort, ICohortDTO } from "./cohort";
 // import { IFile } from "./file";
 import { ISolution } from "./solutions";
 
@@ -8,7 +8,7 @@ export interface IUser {
   id?: number;
   username: string;
   email: string;
-  cohort?: ICohort | null;
+  cohort?: ICohort | ICohortDTO | null;
   roles?: string[];
   score?: number;
   joinDate?: string;

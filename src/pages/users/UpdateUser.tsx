@@ -44,6 +44,7 @@ import { HeadshotInput } from "../../components/user/HeadshotInput";
 import StyledCard from "../../components/global/StyledCard";
 import URLTextField from "../../components/global/URLTextField";
 import EditableHistoryList from "../../components/global/EditableHistoryList";
+import cohortService from "../../services/cohortService";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
@@ -58,7 +59,7 @@ const UpdateUser = () => {
   const [emailError, setEmailError] = useState("");
 
   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
-  const [cohort, setCohort] = useState<ICohort | null>(null);
+  const [cohort, setCohort] = useState<ICohort | ICohortDTO | null>(null);
   const [username, setUsername] = useState("");
   const [roles, setRoles] = useState<string[]>([UserRoles[UserRoles.USER]]);
 
@@ -97,7 +98,10 @@ const UpdateUser = () => {
 
         // const userPromise = userService.getById(token, id);
         // const userProfilePromise = userProfileService.getById(token, id);
-
+        cohortService.getPageContent(token).then((recentCohorts) => {
+          setCohorts(recentCohorts);
+        });
+        
         userService
           .getById(token, id)
           .then((userResult) => {
