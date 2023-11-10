@@ -35,7 +35,7 @@ const StyledCardContent = styled(CardContent)`
 `;
 
 const UpdateCohort = () => {
-  const { cohorts, updateCohort } = useContext(AppContext) as IAppContext;
+  const [cohort, setCohort] = useState<ICohort>();
 
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
@@ -53,39 +53,40 @@ const UpdateCohort = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const cohort = cohorts.find(
-      (cohort) => cohort.id === parseInt(id as string)
-    );
-    if (cohort) {
-      setName(cohort.name);
-      setStartDate(dayjs(cohort.startDate));
-      setMembers(cohort.members);
-    } else {
-      setError("Could not find cohort");
-    }
-  }, [cohorts, id]);
+    const token = authService.getAccessToken() || "";
+
+    cohortServices.getById(token, id as string).then((cohort )=> {
+      setCohort(cohort);
+      if (cohort) {
+        setName(cohort.name);
+        setStartDate(dayjs(cohort.startDate));
+        setMembers(cohort.members);
+      } else {
+        setError("Could not find cohort");
+      }
+    });
+
+   
+  }, [id]);
 
   const handleValidation = () => {
     let passed = true;
 
-    if (name === "") {
+    if (cohort?.name === "") {
       setNameError("Name cannot be blank");
       passed = false;
     } else setNameError("");
 
-    const cohortIndex = cohorts.findIndex((cohort) => {
-      return cohort.name === name && cohort.id !== parseInt(id as string);
-    });
-    if (cohortIndex !== -1) {
-      setNameError(`A cohort with the name ${name} already exists`);
-      passed = false;
-    } else setNameError("");
 
     return passed;
   };
 
   const submit = async () => {
     const token = authService.getAccessToken();
+    if (!cohort) {
+      setError("cohort is undefined");
+      return;
+    }
 
     if (token && id) {
       if (handleValidation()) {
@@ -100,7 +101,6 @@ const UpdateCohort = () => {
         try {
           await cohortServices.update(token, body);
 
-          updateCohort(body);
           enqueueSnackbar(`Cohort updated`, {
             variant: "success",
           });
