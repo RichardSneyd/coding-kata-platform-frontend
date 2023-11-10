@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
 
@@ -7,31 +7,47 @@ import styled from "@emotion/styled";
 import { IUser } from "../../interfaces/user";
 import dayjs, { Dayjs } from "dayjs";
 import { ArrowBack, Check } from "@mui/icons-material";
-import { Button, Typography, Grid, Card, CardHeader, TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress, CardContent, Checkbox, ListItemText, FormGroup, FormControlLabel } from "@mui/material";
+import {
+  Button,
+  Typography,
+  Grid,
+  Card,
+  CardHeader,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  CircularProgress,
+  CardContent,
+  Checkbox,
+  ListItemText,
+  FormGroup,
+  FormControlLabel,
+} from "@mui/material";
 import { useSnackbar } from "notistack";
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { ICohort } from "../../interfaces/cohort";
+import { ICohort, ICohortDTO } from "../../interfaces/cohort";
 import { UserRoles } from "../../routing/routes";
 import userService from "../../services/userService";
-import {AppContext, IAppContext } from "../../context/AppContext";
+import cohortService from "../../services/cohortService";
 
 const StyledCardContent = styled(CardContent)`
   display: flex;
   flex-direction: column;
 `;
 
-
 const CreateUser = () => {
-  const { cohorts, addMember } = useContext(AppContext) as IAppContext;
+  const [cohorts, setCohorts] = useState<ICohortDTO[]>([]);
 
-  const [customStartDate, setCustomStartDate] = useState(true)
+  const [customStartDate, setCustomStartDate] = useState(true);
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
 
   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
-  const [cohort, setCohort] = useState<ICohort | null>(null);
+  const [cohort, setCohort] = useState<ICohort | ICohortDTO | null>(null);
   const [username, setUsername] = useState("");
   const [roles, setRoles] = useState<string[]>([UserRoles[UserRoles.USER]]);
 
@@ -40,14 +56,27 @@ const CreateUser = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(cohort !== null) {
-      setCustomStartDate(false)
-    }
-  }, [cohort])
+    const token = authService.getAccessToken() || "";
+
+    // if (!token) {
+    //   setLoading(false);
+    //   return;
+    // }
+
+    cohortService.getPageContent(token).then((recentCohorts) => {
+      setCohorts(recentCohorts);
+    });
+  }, []);
 
   useEffect(() => {
-    setUsername(email.split("@")[0])
-  }, [email])
+    if (cohort !== null) {
+      setCustomStartDate(false);
+    }
+  }, [cohort]);
+
+  useEffect(() => {
+    setUsername(email.split("@")[0]);
+  }, [email]);
 
   const handleValidation = () => {
     let passed = true;
@@ -60,7 +89,7 @@ const CreateUser = () => {
     if (!email.includes("@") || !email.includes(".")) {
       setEmailError("Not a valid email");
       return false;
-    } 
+    }
 
     setEmailError("");
     return passed;
@@ -71,19 +100,18 @@ const CreateUser = () => {
 
     if (token) {
       if (handleValidation()) {
-        setUsername(email.split("@")[0])
+        setUsername(email.split("@")[0]);
 
         const body: IUser = {
           username,
           email,
           startDate,
           roles,
-          cohort
+          cohort,
         };
         setLoading(true);
         try {
           const response = await userService.create(token, body);
-          addMember(body);
           enqueueSnackbar(`User created`, {
             variant: "success",
           });
@@ -96,8 +124,7 @@ const CreateUser = () => {
 
           setLoading(false);
         }
-      }
-      else {
+      } else {
         enqueueSnackbar("Error please try again", {
           variant: "error",
         });
@@ -148,19 +175,25 @@ const CreateUser = () => {
                 onChange={(e) => setUsername(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && submit()}
               />
-              <br/>
+              <br />
               <FormControl variant="standard">
                 <InputLabel id="cohort-label">Cohort</InputLabel>
                 <Select
                   variant="standard"
                   labelId="cohort-label"
-                  value={cohort?.id}
+                  value={cohort?.name}
                   label="Cohort"
-                  onChange={(e) => setCohort(cohorts.filter(cohort => cohort.id === e.target.value)[0])}
+                  onChange={(e) =>
+                    setCohort(
+                      cohorts.filter(
+                        (cohort) => cohort.name === e.target.value
+                      )[0]
+                    )
+                  }
                 >
-                  {cohorts.map((cohort) => 
-                    <MenuItem value={cohort.id}>{cohort.name}</MenuItem>
-                  )}
+                  {cohorts.map((cohort) => (
+                    <MenuItem value={cohort.name} key={cohort.id}>{cohort.name}</MenuItem>
+                  ))}
                 </Select>
               </FormControl>
               <br />
@@ -169,7 +202,7 @@ const CreateUser = () => {
                 <DesktopDatePicker
                   label="Start Date"
                   inputFormat="DD/MM/YYYY"
-                  value={customStartDate ?  startDate: cohort?.startDate}
+                  value={customStartDate ? startDate : cohort?.startDate}
                   onChange={(e: Dayjs | null) => setStartDate(e)}
                   renderInput={(params) => (
                     <TextField variant="standard" {...params} />
@@ -177,18 +210,18 @@ const CreateUser = () => {
                   disabled={!customStartDate}
                 />
               </LocalizationProvider>
-              {cohort ?
+              {cohort ? (
                 <FormGroup>
                   <FormControlLabel
-                    control={<Checkbox checked={!customStartDate}/>}
+                    control={<Checkbox checked={!customStartDate} />}
                     onChange={() => setCustomStartDate(!customStartDate)}
                     value={customStartDate}
                     label="Use same start date as Cohort"
-                    />
-                </FormGroup> :
-                <br/>
-              }
-
+                  />
+                </FormGroup>
+              ) : (
+                <br />
+              )}
 
               <FormControl>
                 <InputLabel variant="standard" id="role-label">
@@ -201,27 +234,27 @@ const CreateUser = () => {
                   value={roles}
                   label="Role"
                   renderValue={(selected) => {
-                    console.log(selected)
-                    return selected.join(", ")
+                    return selected.join(", ");
                   }}
                   onChange={(e) => {
                     let value = e.target.value;
-                    console.log(value)
-                    setRoles(typeof value === "string" ? value.split(',') : value)
-                  }
-                  }
+                    setRoles(
+                      typeof value === "string" ? value.split(",") : value
+                    );
+                  }}
                 >
-                  {Object.keys(UserRoles).filter(key => 
-                    Number(key) > 0
-                  ).map((item) => (
-                    <MenuItem key={item} value={UserRoles[Number(item)]}>
-                      <Checkbox checked={roles.indexOf(UserRoles[Number(item)]) > -1} />
-                      <ListItemText primary={UserRoles[Number(item)]} />
-                    </MenuItem>
-                  ))}
+                  {Object.keys(UserRoles)
+                    .filter((key) => Number(key) > 0)
+                    .map((item) => (
+                      <MenuItem key={item} value={UserRoles[Number(item)]}>
+                        <Checkbox
+                          checked={roles.indexOf(UserRoles[Number(item)]) > -1}
+                        />
+                        <ListItemText primary={UserRoles[Number(item)]} />
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
-
             </StyledCardContent>
           </Card>
         </Grid>
@@ -239,7 +272,7 @@ const CreateUser = () => {
         </Grid>
       </Grid>
     </>
-  )
-}
+  );
+};
 
 export default CreateUser;

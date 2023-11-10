@@ -122,6 +122,7 @@ const userService = {
     return res.data.content;
   },
   create: async (token: string, body: IUser) => {
+    console.log(body);
     try {
       const response = await axios.post(
         GlobalConfig.server_url + "/admin/users/",

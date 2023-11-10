@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import authService from "../../services/authService";
 
@@ -37,7 +37,6 @@ import { IUserProfile, IUser } from "../../interfaces/user";
 // import { IFile } from "../../interfaces/file";
 import FileInput from "../../components/global/FileInput";
 import EditableList from "../../components/global/EditableList";
-import { AppContext, IAppContext } from "../../context/AppContext";
 import Loading from "../../components/global/Loading";
 import EmptyState from "../../components/global/EmptyState";
 import { HeadshotInput } from "../../components/user/HeadshotInput";
@@ -530,7 +529,7 @@ const UpdateUser = () => {
                       }
                     >
                       {cohorts.map((cohort) => (
-                        <MenuItem value={cohort.name} key={cohort?.id}>
+                        <MenuItem value={cohort.name} key={cohort.id}>
                           {cohort.name}
                         </MenuItem>
                       ))}
