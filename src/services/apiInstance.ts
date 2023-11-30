@@ -14,7 +14,6 @@ apiInstance.interceptors.response.use(
     if (error.response.status === 401) {
       // Clear stored user information and redirect to login page
       authService.logout();
-      // You can also display a notification or show an error message to the user
     }
     return Promise.reject(error);
   }
