@@ -1,6 +1,6 @@
-import axios, { AxiosError } from "axios";
-import GlobalConfig from "../config/GlobalConfig";
+import { AxiosError } from "axios";
 import { IEvaluate } from "../interfaces/eval";
+import apiInstance from "./apiInstance";
 
 const EvalService = {
   evaluate: async (
@@ -8,8 +8,8 @@ const EvalService = {
     token: string
   ) => {
     try {
-      const response = await axios.post(
-        GlobalConfig.server_url + "/user/eval/" + problemId,
+      const response = await apiInstance.post(
+        "/user/eval/" + problemId,
         {
           userId,
           code,
@@ -42,8 +42,8 @@ const EvalService = {
     token: string
   ) => {
     try {
-      const response = await axios.post(
-        GlobalConfig.server_url + "/user/eval/test/" + problemId,
+      const response = await apiInstance.post(
+        "/user/eval/test/" + problemId,
         {
           userId,
           code,

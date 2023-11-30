@@ -1,10 +1,10 @@
-import axios, { AxiosError } from "axios";
-import GlobalConfig from "../config/GlobalConfig";
+import { AxiosError } from "axios";
 import { IProblem } from "../interfaces/problemSet";
+import apiInstance from "./apiInstance";
 
 const ProblemService = {
   getAll: async (token: string) => {
-    const res = await axios.get(GlobalConfig.server_url + "/user/problems/", {
+    const res = await apiInstance.get("/user/problems/", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -12,8 +12,8 @@ const ProblemService = {
     return res.data;
   },
   getNextForUser: async (token: string, id: string) => {
-    const res = await axios.get(
-      GlobalConfig.server_url + `/user/problems/next-for/${id}`,
+    const res = await apiInstance.get(
+      `/user/problems/next-for/${id}`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -23,8 +23,8 @@ const ProblemService = {
     return res.data;
   },
   getById: async (token: string, id: string): Promise<IProblem> => {
-    const res = await axios.get(
-      `${GlobalConfig.server_url}/user/problems/${id}`,
+    const res = await apiInstance.get(
+      `/user/problems/${id}`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -35,8 +35,8 @@ const ProblemService = {
   },
   create: async (token: string, body: IProblem) => {
     try {
-      const response = await axios.post(
-        GlobalConfig.server_url + "/admin/problems/",
+      const response = await apiInstance.post(
+        "/admin/problems/",
         body,
         {
           headers: {
@@ -61,8 +61,8 @@ const ProblemService = {
   },
   update: async (token: string, body: IProblem) => {
     try {
-      const response = await axios.put(
-        GlobalConfig.server_url + "/admin/problems/",
+      const response = await apiInstance.put(
+        "/admin/problems/",
         body,
         {
           headers: {
@@ -87,8 +87,8 @@ const ProblemService = {
   },
   delete: async (token: string, id: string) => {
     try {
-      const response = await axios.delete(
-        `${GlobalConfig.server_url}/admin/problems/${id}`,
+      const response = await apiInstance.delete(
+        `/admin/problems/${id}`,
         {
           headers: {
             Authorization: "Bearer " + token,

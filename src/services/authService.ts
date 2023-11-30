@@ -1,7 +1,8 @@
 // had to convert this from an object with functions in it because typescript didn't like it
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
-import GlobalConfig from "../config/GlobalConfig";
+import { jwtDecode } from "jwt-decode";
+import { AxiosError, AxiosRequestConfig } from "axios";
 import { ISignin, IJWTUser, IResponse } from "../interfaces/network";
+import apiInstance from "./apiInstance";
 
 const authService = {
   // converts standard json object to x-www-form-urlencoded format required by Spring Security
@@ -16,12 +17,12 @@ const authService = {
     return formBody.join("&");
   },
 
-  async signin(username: string, password: string): Promise<ISignin> {
+  async signin(username: string, password: string): Promise<ISignin | undefined> {
     const userParams = this.toUrlEncoded({ username, password });
 
     try {
-      const response = await axios.post<AxiosRequestConfig, IResponse>(
-        GlobalConfig.server_url + "/login",
+      const response = await apiInstance.post<AxiosRequestConfig, IResponse>(
+        "/login",
         userParams,
         {
           headers: {
@@ -31,10 +32,10 @@ const authService = {
       );
 
       if (response?.data?.access_token) {
-        const user = this.parseJwt(response.data.access_token);
+        const user: ISignin | undefined = this.parseJwt(response.data.access_token);
 
         this.storeAccessToken(response.data.access_token);
-        this.storeUser(user);
+        if(user)this.storeUser(user);
         return user;
       }
       throw AxiosError;
@@ -50,8 +51,8 @@ const authService = {
   },
   async forgetPassword(email: string) {
     try {
-      const response = await axios.get(
-        `${GlobalConfig.server_url}/password/forgot/${email}`
+      const response = await apiInstance.post(
+        `/password/forgot/${email}`
       );
 
       if (response.status === 200) {
@@ -73,8 +74,8 @@ const authService = {
     newPassword: string;
   }) {
     try {
-      const response = await axios.post(
-        GlobalConfig.server_url + "/password/reset",
+      const response = await apiInstance.post(
+        "/password/reset",
         body
       );
 
@@ -111,25 +112,43 @@ const authService = {
 
   getUser(): IJWTUser | undefined {
     const user = window.localStorage.getItem("user");
-    if (user) return JSON.parse(user);
-    return undefined;
+    const token = authService.getAccessToken();
+  
+    if (!token || !user) {
+      authService.logout();
+      return undefined;
+    }
+  
+    const isTokenValid = authService.isTokenValid(token);
+  
+    if (!isTokenValid) {
+      authService.logout();
+      return undefined;
+    }
+  
+    return JSON.parse(user);
   },
 
-  parseJwt(token: string): IJWTUser {
-    var base64Url = token.split(".")[1];
-    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    var jsonPayload = decodeURIComponent(
-      window
-        .atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-
-    return JSON.parse(jsonPayload);
+  isTokenValid(token: string): boolean {
+    const decodedToken = jwtDecode<{ exp: number }>(token);
+    const expirationTimestamp = decodedToken.exp;
+    const currentTimestamp = Math.floor(Date.now() / 1000); // Convert to seconds
+  
+    return currentTimestamp <= expirationTimestamp;
   },
+
+  parseJwt(token: string): IJWTUser | undefined {
+    const decodedToken = jwtDecode<{ exp: number }>(token);
+    const expirationTimestamp = decodedToken.exp;
+    const currentTimestamp = Math.floor(Date.now() / 1000); // Convert to seconds
+  
+    if (currentTimestamp > expirationTimestamp) {
+      authService.logout();
+      return undefined;
+    }
+  
+    return decodedToken;
+  }
 };
 
 export default authService;

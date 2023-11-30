@@ -56,6 +56,7 @@ const Login = () => {
       setLoading(true);
       try {
         const res = await authService.signin(username, password);
+        if(!res) return;
         console.log(res);
         if (res.roles && res.roles[0] === "ADMIN") {
           navigate("/admin/dashboard");

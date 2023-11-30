@@ -1,11 +1,11 @@
-import axios, { AxiosError } from "axios";
-import GlobalConfig from "../config/GlobalConfig";
+import { AxiosError } from "axios";
 import { ICohort } from "../interfaces/cohort";
+import apiInstance from "./apiInstance";
 
 const cohortService = {
   getPage: async (token: string, page: number = 0, size: number = 10) => {
-    const url = `${GlobalConfig.server_url}/user/cohorts?page=${page}&size=${size}`;
-    const response = await axios.get(url, {
+    const url = `/user/cohorts?page=${page}&size=${size}`;
+    const response = await apiInstance.get(url, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -72,8 +72,8 @@ const cohortService = {
     return allCohorts;
   },
   getById: async (token: string, id: string): Promise<ICohort> => {
-    const res = await axios.get(
-      `${GlobalConfig.server_url}/user/cohorts/${id}`,
+    const res = await apiInstance.get(
+      `/user/cohorts/${id}`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -84,8 +84,8 @@ const cohortService = {
   },
   create: async (token: string, body: ICohort) => {
     try {
-      const response = await axios.post(
-        GlobalConfig.server_url + "/admin/cohorts/",
+      const response = await apiInstance.post(
+        "/admin/cohorts/",
         body,
         {
           headers: {
@@ -110,8 +110,8 @@ const cohortService = {
   },
   update: async (token: string, body: ICohort) => {
     try {
-      const response = await axios.put(
-        GlobalConfig.server_url + "/admin/cohorts/",
+      const response = await apiInstance.put(
+        "/admin/cohorts/",
         body,
         {
           headers: {
@@ -136,8 +136,8 @@ const cohortService = {
   },
   delete: async (token: string, id: string) => {
     try {
-      const response = await axios.delete(
-        `${GlobalConfig.server_url}/admin/cohorts/${id}`,
+      const response = await apiInstance.delete(
+        `/admin/cohorts/${id}`,
         {
           headers: {
             Authorization: "Bearer " + token,

@@ -1,11 +1,11 @@
-import axios, { AxiosError } from "axios";
-import GlobalConfig from "../config/GlobalConfig";
+import { AxiosError } from "axios";
 import { IUserProfile } from "../interfaces/user";
+import apiInstance from "./apiInstance";
 
 const userProfileService = {
     getPage: async (token: string, page: number = 0, size: number = 10) => {
-        const url = `${GlobalConfig.server_url}/user/profiles?page=${page}&size=${size}`;
-        const response = await axios.get(url, {
+        const url = `/user/profiles?page=${page}&size=${size}`;
+        const response = await apiInstance.get(url, {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -49,7 +49,7 @@ const userProfileService = {
     
 
     getById: async (token: string, id: string): Promise<IUserProfile> => {
-        const res = await axios.get(`${GlobalConfig.server_url}/user/profiles/${id}`, {
+        const res = await apiInstance.get(`/user/profiles/${id}`, {
             headers: {
                 Authorization: "Bearer " + token,
             },
@@ -58,8 +58,8 @@ const userProfileService = {
     },
     create: async (token: string, body: IUserProfile, id: string) => {
         try {
-            const response = await axios.post(
-                GlobalConfig.server_url + `/user/profiles/${id}`,
+            const response = await apiInstance.post(
+                `/user/profiles/${id}`,
                 body,
                 {
                     headers: {
@@ -84,8 +84,8 @@ const userProfileService = {
     },
     update: async (token: string, id: string, body: IUserProfile) => {
         try {
-            const response = await axios.put(
-                `${GlobalConfig.server_url}/user/profiles/${id}`,
+            const response = await apiInstance.put(
+                `/user/profiles/${id}`,
                 body,
                 {
                     headers: {
@@ -108,7 +108,7 @@ const userProfileService = {
         }
     },
     delete: async (token: string, id: string) => {
-        const res = await axios.delete(`${GlobalConfig.server_url}/user/profiles/${id}`, {
+        const res = await apiInstance.delete(`/user/profiles/${id}`, {
             headers: {
                 Authorization: "Bearer " + token,
             },
@@ -116,7 +116,7 @@ const userProfileService = {
         return res.data;
     },
     getResume: async (token: string, id: string): Promise<File> => {
-        const res = await axios.get(`${GlobalConfig.server_url}/user/profiles/${id}/resume`, {
+        const res = await apiInstance.get(`/user/profiles/${id}/resume`, {
             headers: {
                 Authorization: "Bearer " + token,
             },
@@ -125,7 +125,7 @@ const userProfileService = {
         return new File([res.data], 'resume.pdf', { type: 'application/pdf' });
     },
     getHeadshot: async (token: string, id: string): Promise<File> => {
-        const res = await axios.get(`${GlobalConfig.server_url}/user/profiles/${id}/headshot`, {
+        const res = await apiInstance.get(`/user/profiles/${id}/headshot`, {
             headers: {
                 Authorization: "Bearer " + token,
             },
@@ -138,7 +138,7 @@ const userProfileService = {
         formData.append('file', file);
 
         try {
-            const res = await axios.post(`${GlobalConfig.server_url}/user/profiles/${id}/headshot`, formData, {
+            const res = await apiInstance.post(`/user/profiles/${id}/headshot`, formData, {
                 headers: {
                     'Authorization': "Bearer " + token,
                     'Content-Type': 'multipart/form-data'
@@ -155,7 +155,7 @@ const userProfileService = {
         formData.append('file', file);
 
         try {
-            const res = await axios.post(`${GlobalConfig.server_url}/user/profiles/${id}/resume`, formData, {
+            const res = await apiInstance.post(`/user/profiles/${id}/resume`, formData, {
                 headers: {
                     'Authorization': "Bearer " + token,
                     'Content-Type': 'multipart/form-data'

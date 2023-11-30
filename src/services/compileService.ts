@@ -1,11 +1,11 @@
-import axios from 'axios';
-import GlobalConfig from '../config/GlobalConfig';
+import apiInstance from "./apiInstance";
+
 
 const CompileService = {
     
     compile: (lang = "javascript", code = "console.log('hello world')") => {
-        return axios.post(
-            GlobalConfig.server_url + '/compile', {lang, code}
+        return apiInstance.post(
+            '/compile', {lang, code}
         );
     }
 }

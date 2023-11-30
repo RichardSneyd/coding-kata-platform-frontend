@@ -1,11 +1,11 @@
-import axios, { AxiosError } from "axios";
-import GlobalConfig from "../config/GlobalConfig";
+import { AxiosError } from "axios";
 import { ISolution, ISolutionDTO } from "../interfaces/solutions";
+import apiInstance from "./apiInstance";
 
 const solutionService = {
   getPage: async (token: string, page: number = 0, size: number = 10) => {
-    const url = `${GlobalConfig.server_url}/admin/solutions?page=${page}&size=${size}`;
-    const response = await axios.get(url, {
+    const url = `/admin/solutions?page=${page}&size=${size}`;
+    const response = await apiInstance.get(url, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -78,8 +78,8 @@ const solutionService = {
   },
 
   getById: async (token: string, id: string): Promise<ISolutionDTO> => {
-    const res = await axios.get(
-      `${GlobalConfig.server_url}/user/problems/solutions/${id}`,
+    const res = await apiInstance.get(
+      `/user/problems/solutions/${id}`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -89,8 +89,8 @@ const solutionService = {
     return res.data;
   },
   getAllForUser: async (token: string, id: string): Promise<ISolutionDTO> => {
-    const res = await axios.get(
-      `${GlobalConfig.server_url}/admin/solutions/user/${id}`,
+    const res = await apiInstance.get(
+      `/admin/solutions/user/${id}`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -100,8 +100,8 @@ const solutionService = {
     return res.data;
   },
   getAllForProblem: async (token: string, id: string): Promise<ISolutionDTO> => {
-    const res = await axios.get(
-      `${GlobalConfig.server_url}/admin/solutions/problem/${id}`,
+    const res = await apiInstance.get(
+      `/admin/solutions/problem/${id}`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -112,8 +112,8 @@ const solutionService = {
   },
   delete: async (token: string, id: string) => {
     try {
-      const response = await axios.delete(
-        `${GlobalConfig.server_url}/admin/solutions/${id}`,
+      const response = await apiInstance.delete(
+        `/admin/solutions/${id}`,
         {
           headers: {
             Authorization: "Bearer " + token,

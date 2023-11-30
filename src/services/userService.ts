@@ -1,11 +1,11 @@
-import axios, { AxiosError } from "axios";
-import GlobalConfig from "../config/GlobalConfig";
+import { AxiosError } from "axios";
 import { IUser } from "../interfaces/user";
+import apiInstance from "./apiInstance";
 
 const userService = {
   getPage: async (token: string, page: number = 0, size: number = 10) => {
-    const url = `${GlobalConfig.server_url}/admin/users?page=${page}&size=${size}`;
-    const response = await axios.get(url, {
+    const url = `/admin/users?page=${page}&size=${size}`;
+    const response = await apiInstance.get(url, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -48,7 +48,7 @@ const userService = {
   },
 
   getById: async (token: string, id: string): Promise<IUser> => {
-    const res = await axios.get(`${GlobalConfig.server_url}/user/users/${id}`, {
+    const res = await apiInstance.get(`/user/users/${id}`, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -56,7 +56,7 @@ const userService = {
     return res.data;
   },
   deleteById: async (token: string, id: string) => {
-    const res = await axios.delete(`${GlobalConfig.server_url}/admin/users/${id}`, {
+    const res = await apiInstance.delete(`/admin/users/${id}`, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -65,8 +65,8 @@ const userService = {
   },
   update: async (token: string, body: IUser) => {
     try {
-      const response = await axios.put(
-        GlobalConfig.server_url + "/user/users/",
+      const response = await apiInstance.put(
+        "/user/users/",
         body,
         {
           headers: {
@@ -89,8 +89,8 @@ const userService = {
     }
   },
   getUserProgress: async (token: string, id: string) => {
-    const res = await axios.get(
-      `${GlobalConfig.server_url}/user/users/${id}/progress`,
+    const res = await apiInstance.get(
+      `/user/users/${id}/progress`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -100,8 +100,8 @@ const userService = {
     return res.data;
   },
   getCohortLeaderoard: async (token: string, cid: string): Promise<IUser[]> => {
-    const res = await axios.get(
-      `${GlobalConfig.server_url}/user/users/leaderboard/${cid}`,
+    const res = await apiInstance.get(
+      `/user/users/leaderboard/${cid}`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -111,8 +111,8 @@ const userService = {
     return res.data;
   },
   getGlobalLeaderboard: async (token: string) => {
-    const res = await axios.get(
-      `${GlobalConfig.server_url}/admin/users/leaderboard`,
+    const res = await apiInstance.get(
+      `/admin/users/leaderboard`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -124,8 +124,8 @@ const userService = {
   create: async (token: string, body: IUser) => {
     console.log(body);
     try {
-      const response = await axios.post(
-        GlobalConfig.server_url + "/admin/users/",
+      const response = await apiInstance.post(
+        "/admin/users/",
         body,
         {
           headers: {
