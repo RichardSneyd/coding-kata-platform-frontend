@@ -86,7 +86,7 @@ const userService = {
      // if (typeof err.response.data === "string") throw new Error(err.response.data);
 
      // throw new Error("Could not update User");
-     throw new Error(err.response.data || `Could not update User`);
+     throw new Error(JSON.stringify(err.response.data) || err.response.data || `Could not update User`);
     }
   },
   getUserProgress: async (token: string, id: string) => {
