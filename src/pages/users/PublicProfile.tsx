@@ -40,37 +40,60 @@ const PublicProfile: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-      const resumeFile = await userProfileService.getResume(token || "", id || "");
-      setResume(URL.createObjectURL(resumeFile));
+        const resumeFile = await userProfileService.getResume(
+          token || "",
+          id || ""
+        );
+        setResume(URL.createObjectURL(resumeFile));
 
-      const headshotFile = await userProfileService.getHeadshot(token || "", id || "");
-      setHeadshot(URL.createObjectURL(headshotFile));
-      }
-      catch (error: any) {
+        const headshotFile = await userProfileService.getHeadshot(
+          token || "",
+          id || ""
+        );
+        setHeadshot(URL.createObjectURL(headshotFile));
+      } catch (error: any) {
         setLoading(false);
       }
       try {
-
-        const userProfileData = await userProfileService.getById(token || "", id || "");
+        const userProfileData = await userProfileService.getById(
+          token || "",
+          id || ""
+        );
         setUserProfile(userProfileData);
 
         setLoading(false);
-    } catch (error: any) {
+      } catch (error: any) {
         setError("Error fetching user profile: " + error);
         setLoading(false);
         console.error("Error fetching user profile: ", error);
-    }
+      }
     };
 
     fetchData();
   }, [id]);
 
-  if (!loading && !userProfile) return <div>User profile not found</div>
+  if (!loading && !userProfile)
+    return (
+      <>
+        <Box p={3}>
+          <BackArrow />
+        </Box>
+        <div>User profile not found</div>
+      </>
+    );
   if (!userProfile) {
     return <Loading />;
   }
   if (loading) return <Loading />;
-  if (!resume || !headshot) return <div>Profile incomplete, resume and/or headshot missing.</div>
+  if (!resume || !headshot)
+    return (
+      <>
+        <Box p={3}>
+          <BackArrow />
+        </Box>
+        <div>Profile incomplete, resume and/or headshot missing.</div>
+      </>
+    );
 
   const {
     fullName,
