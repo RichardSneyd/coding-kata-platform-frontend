@@ -3,21 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { HistoryContext } from "./HistoryProvider";
-// import {createBrowserHistory} from 'history';
 
 const BackArrow: React.FC = () => {
     const navigate = useNavigate();
-    const history = useContext(HistoryContext);
+    const {history, removeCurrentEntry} = useContext(HistoryContext);
   
     const handleBack = () => {
-      // Find the last unique location
+      // Iterate backwards through the history array
       for (let i = history.length - 2; i >= 0; i--) {
         if (history[i].pathname !== history[history.length - 1].pathname) {
-          navigate(history[i].pathname);
+          // Navigate to the last unique location
+          removeCurrentEntry();
+          navigate(history[i].pathname, { replace: true });
           return;
         }
       }
-      navigate('/'); // Fallback if no unique history entry is found
+      // Fallback if no unique history entry is found
+      navigate('/', { replace: true });
     };
   
     return (
@@ -25,6 +27,6 @@ const BackArrow: React.FC = () => {
         Back
       </Button>
     );
-  };
+};
 
 export default BackArrow;
