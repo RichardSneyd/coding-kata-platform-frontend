@@ -53,7 +53,7 @@ const TestCases = ({
               title={testCase.output.dataType}
             >
               
-              <span style={{ padding: '2px', color: 'darkgreen', borderRadius: '5px', backgroundColor: 'lightgray' }}>
+              <span style={{ padding: '2px', color: 'lightgray', borderRadius: '5px', backgroundColor: 'darkgreen' }}>
                 {testCase.output.dataType?.includes("ARRAY") ? "[" : ""}
                 {testCase.output.dataType?.includes("STRING") && testCase.output.dataType.includes("ARRAY") ? testCase.output.value?.split(",").map(word => `"${word.trim()}"`).join(",") : testCase.output.value ? testCase.output.value : ""}
                 {testCase.output.dataType?.includes("ARRAY") ? "]" : ""}
