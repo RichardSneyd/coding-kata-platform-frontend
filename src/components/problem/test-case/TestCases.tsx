@@ -35,29 +35,64 @@ const TestCases = ({
             {<span style={{ fontStyle: "italic" }}>{functionName}(</span>}
             {testCase.inputs.map((input, index) => {
               return (
-                <span key={`${input.value}-${index}`}>
-                  <Tooltip style={{ cursor: "pointer" }} title={input.dataType}>
-                    <span style={{color: 'navy', borderRadius: '5px', backgroundColor: 'lightgray'}}>
-                      <span>{input.dataType?.includes("ARRAY") ? "[" : ""}</span>
-                      {input.dataType?.includes("STRING")  && input.dataType?.includes("ARRAY") ? input.value?.split(",").map(word => `"${word.trim()}"`).join(",") : input.value ? input.value : ""}
-                      {input.dataType?.includes("ARRAY") ? "]" : ""}
-                    </span>
-                  </Tooltip>
+                <>
+                  <span
+                    style={{
+                      color: "navy",
+                      borderRadius: "5px",
+                      backgroundColor: "lightgray",
+                    }}
+                    key={`${input.value}-${index}`}
+                  >
+                    <Tooltip
+                      style={{ cursor: "pointer" }}
+                      title={input.dataType}
+                    >
+                      <span>
+                        {input.dataType?.includes("ARRAY") ? "[" : ""}
+                        {input.dataType?.includes("STRING") &&
+                        input.dataType?.includes("ARRAY")
+                          ? input.value
+                              ?.split(",")
+                              .map((word) => `${word.trim()}`)
+                              .join(",")
+                          : input.value
+                          ? input.value
+                          : ""}
+
+                        {input.dataType?.includes("ARRAY") ? "]" : ""}
+                      </span>
+                    </Tooltip>
+                  </span>
                   {index !== testCase.inputs.length - 1 ? "," : ""}
-                </span>
+                </>
               );
             })}
             <TestCaseValue>{") => "}</TestCaseValue>
             <Tooltip
-              style={{ cursor: "pointer"}}
+              style={{ cursor: "pointer" }}
               title={testCase.output.dataType}
             >
-              
-              <span style={{ padding: '2px', color: 'lightgray', borderRadius: '5px', backgroundColor: 'darkgreen' }}>
+              <span
+                style={{
+                  padding: "2px",
+                  color: "lightgray",
+                  borderRadius: "5px",
+                  backgroundColor: "darkgreen",
+                }}
+              >
                 {testCase.output.dataType?.includes("ARRAY") ? "[" : ""}
-                {testCase.output.dataType?.includes("STRING") && testCase.output.dataType.includes("ARRAY") ? testCase.output.value?.split(",").map(word => `"${word.trim()}"`).join(",") : testCase.output.value ? testCase.output.value : ""}
+                {testCase.output.dataType?.includes("STRING") &&
+                testCase.output.dataType.includes("ARRAY")
+                  ? testCase.output.value
+                      ?.split(",")
+                      .map((word) => `"${word.trim()}"`)
+                      .join(",")
+                  : testCase.output.value
+                  ? testCase.output.value
+                  : ""}
                 {testCase.output.dataType?.includes("ARRAY") ? "]" : ""}
-                </span>
+              </span>
             </Tooltip>
           </code>
         </ListItemText>
