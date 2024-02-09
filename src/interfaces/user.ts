@@ -23,7 +23,8 @@ export interface IUserId {
 export interface IUserProfile {
   [key: string]: any;
   id?: number;
-  user: IUser;
+  user?: IUser;
+  cohort?: String;
   fullName?: string;
   githubLink?: string;
   workExperience?: string[];

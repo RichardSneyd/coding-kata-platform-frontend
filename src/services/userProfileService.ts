@@ -6,47 +6,47 @@ const userProfileService = {
     getPage: async (token: string, page: number = 0, size: number = 10) => {
         const url = `/user/profiles?page=${page}&size=${size}`;
         const response = await apiInstance.get(url, {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
+            headers: {
+                Authorization: "Bearer " + token,
+            },
         });
         return response.data;
-      },
-    
-      getPageContent: async (token: string, page: number = 0, size: number = 10) => {
+    },
+
+    getPageContent: async (token: string, page: number = 0, size: number = 10) => {
         const data = await userProfileService.getPage(token, page, size);
         return data.content || [];
-      },
-    
-      getAll: async (token: string, callback: Function) => {
+    },
+
+    getAll: async (token: string, callback: Function) => {
         let page = 0;
         const size = 10; // or whatever default size you prefer
         let allProfiles: IUserProfile[] = [];
         let isLastPage = false;
-    
+
         while (!isLastPage) {
-          try {
-            const response = await userProfileService.getPage(token, page, size);
-            const profiles = response.content;
-    
-            if (response.last) {
-              isLastPage = true;
+            try {
+                const response = await userProfileService.getPage(token, page, size);
+                const profiles = response.content;
+
+                if (response.last) {
+                    isLastPage = true;
+                }
+
+                allProfiles = [...allProfiles, ...profiles];
+
+                // Callback to update the state or any other action you'd like to take
+                callback && callback(allProfiles);
+
+                page++;
+            } catch (error) {
+                console.error('Error fetching page:', error);
+                isLastPage = true;  // terminate loop if there's an error
             }
-    
-            allProfiles = [...allProfiles, ...profiles];
-    
-            // Callback to update the state or any other action you'd like to take
-            callback && callback(allProfiles);
-    
-            page++;
-          } catch (error) {
-            console.error('Error fetching page:', error);
-            isLastPage = true;  // terminate loop if there's an error
-          }
         }
         return allProfiles;
-      },
-    
+    },
+
 
     getById: async (token: string, id: string): Promise<IUserProfile> => {
         const res = await apiInstance.get(`/user/profiles/${id}`, {
