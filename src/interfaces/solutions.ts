@@ -17,11 +17,12 @@ export interface ISolutionDTO {
     lang: string;
     correctness: number;
     username: string;
+    userId: number;
     title: string;
     description: string;
     difficulty: string;
     submissionDate: string;
-    user: IUser;
+    // user: IUser;
 }
 
 export interface IEvalInput {

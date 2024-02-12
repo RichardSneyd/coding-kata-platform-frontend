@@ -23,6 +23,7 @@ import solutionService from "../../services/solutionService";
 import dayjs from "dayjs";
 import PreviewCodeEditorContainer from "../../components/editor/PreviewCodeEditorContainer";
 import BackArrow from "../../components/global/BackArrow";
+import DeleteSolution from "../../components/solution/DeleteSolution";
 
 /**
  * Injected styles
@@ -33,6 +34,11 @@ const TitleWrapper = styled("div")`
   justify-content: space-between;
 `;
 
+const TitleActionWrapper = styled("div")`
+  a {
+    margin: 0 5px;
+  }
+`;
 const ChipWrapper = styled("div")`
   display: flex;
   align-items: center;
@@ -53,6 +59,16 @@ const Solution = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const { id } = useParams();
+
+  const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
+  const userOwnsSolution = () => {
+   // console.log(authService.getUser());
+    if(!authService.getUser()) return false;
+    if(!solution) return false;
+    console.log('reached the check')
+    return authService.getUser()?.userId === solution?.userId;
+  }
+  const canEdit = () => userOwnsSolution() || isAdmin;
 
   useEffect(() => {
     const token = authService.getAccessToken();
@@ -93,6 +109,11 @@ const Solution = () => {
         <Typography variant="h1">
           Solution for <code>'{solution.title}'</code> ({solution.correctness}%)
         </Typography>
+        <TitleActionWrapper>
+
+          {solution.id && canEdit() && <DeleteSolution id={solution.id} />}
+          
+        </TitleActionWrapper>
       </TitleWrapper>
 
       <Typography variant="subtitle1">{solution.description}</Typography>

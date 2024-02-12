@@ -107,6 +107,29 @@ const ProblemService = {
       throw new Error("Could not delete Problem");
     }
   },
+
+  deleteSolution: async (token: string, id: string) => {
+    try {
+      const response = await apiInstance.delete(
+        `/admin/problems/solution/${id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response.status === 200) {
+        return { message: "Solution deleted" };
+      }
+      throw AxiosError;
+    } catch (err: any) {
+      // If we get an axios error, we can assume the server down
+      if (err?.code === "ERR_NETWORK") {
+        throw new Error("Server error, please try again later");
+      }
+      throw new Error("Could not delete Problem");
+    }
+  },
 };
 
 export default ProblemService;
