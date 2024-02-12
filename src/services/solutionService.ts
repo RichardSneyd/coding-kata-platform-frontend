@@ -113,7 +113,7 @@ const solutionService = {
   delete: async (token: string, id: string) => {
     try {
       const response = await apiInstance.delete(
-        `/admin/solutions/${id}`,
+        `/user/problems/solutions/${id}`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -121,7 +121,7 @@ const solutionService = {
         }
       );
       if (response.status === 200) {
-        return { message: "Problem deleted" };
+        return { message: "Solution deleted" };
       }
       throw AxiosError;
     } catch (err: any) {
@@ -129,7 +129,7 @@ const solutionService = {
       if (err?.code === "ERR_NETWORK") {
         throw new Error("Server error, please try again later");
       }
-      throw new Error("Could not delete Solution");
+      throw new Error(`Error: ${err?.code}`);
     }
   },
 };

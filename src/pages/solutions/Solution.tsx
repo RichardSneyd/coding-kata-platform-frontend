@@ -62,7 +62,8 @@ const Solution = () => {
 
   const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
   const userOwnsSolution = () => {
-   // console.log(authService.getUser());
+   // for now, disable this
+  //  return false;
     if(!authService.getUser()) return false;
     if(!solution) return false;
     console.log('reached the check')
