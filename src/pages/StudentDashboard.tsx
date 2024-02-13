@@ -32,6 +32,7 @@ import CohortLeaderoard from "../components/user/Leaderboard";
 import { Link } from "react-router-dom";
 import SuccessChip from "../components/problem/SuccessChip";
 import dayjs from "dayjs";
+import FilterTable, { ITableFields } from "../components/global/FilterTable";
 
 const StudentDashboard = () => {
   const [user, setUser] = useState<IUser>();
@@ -114,6 +115,15 @@ const StudentDashboard = () => {
     }
   }, []);
 
+  const solutionTableFields: ITableFields[] = [
+    { label: "ID", field: "id", type: "string" },
+    { label: "Problem", field: "problem.title", type: "string" },
+    { label: "Difficulty", field: "problem.difficulty", type: "difficulty" },
+    { label: "Language", field: "lang", type: "string" },
+    { label: "Submission Date", field: "submissionDate", type: "date" },
+    { label: "Correctness", field: "correctness", type: "success" },
+  ];
+
   if (loading) return <Loading />;
   if (error !== "" || !user) return <EmptyState message={error} />;
   return (
@@ -123,62 +133,13 @@ const StudentDashboard = () => {
           <Typography variant="h1">Hi {user.username} 👋🏻</Typography>
         </Grid>
         <Grid item md={8} xs={12}>
-          <Card>
-            <CardHeader title="✏️ Previously Submitted Solutions" />
-            <CardContent>
-              <TableContainer sx={{ minHeight: 302 }}>
-                <Table aria-label="Solutions table">
-                  <TableHead>
-                    <TableRow>
-                      {user.solutions?.length === 0 ? (
-                        <TableCell></TableCell>
-                      ) : (
-                        solutionTablelFields.map((cell, index) => (
-                          <TableCell key={`${index}-${cell}`}>{cell}</TableCell>
-                        ))
-                      )}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {user.solutions?.length === 0 ? (
-                      <TableRow>
-                        <TableCell sx={{ textAlign: "center" }}>
-                          Your solutions will appear here!
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      user.solutions?.map((solution) => (
-                        <TableRow
-                          key={solution.id}
-                          hover
-                          onClick={() => navigate(`/solutions/${solution.id}`)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <TableCell>{solution.problem.title}</TableCell>
-                          <TableCell>
-                            {" "}
-                            <DifficultyChip
-                              label={solution.problem.difficulty || ""}
-                            />
-                          </TableCell>
-                          <TableCell>{solution.lang}</TableCell>
-                          <TableCell>
-                            {dayjs(solution.submissionDate).fromNow()}
-                          </TableCell>
-                          <TableCell>
-                            <SuccessChip
-                              score={solution.correctness}
-                              label={`${solution.correctness}%`}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
+        <FilterTable
+              title="Submitted Solutions"
+              rows={user.solutions}
+              fields={solutionTableFields}
+              viewLink='/solutions/'
+              
+            />
         </Grid>
         <Grid container item rowSpacing={3} xs={12} md={4} direction="row">
           <Grid item xs={12}>
