@@ -18,7 +18,7 @@ const ListCohorts = () => {
     { label: "ID", field: "id", type: "string" },
     { label: "Name", field: "name", type: "string" },
     { label: "Start Date", field: "startDate", type: "date" },
-    { label: "# Members", field: "members", type: "string" },
+    { label: "# Members", field: "numberOfMembers", type: "string" },
   ];
 
   return (
