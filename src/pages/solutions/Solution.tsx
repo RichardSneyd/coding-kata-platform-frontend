@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import PreviewCodeEditorContainer from "../../components/editor/PreviewCodeEditorContainer";
 import BackArrow from "../../components/global/BackArrow";
 import DeleteSolution from "../../components/solution/DeleteSolution";
+import { renderHTML } from "../../components/global/Rendering";
 
 /**
  * Injected styles
@@ -62,13 +63,13 @@ const Solution = () => {
 
   const isAdmin = authService.getUser()?.roles?.includes("ADMIN");
   const userOwned = () => {
-   // for now, disable this
-  //  return false;
-    if(!authService.getUser()) return false;
-    if(!solution) return false;
-    console.log('reached the check')
+    // for now, disable this
+    //  return false;
+    if (!authService.getUser()) return false;
+    if (!solution) return false;
+    console.log("reached the check");
     return authService.getUser()?.userId === solution?.userId;
-  }
+  };
   const canEdit = () => userOwned() || isAdmin;
 
   useEffect(() => {
@@ -111,13 +112,13 @@ const Solution = () => {
           Solution for <code>'{solution.title}'</code> ({solution.correctness}%)
         </Typography>
         <TitleActionWrapper>
-
           {solution.id && canEdit() && <DeleteSolution id={solution.id} />}
-          
         </TitleActionWrapper>
       </TitleWrapper>
 
-      <Typography variant="subtitle1">{solution.description}</Typography>
+      <Typography variant="subtitle1">
+        <div dangerouslySetInnerHTML={renderHTML(solution.description)} />
+      </Typography>
 
       <br />
       <Grid container spacing={5}>
