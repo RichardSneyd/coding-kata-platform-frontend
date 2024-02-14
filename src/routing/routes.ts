@@ -39,6 +39,7 @@ import ListProblemSetsForUsers from "../pages/user-level/problem-sets/ListProble
 import UpdateUser from "../pages/users/UpdateUser";
 import PublicProfile from "../pages/users/PublicProfile";
 import ListPublicProfiles from "../pages/users/ListPublicProfiles";
+import AnonymisedProfile from "../pages/users/AnonymisedProfile";
 
 export enum UserRoles {
   UNAUTHED,
@@ -96,6 +97,12 @@ const routes: IRouteType[] = [
     name: "Profile",
     link: "/candidates/:id",
     Component: PublicProfile,
+    authed: UserRoles.CLIENT,
+  },
+  {
+    name: "Anonymised Profile",
+    link: "/candidates/anonymised/:id",
+    Component: AnonymisedProfile,
     authed: UserRoles.CLIENT,
   },
   {
