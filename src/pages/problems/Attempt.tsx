@@ -223,7 +223,7 @@ const Attempt = () => {
   if (error || !problem) return <EmptyState message={error} />;
   return (
     <>
-      <BackArrow />
+      <BackArrow warn={true} message="If you've written code, it may be lost." />
       <Grid container spacing={5} alignItems="start" alignSelf="center">
         <AttemptDetailsWrapper
           problem={problem}
