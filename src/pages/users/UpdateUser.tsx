@@ -132,10 +132,12 @@ const UpdateUser = () => {
                 setResume(userProfileResult?.resume || null);
                 setEducation(userProfileResult?.education || []);
                 setWorkExperience(userProfileResult?.workExperience || []);
-                setPreferredRoles(userProfileResult?.preferredRoles || []);
-                setPreferredLocations(
-                  userProfileResult?.preferredLocations || []
-                );
+                // filter out disallowed values
+                const validRoles = (userProfileResult?.preferredRoles || []).filter(role => roleOptions.includes(role));
+                setPreferredRoles(validRoles);
+                // filter out disallowed values
+                const validLocations = (userProfileResult?.preferredLocations || []).filter(location => locationOptions.includes(location));
+                setPreferredLocations(validLocations);
                 setGithubLink(userProfileResult?.githubLink || "");
                 setAvailable(userProfileResult?.available || false);
               })
