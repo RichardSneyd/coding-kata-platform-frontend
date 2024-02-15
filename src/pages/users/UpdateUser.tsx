@@ -71,8 +71,17 @@ const UpdateUser = () => {
   const [resume, setResume] = useState<string | null>(null);
   const [education, setEducation] = useState<string[]>([]);
   const [workExperience, setWorkExperience] = useState<string[]>([]);
-  const [preferredLocations, setPrefferedLocations] = useState<string[]>([]);
+
+  const [preferredLocations, setPreferredLocations] = useState<string[]>([]);
+  const locationOptions = ["UK Wide", "London Area", "Scotland"];
+
   const [preferredRoles, setPreferredRoles] = useState<string[]>([]);
+  const roleOptions = [
+    "Front End",
+    "Back End",
+    "DevOps",
+    "Data Analysis",
+  ];
 
   const [headshotImage, setHeadshotImage] = useState<File | null>(null);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
@@ -101,7 +110,7 @@ const UpdateUser = () => {
         cohortService.getPageContent(token).then((recentCohorts) => {
           setCohorts(recentCohorts);
         });
-        
+
         userService
           .getById(token, id)
           .then((userResult) => {
@@ -124,7 +133,7 @@ const UpdateUser = () => {
                 setEducation(userProfileResult?.education || []);
                 setWorkExperience(userProfileResult?.workExperience || []);
                 setPreferredRoles(userProfileResult?.preferredRoles || []);
-                setPrefferedLocations(
+                setPreferredLocations(
                   userProfileResult?.preferredLocations || []
                 );
                 setGithubLink(userProfileResult?.githubLink || "");
@@ -180,11 +189,11 @@ const UpdateUser = () => {
   };
 
   const handleAddLocation = (location: string) => {
-    setPrefferedLocations((prevLocations) => [...prevLocations, location]);
+    setPreferredLocations((prevLocations) => [...prevLocations, location]);
   };
 
   const handleDeleteLocation = (index: number) => {
-    setPrefferedLocations((prevLocations) =>
+    setPreferredLocations((prevLocations) =>
       prevLocations.filter((_, i) => i !== index)
     );
   };
@@ -212,14 +221,28 @@ const UpdateUser = () => {
 
   const handleGithubLinkChange = (value: string) => {
     setGithubLink(value);
+  };
 
-    // try {
-    //   new URL(value);
-    //   setGithubLink(value);
-    //   setError("");  // clear the error if the URL is valid
-    // } catch (_) {
-    //   setError("Invalid URL");
-    // }
+  // Handle change in preferredLocations
+  const handleLocationChange = (event: any) => {
+    setPreferredLocations(event.target.value);
+  };
+
+  // Handle change in preferredRoles
+  const handleRoleChange = (event: any) => {
+    const {
+      target: { value },
+    } = event;
+    if (value.includes("All")) {
+      setPreferredRoles(["All"]);
+    } else {
+      setPreferredRoles(
+        // On autofill we get a stringified value.
+        typeof value === "string"
+          ? value.split(",")
+          : value.filter((v: any) => v !== "All")
+      );
+    }
   };
 
   const handleValidation = () => {
@@ -267,7 +290,7 @@ const UpdateUser = () => {
           preferredRoles,
           githubLink,
           user: userBody,
-          available
+          available,
         };
 
         console.log(userProfileBody);
@@ -327,17 +350,17 @@ const UpdateUser = () => {
   };
 
   const userOwned = () => {
-     if(!authService.getUser()) return false;
-     return authService.getUser()?.userId?.toString() === id;
-   }
-   const canAccess = () => {
+    if (!authService.getUser()) return false;
+    return authService.getUser()?.userId?.toString() === id;
+  };
+  const canAccess = () => {
     const permission = userOwned() || isAdmin;
     //if(!permission) setError("Permission denied");
     return permission;
   };
 
   if (loading) return <Loading />;
-  if(!canAccess()) return (<EmptyState message = {"Permission denied"} />);
+  if (!canAccess()) return <EmptyState message={"Permission denied"} />;
   if (error) return <EmptyState message={error} />;
   return (
     <>
@@ -352,8 +375,12 @@ const UpdateUser = () => {
                 <CardHeader title="📝 User Profile" />
                 <StyledCardContent>
                   <Grid container spacing={5}>
-                       <Grid item md={3} xs={12} sm={12}>
-                      <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                    <Grid item md={3} xs={12} sm={12}>
+                      <Box
+                        display={"flex"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                      >
                         <HeadshotInput
                           headshot={headshotImage ? headshotImage : null}
                           onChange={handleHeadshotChange}
@@ -369,14 +396,16 @@ const UpdateUser = () => {
                         onChange={(e) => setFullName(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && submit()}
                       />
-                      <br /><br />
+                      <br />
+                      <br />
                       <URLTextField
                         label="Github Link"
                         value={githubLink}
                         onChange={handleGithubLinkChange}
                         onKeyDown={(e) => e.key === "Enter" && submit()}
                       />
-                      <br /><br />
+                      <br />
+                      <br />
                       <TextField
                         multiline
                         sx={{ width: "100%", minHeight: "5em" }}
@@ -397,15 +426,15 @@ const UpdateUser = () => {
                       />
                       {resumeFile && (
                         <>
-                        <br /> <br />
-                        <Typography variant="body1">
-                          <MUILink
-                            href={URL.createObjectURL(resumeFile)}
-                            download={resumeFile.name}
-                          >
-                            Download Resume.pdf
-                          </MUILink>
-                        </Typography>
+                          <br /> <br />
+                          <Typography variant="body1">
+                            <MUILink
+                              href={URL.createObjectURL(resumeFile)}
+                              download={resumeFile.name}
+                            >
+                              Download Resume.pdf
+                            </MUILink>
+                          </Typography>
                         </>
                       )}
                       <FileInput
@@ -415,7 +444,6 @@ const UpdateUser = () => {
                         accept=".pdf"
                       />
                     </Grid>
-                 
                   </Grid>
                 </StyledCardContent>
               </StyledCard>
@@ -454,12 +482,34 @@ const UpdateUser = () => {
                   <StyledCard>
                     <StyledCardContent>
                       <CardHeader title="💼 Roles of Interest" />
-                      <EditableList
+                      {/* <EditableList
                         label="Roles"
                         items={preferredRoles}
                         onAddItem={handleAddJobRole}
                         onDeleteItem={handleDeleteJobRole}
-                      />
+                      /> */}
+                      <FormControl fullWidth>
+                        {/* <InputLabel id="preferred-roles-label">
+                          Preferred Roles
+                        </InputLabel> */}
+                        <Select
+                          labelId="preferred-roles-label"
+                          id="preferred-roles"
+                          multiple
+                          value={preferredRoles}
+                          onChange={handleRoleChange}
+                          renderValue={(selected) => selected.join(", ")}
+                        >
+                          {roleOptions.map((role) => (
+                            <MenuItem key={role} value={role}>
+                              <Checkbox
+                                checked={preferredRoles.indexOf(role) > -1}
+                              />
+                              <ListItemText primary={role} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     </StyledCardContent>
                   </StyledCard>
                 </Grid>
@@ -469,7 +519,7 @@ const UpdateUser = () => {
             <Grid item md={6} xs={12} sm={12}>
               <Grid container md={12} xs={12} sm={12}>
                 <Grid item md={12} xs={12} sm={12}>
-                  <StyledCard>
+                  {/* <StyledCard>
                     <StyledCardContent>
                       <CardHeader title="🗺 Preferred Locations" />
                       <EditableList
@@ -478,6 +528,35 @@ const UpdateUser = () => {
                         onAddItem={handleAddLocation}
                         onDeleteItem={handleDeleteLocation}
                       />
+                    </StyledCardContent>
+                  </StyledCard> */}
+                  <StyledCard>
+                    <StyledCardContent>
+                      <CardHeader title="🗺 Preferred Locations" />
+                      <FormControl fullWidth>
+                        {/* <InputLabel id="preferred-locations-label">
+                          Preferred Locations
+                        </InputLabel> */}
+                        <Select
+                          labelId="preferred-locations-label"
+                          id="preferred-locations"
+                          multiple
+                          value={preferredLocations}
+                          onChange={handleLocationChange}
+                          renderValue={(selected) => selected.join(", ")}
+                        >
+                          {locationOptions.map((location) => (
+                            <MenuItem key={location} value={location}>
+                              <Checkbox
+                                checked={
+                                  preferredLocations.indexOf(location) > -1
+                                }
+                              />
+                              <ListItemText primary={location} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     </StyledCardContent>
                   </StyledCard>
                 </Grid>
@@ -516,78 +595,84 @@ const UpdateUser = () => {
                     onKeyDown={(e) => e.key === "Enter" && submit()}
                   />
                   <br />
-                 {isAdmin &&  <FormControl variant="standard">
-                    <InputLabel id="cohort-label">Cohort</InputLabel>
-                    <Select
-                      variant="standard"
-                      labelId="cohort-label"
-                      value={cohort?.name}
-                      label="Cohort"
-                      onChange={
-                        (e) =>
-                          setCohort(
-                            cohorts.filter(
-                              (cohort) => cohort.name === e.target.value
-                            )[0]
-                          )
-                        // setCohort(e.target.value)
-                      }
-                    >
-                      {cohorts.map((cohort) => (
-                        <MenuItem value={cohort.name} key={cohort.id}>
-                          {cohort.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl> }
-                  <br />
-                  
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox checked={available} />}
-                        onChange={() => setAvailable(!available)}
-                        value={available}
-                        label="Available for Hire (Uncheck when placed)"
-                      />
-                    </FormGroup>
-                 
-        
-                {isAdmin &&  <FormControl>
-                    <InputLabel variant="standard" id="role-label">
-                      Role
-                    </InputLabel>
-                    <Select
-                      variant="standard"
-                      multiple
-                      labelId="role-label"
-                      value={roles}
-                      label="Role"
-                      renderValue={(selected) => {
-                        //  console.log(selected);
-                        return selected.join(", ");
-                      }}
-                      onChange={(e) => {
-                        let value = e.target.value;
-                        console.log(value);
-                        setRoles(
-                          typeof value === "string" ? value.split(",") : value
-                        );
-                      }}
-                    >
-                      {Object.keys(UserRoles)
-                        .filter((key) => Number(key) > 0)
-                        .map((item) => (
-                          <MenuItem key={item} value={UserRoles[Number(item)]}>
-                            <Checkbox
-                              checked={
-                                roles.indexOf(UserRoles[Number(item)]) > -1
-                              }
-                            />
-                            <ListItemText primary={UserRoles[Number(item)]} />
+                  {isAdmin && (
+                    <FormControl variant="standard">
+                      <InputLabel id="cohort-label">Cohort</InputLabel>
+                      <Select
+                        variant="standard"
+                        labelId="cohort-label"
+                        value={cohort?.name}
+                        label="Cohort"
+                        onChange={
+                          (e) =>
+                            setCohort(
+                              cohorts.filter(
+                                (cohort) => cohort.name === e.target.value
+                              )[0]
+                            )
+                          // setCohort(e.target.value)
+                        }
+                      >
+                        {cohorts.map((cohort) => (
+                          <MenuItem value={cohort.name} key={cohort.id}>
+                            {cohort.name}
                           </MenuItem>
                         ))}
-                    </Select>
-                  </FormControl>}
+                      </Select>
+                    </FormControl>
+                  )}
+                  <br />
+
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Checkbox checked={available} />}
+                      onChange={() => setAvailable(!available)}
+                      value={available}
+                      label="Available for Hire (Uncheck when placed)"
+                    />
+                  </FormGroup>
+
+                  {isAdmin && (
+                    <FormControl>
+                      <InputLabel variant="standard" id="role-label">
+                        Role
+                      </InputLabel>
+                      <Select
+                        variant="standard"
+                        multiple
+                        labelId="role-label"
+                        value={roles}
+                        label="Role"
+                        renderValue={(selected) => {
+                          //  console.log(selected);
+                          return selected.join(", ");
+                        }}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          console.log(value);
+                          setRoles(
+                            typeof value === "string" ? value.split(",") : value
+                          );
+                        }}
+                      >
+                        {Object.keys(UserRoles)
+                          .filter((key) => Number(key) > 0)
+                          .map((item) => (
+                            <MenuItem
+                              key={item}
+                              value={UserRoles[Number(item)]}
+                            >
+                              <Checkbox
+                                checked={
+                                  roles.indexOf(UserRoles[Number(item)]) > -1
+                                }
+                              />
+                              <ListItemText primary={UserRoles[Number(item)]} />
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  )}
                 </StyledCardContent>
               </StyledCard>
             </Grid>
