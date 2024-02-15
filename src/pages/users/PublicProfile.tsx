@@ -124,14 +124,6 @@ const PublicProfile: React.FC = () => {
   return (
     <Box p={3}>
       <Box display={"flex"} justifyContent={"space-between"}>
-        {/* <Button
-        color="info"
-        component={Link}
-        to={isAdmin ? "/users" : "/dashboard"}
-        startIcon={<ArrowBack />}
-      >
-        Back
-      </Button> */}
         <BackArrow />
         <Button
           color="info"
@@ -143,16 +135,21 @@ const PublicProfile: React.FC = () => {
           View Anonymous Version (New Tab)
         </Button>
       </Box>
-      {isAdmin && <Box display="flex" justifyContent="flex-end" paddingBottom={2}>
-        <Fab
-          color="primary"
-          aria-label="Edit User Profile"
-          component={Link}
-          to={`/users/edit/${id}`}
-        >
-          <Edit />
-        </Fab>
-      </Box>}
+      {isAdmin && (
+        <TitleWrapper>
+          <Typography variant="h1">Profile</Typography>
+          <TitleActionWrapper>
+            <Fab
+              color="primary"
+              aria-label="Edit User Profile"
+              component={Link}
+              to={`/users/edit/${id}`}
+            >
+              <Edit />
+            </Fab>
+          </TitleActionWrapper>
+        </TitleWrapper>
+      )}
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card>
