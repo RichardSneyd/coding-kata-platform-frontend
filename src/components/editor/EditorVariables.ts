@@ -15,7 +15,7 @@ interface ILanguageOptions {
 }
 
 export const languagePlaceholders: ILanguageOptions = {
-  java: "public class Main {\n//write your solution here\n\n}",
+  java: "public class Main {\n    //write your solution here\n\n}",
   javascript: "// write your solution here",
   python: "# write your solution here",
 };

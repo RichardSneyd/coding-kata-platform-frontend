@@ -51,7 +51,6 @@ const Attempt = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    console.log("update!");
     const token = authService.getAccessToken();
 
     const fetchProblem = () => {
