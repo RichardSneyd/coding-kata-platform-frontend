@@ -34,6 +34,11 @@ import {
   List,
   Person,
   Rule,
+  AccountBox,
+  PersonSearch,
+  ManageAccounts,
+  SupervisorAccount, 
+  Badge
 } from "@mui/icons-material";
 import ListProblemSetsForUsers from "../pages/user-level/problem-sets/ListProblemSetsForUsers";
 import UpdateUser from "../pages/users/UpdateUser";
@@ -111,7 +116,6 @@ const routes: IRouteType[] = [
     Component: ListPublicProfiles,
     authed: UserRoles.CLIENT,
     showInMenuFor: UserRoles.CLIENT,
-    icon: Dashboard,
   },
   {
     name: "Dashboard",
@@ -136,17 +140,21 @@ const routes: IRouteType[] = [
     Component: Profile,
     authed: UserRoles.USER,
   },
-
-  /**
-   * User
-   */
   {
-    name: "Users",
+    name: "Commercial Profiles",
+    link: "/candidates",
+    Component: ListPublicProfiles,
+    authed: UserRoles.ADMIN,
+    icon: Badge,
+    showInMenuFor: UserRoles.ADMIN,
+  },
+  {
+    name: "User Accounts",
     link: "/users",
     Component: ListUsers,
     authed: UserRoles.ADMIN,
     showInMenuFor: UserRoles.ADMIN,
-    icon: Person,
+    icon: SupervisorAccount,
   },
   {
     name: "User",
