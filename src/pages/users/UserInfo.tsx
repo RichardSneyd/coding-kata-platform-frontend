@@ -132,7 +132,7 @@ const UserInfo = ({title = "User Info", userId = null}: {title?: string, userId?
         to={"/candidates/" + id}
         endIcon={<ArrowForward />}
       >
-        View Public Profile
+        View Commercial Profile
       </Button>
     </Box>
       <TitleWrapper>
