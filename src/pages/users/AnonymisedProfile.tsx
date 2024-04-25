@@ -64,7 +64,6 @@ const AnonymisedProfile: React.FC = () => {
   }
   if (!loading && !userProfile) return <EmptyState message="User profile not found" />;
   if (loading) return <Loading />;
-  if (!resume) return <EmptyState message="Profile incomplete, resume missing." />;
 
   const {
     bio,
