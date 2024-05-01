@@ -55,7 +55,7 @@ const ForgetPassword = () => {
       setError("");
       setLoading(true);
       try {
-        const response = await authService.forgetPassword(email);
+        const response = await authService.forgotPassword(email);
 
         setSuccessMessage(response.message);
         setLoading(false);

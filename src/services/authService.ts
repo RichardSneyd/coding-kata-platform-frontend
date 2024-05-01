@@ -49,9 +49,9 @@ const authService = {
       throw new Error("Incorrect username or password");
     }
   },
-  async forgetPassword(email: string) {
+  async forgotPassword(email: string) {
     try {
-      const response = await apiInstance.post(
+      const response = await apiInstance.get(
         `/password/forgot/${email}`
       );
 
@@ -66,7 +66,7 @@ const authService = {
         throw new Error("Server error, please try again later");
       }
       console.warn("password reset error", err);
-      throw new Error("ERROR: " + err.response.data);
+      throw new Error("ERROR: " + err.message);
     }
   },
   async resetPassword(body: {
