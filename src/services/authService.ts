@@ -65,7 +65,8 @@ const authService = {
       if (err?.code === "ERR_NETWORK") {
         throw new Error("Server error, please try again later");
       }
-      throw new Error("The email you entered does not exist");
+      console.warn("password reset error", err);
+      throw new Error("ERROR: " + err.response.data);
     }
   },
   async resetPassword(body: {
