@@ -92,8 +92,8 @@ const Header = ({ isAuthed, role, setIsAuthed, setRole }: IProps) => {
               sx={{
                 height: 40,
               }}
-              alt="BNTA Logo"
-              src="/img/bnta-logo.png"
+              alt="FlowKata Logo"
+              src="/img/logo.png"
             />
           </Link>
 
