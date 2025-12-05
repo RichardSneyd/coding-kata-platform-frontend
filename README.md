@@ -1,6 +1,6 @@
 # Coding LMS Front-end
 
-A React front-end for the BNTA coding LMS.
+A React, Material UI front-end for a coding kata SaaS. The backend Java/Spring Boot repo can be found here: https://github.com/RichardSneyd/coding-kata-platform-backend
 
 # Use authService.parseJwt to get User Info
 
